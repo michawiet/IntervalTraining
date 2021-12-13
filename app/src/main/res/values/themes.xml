@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.IntervalTraining" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#3F51B5</item>
+        <item name="colorPrimaryVariant">#303F9F</item>
+        <item name="colorOnPrimary">#C5CAE9</item>
+        <item name="textColorPrimary">#212121</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#607D8B</item>
+        <item name="colorSecondaryVariant">#757575</item>
+        <item name="colorOnSecondary">#BDBDBD</item>
+        <item name="textColorSecondary">#757575</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
