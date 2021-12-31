@@ -13,7 +13,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/ic_round_alarm_off_24"
-        android:contentDescription="@string/set_time_of_notification" />
+        android:contentDescription="@string/set_time_of_notification"
+        />
 
     <TextView
         android:id="@+id/weekday_name_text_view"
