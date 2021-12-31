@@ -2,10 +2,13 @@ package eu.mikko.intervaltraining
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.adapters.ItemAdapter
+import androidx.fragment.app.Fragment
+import eu.mikko.intervaltraining.fragments.HomeFragment
+import eu.mikko.intervaltraining.fragments.NotificationsFragment
+import eu.mikko.intervaltraining.fragments.ProgressFragment
+import eu.mikko.intervaltraining.fragments.TrainingFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_notifications.*
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.*
@@ -16,17 +19,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //weekday_recycler_view_items.layoutManager = LinearLayoutManager(this)
-        //val itemAdapter = ItemAdapter(this, getItemList())
-        //weekday_recycler_view_items.adapter = itemAdapter
+        val homeFragment = HomeFragment()
+        val progressFragment = ProgressFragment()
+        val notificationsFragment = NotificationsFragment()
+        val trainingFragment = TrainingFragment()
+
+        makeCurrentFragment(homeFragment)
+
+        bottom_navigation.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.home_nav -> makeCurrentFragment(homeFragment)
+                R.id.progress_nav -> makeCurrentFragment(progressFragment)
+                R.id.notifications_nav -> makeCurrentFragment(notificationsFragment)
+                R.id.train_nav -> makeCurrentFragment(trainingFragment)
+            }
+            true
+        }
     }
 
-    //private fun getItemList(): ArrayList<String> {
-    //    val list = ArrayList<String>()
-    //    for(day in DayOfWeek.values()) {
-    //        list.add(day.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
-    //    }
-//
-    //    return list
-    //}
+    private fun makeCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fl_wrapper, fragment)
+            commit()
+        }
+
+    private fun getItemList(): ArrayList<String> {
+        val list = ArrayList<String>()
+        for(day in DayOfWeek.values()) {
+            list.add(day.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
+        }
+
+        return list
+    }
 }

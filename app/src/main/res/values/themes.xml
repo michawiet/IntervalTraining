@@ -7,7 +7,7 @@
         <item name="colorOnPrimary">#C5CAE9</item>
         <item name="textColorPrimary">#212121</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#607D8B</item>
+        <item name="colorSecondary">#3F51B5</item>
         <item name="colorSecondaryVariant">#757575</item>
         <item name="colorOnSecondary">#BDBDBD</item>
         <item name="textColorSecondary">#757575</item>
