@@ -13,6 +13,7 @@ import eu.mikko.intervaltraining.data.WeekdayRecyclerViewItem
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import java.time.DayOfWeek
 import java.time.format.TextStyle
+import java.util.*
 import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,10 +30,12 @@ class NotificationsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    //private val weekdayNotificationList = getWeekdayNotificationList()
 
     private fun getWeekdayNotificationList(): List<WeekdayRecyclerViewItem> {
         val list = ArrayList<WeekdayRecyclerViewItem>()
         // TODO("read data from local storage/sqlite")
+
         for(day in DayOfWeek.values()) {
             val item = WeekdayRecyclerViewItem(day.getDisplayName(TextStyle.FULL,
                 ConfigurationCompat.getLocales(resources.configuration)[0]),

@@ -42,13 +42,4 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.fl_wrapper, fragment)
             commit()
         }
-
-    private fun getItemList(): ArrayList<String> {
-        val list = ArrayList<String>()
-        for(day in DayOfWeek.values()) {
-            list.add(day.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
-        }
-
-        return list
-    }
 }

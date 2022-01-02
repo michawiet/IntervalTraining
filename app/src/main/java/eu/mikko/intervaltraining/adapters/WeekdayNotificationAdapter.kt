@@ -8,14 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RelativeLayout
+import android.widget.RelativeLayout.LayoutParams
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.data.WeekdayRecyclerViewItem
 import kotlinx.android.synthetic.main.weekday_notification_item.view.*
-import android.widget.RelativeLayout.LayoutParams
 
 class WeekdayNotificationAdapter(private val weekdayRecyclerViewItemList: List<WeekdayRecyclerViewItem>) : RecyclerView.Adapter<WeekdayNotificationAdapter.WeekdayNotificationViewHolder>() {
 
@@ -45,11 +45,35 @@ class WeekdayNotificationAdapter(private val weekdayRecyclerViewItemList: List<W
         val notificationTimeTextView: TextView = itemView.notification_time
         val notificationSwitch: SwitchMaterial = itemView.weekday_notification_switch
 
+        private val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+            //TODO("add ")
+            notificationTimeTextView.text = String.format("%02d:%02d", hourOfDay, minute)
+            notificationSwitch.isChecked = true
+        }
+
         init {
-            //TODO("implement on set time listener")
+            notificationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked) {
+                    imageView.setImageResource(R.drawable.ic_round_alarm_on_24)
+                    imageView.setColorFilter(ContextCompat.getColor(itemView.context, R.color.black_inactive))
+                    notificationTimeTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black_active))
+                    weekdayNameTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black_inactive))
+
+                    //Toast.makeText(itemView.context, "Training notification enabled!", Toast.LENGTH_SHORT).show()
+                } else {
+                    imageView.setImageResource(R.drawable.ic_round_alarm_off_24)
+                    imageView.setColorFilter(ContextCompat.getColor(itemView.context, R.color.black_disabled))
+                    notificationTimeTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black_inactive))
+                    weekdayNameTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black_disabled))
+
+                    //Toast.makeText(itemView.context, "Training notification disabled!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             imageView.setOnClickListener {
-                val dialog = TimePickerDialog(itemView.context,
-                    null,
+                val dialog = TimePickerDialog(
+                    itemView.context,
+                    timeSetListener,
                     Integer.parseInt(notificationTimeTextView.text.subSequence(0, 2).toString()),
                     Integer.parseInt(notificationTimeTextView.text.subSequence(3, 5).toString()),
                     true)

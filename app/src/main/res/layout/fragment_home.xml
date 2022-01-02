@@ -10,5 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
+    <!-- goal = distance/time (ability to choose? 5k/10k, 20, 30, 40) -->
+    <!-- goal progress difficulty (easy/medium/hard) -->
 
 </FrameLayout>
