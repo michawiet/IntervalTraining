@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout.LayoutParams
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -46,7 +47,7 @@ class WeekdayNotificationAdapter(private val weekdayRecyclerViewItemList: List<W
         val notificationSwitch: SwitchMaterial = itemView.weekday_notification_switch
 
         private val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            //TODO("add ")
+            //TODO("add alarm")
             notificationTimeTextView.text = String.format("%02d:%02d", hourOfDay, minute)
             notificationSwitch.isChecked = true
         }
@@ -59,14 +60,14 @@ class WeekdayNotificationAdapter(private val weekdayRecyclerViewItemList: List<W
                     notificationTimeTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black_active))
                     weekdayNameTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black_inactive))
 
-                    //Toast.makeText(itemView.context, "Training notification enabled!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(itemView.context, "Training notification for ${weekdayNameTextView.text} enabled!", Toast.LENGTH_SHORT).show()
                 } else {
                     imageView.setImageResource(R.drawable.ic_round_alarm_off_24)
                     imageView.setColorFilter(ContextCompat.getColor(itemView.context, R.color.black_disabled))
                     notificationTimeTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black_inactive))
                     weekdayNameTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black_disabled))
 
-                    //Toast.makeText(itemView.context, "Training notification disabled!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(itemView.context, "Training notification for ${weekdayNameTextView.text} disabled!", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -91,6 +92,8 @@ class WeekdayNotificationAdapter(private val weekdayRecyclerViewItemList: List<W
                 dialog.setCustomTitle(tv)
                 dialog.show()
             }
+
+
         }
     }
 }

@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/home_nav"
         android:icon="@drawable/ic_round_home_24"
-        android:title="@string/home" />
+        android:title="@string/home"
+        app:showAsAction="always"
+        android:checked="true" />
     <item
         android:id="@+id/progress_nav"
         android:icon="@drawable/ic_round_show_chart_24"
-        android:title="@string/progress" />
+        android:title="@string/progress"
+        app:showAsAction="ifRoom"
+        android:checked="false" />
     <item
         android:id="@+id/notifications_nav"
         android:icon="@drawable/ic_round_notifications_24"
-        android:title="@string/notifications" />
+        android:title="@string/notifications"
+        app:showAsAction="ifRoom"
+        android:checked="false" />
     <item
         android:id="@+id/train_nav"
         android:icon="@drawable/ic_round_directions_run_24"
-        android:title="@string/train" />
+        android:title="@string/train"
+        app:showAsAction="ifRoom"
+        android:checked="false" />
 </menu>
