@@ -25,8 +25,7 @@
             app:cpb_progress="75"
             app:cpb_progressbar_color="@color/primary_500"
             app:cpb_progressbar_width="10dp"
-            app:cpb_round_border="true"
-             />
+            app:cpb_round_border="true" />
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/interval_progress_bar"
@@ -42,8 +41,7 @@
             app:cpb_background_progressbar_color="@color/primary_100"
             app:cpb_background_progressbar_width="10dp"
             app:cpb_progressbar_color="@color/primary_900"
-            app:cpb_progressbar_width="10dp"
-            />
+            app:cpb_progressbar_width="10dp" />
 
         <TextView
             android:id="@+id/interval_timer"
@@ -56,8 +54,8 @@
             app:layout_constraintWidth_percent="0.5"
             android:text="@string/interval_timer_default"
             android:textSize="50sp"
-            android:textColor="@android:color/primary_text_light"
-            />
+            android:textColor="@color/black_active"
+            android:typeface="monospace" />
 
         <TextView
             android:id="@+id/activity_timer"
@@ -65,13 +63,14 @@
             android:layout_height="wrap_content"
             android:text="@string/activity_timer_default"
             android:textSize="20sp"
-            android:textColor="?textColorSecondary"
+            android:textColor="@color/black_inactive"
             app:layout_constraintBottom_toTopOf="@id/interval_timer"
             app:layout_constraintEnd_toEndOf="@id/interval_progress_bar"
             app:layout_constraintStart_toStartOf="@id/interval_progress_bar"
             app:layout_constraintTop_toTopOf="@id/interval_progress_bar"
             app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintVertical_bias="0.75" />
+            app:layout_constraintVertical_bias="0.75"
+            android:typeface="monospace" />
 
         <TextView
             android:id="@+id/minute_hint"
@@ -79,29 +78,29 @@
             android:layout_height="wrap_content"
             android:text="@string/timer_minutes_hint"
             android:textSize="15sp"
-            android:textColor="?textColorSecondary"
+            android:textColor="@color/black_inactive"
             app:layout_constraintEnd_toEndOf="@id/interval_timer"
             app:layout_constraintStart_toStartOf="@id/interval_timer"
             app:layout_constraintTop_toTopOf="@id/interval_timer"
             app:layout_constraintBottom_toBottomOf="@id/interval_progress_bar"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintVertical_bias="0.4" />
+            app:layout_constraintHorizontal_bias="0.18"
+            app:layout_constraintVertical_bias="0.4"
+            android:typeface="monospace"/>
 
         <TextView
             android:id="@+id/seconds_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/timer_seconds_hint"
-            android:textColor="?textColorSecondary"
+            android:textColor="@color/black_inactive"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="@id/interval_timer"
             app:layout_constraintStart_toStartOf="@id/interval_timer"
             app:layout_constraintTop_toTopOf="@id/interval_timer"
             app:layout_constraintBottom_toBottomOf="@id/interval_progress_bar"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintVertical_bias="0.4" />
+            app:layout_constraintHorizontal_bias="0.82"
+            app:layout_constraintVertical_bias="0.4"
+            android:typeface="monospace"/>
 
         <TextView
             android:id="@+id/activity_type"
@@ -109,7 +108,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.5"
             android:text="@string/activity_type_default"
-            android:textColor="?textColorSecondary"
+            android:textColor="@color/black_inactive"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="@id/interval_progress_bar"
             app:layout_constraintEnd_toEndOf="@id/interval_progress_bar"
