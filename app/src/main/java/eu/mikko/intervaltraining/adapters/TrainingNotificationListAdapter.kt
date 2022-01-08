@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.os.ConfigurationCompat
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import eu.mikko.intervaltraining.R
@@ -15,7 +14,9 @@ import kotlinx.android.synthetic.main.training_notification_item.view.*
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 
-class TrainingNotificationListAdapter : RecyclerView.Adapter<TrainingNotificationListAdapter.TrainingNotificationViewHolder>() {
+class TrainingNotificationListAdapter(private val clickToChangeTimeListener: (TrainingNotification) -> Unit,
+                                      private val clickToToggleNotificationListener: (TrainingNotification) -> Unit
+) : RecyclerView.Adapter<TrainingNotificationListAdapter.TrainingNotificationViewHolder>() {
 
     private var trainingNotificationList = emptyList<TrainingNotification>()
 
@@ -23,12 +24,21 @@ class TrainingNotificationListAdapter : RecyclerView.Adapter<TrainingNotificatio
         parent: ViewGroup,
         viewType: Int
     ): TrainingNotificationViewHolder {
-        return TrainingNotificationViewHolder.create(parent)
+        return TrainingNotificationViewHolder.create(parent, {
+            clickToChangeTimeListener(trainingNotificationList[it])
+        }, {
+            clickToToggleNotificationListener(trainingNotificationList[it])
+        })
     }
 
     override fun onBindViewHolder(holder: TrainingNotificationViewHolder, position: Int) {
         val currentItem = trainingNotificationList[position]
-        holder.bind(currentItem)
+        holder.weekdayNameTextView.text =
+            DayOfWeek
+            .valueOf(currentItem.dayOfWeek)
+            .getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
+        holder.notificationTimeTextView.text = currentItem.time
+        holder.notificationSwitch.isChecked = currentItem.isEnabled
     }
 
     override fun getItemCount(): Int {
@@ -40,22 +50,22 @@ class TrainingNotificationListAdapter : RecyclerView.Adapter<TrainingNotificatio
         notifyDataSetChanged()
     }
 
-    class TrainingNotificationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val weekdayNameTextView: TextView = itemView.training_name_text_view
-        private val notificationTimeTextView: TextView = itemView.training_notification_time
-        private val notificationSwitch: SwitchMaterial = itemView.training_notification_switch
+    class TrainingNotificationViewHolder(itemView: View, clickAtTimeTextView: (Int) -> Unit,
+                                         clickAtNotificationSwitch: (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
+        val weekdayNameTextView: TextView = itemView.training_name_text_view
+        val notificationTimeTextView: TextView = itemView.training_notification_time
+        val notificationSwitch: SwitchMaterial = itemView.training_notification_switch
 
-        fun bind(data: TrainingNotification) {
-            weekdayNameTextView.text = DayOfWeek.valueOf(data.dayOfWeek).getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
-            notificationTimeTextView.text = data.time
-            notificationSwitch.isChecked = data.isEnabled
+        init {
+            notificationTimeTextView.setOnClickListener { clickAtTimeTextView(adapterPosition) }
+            notificationSwitch.setOnClickListener { clickAtNotificationSwitch(adapterPosition) }
         }
 
         companion object {
-            fun create(parent: ViewGroup): TrainingNotificationViewHolder {
+            fun create(parent: ViewGroup, clickAtTimeTextView: (Int) -> Unit, clickToToggleNotificationListener: (Int) -> Unit): TrainingNotificationViewHolder {
                 val view: View = LayoutInflater.from(parent.context)
                     .inflate(R.layout.training_notification_item, parent, false)
-                return TrainingNotificationViewHolder(view)
+                return TrainingNotificationViewHolder(view, clickAtTimeTextView, clickToToggleNotificationListener)
             }
         }
     }
