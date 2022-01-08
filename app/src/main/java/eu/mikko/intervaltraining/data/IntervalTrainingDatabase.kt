@@ -1,13 +1,12 @@
-package eu.mikko.intervaltraining.database
+package eu.mikko.intervaltraining.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import eu.mikko.intervaltraining.dao.TrainingNotificationDao
-import eu.mikko.intervaltraining.entities.TrainingNotificationEntity
+import eu.mikko.intervaltraining.model.TrainingNotification
 
-@Database(entities = [TrainingNotificationEntity::class], version = 1)
+@Database(entities = [TrainingNotification::class], version = 1, exportSchema = false)
 abstract class IntervalTrainingDatabase: RoomDatabase() {
 
     abstract fun trainingNotificationDao(): TrainingNotificationDao
@@ -23,11 +22,11 @@ abstract class IntervalTrainingDatabase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     IntervalTrainingDatabase::class.java,
-                    "interval_training"
-                ).build()
+                    "interval_training")
+                    .createFromAsset("database/interval_training.db")
+                    .build()
                 INSTANCE = instance
-                // return instance
-                instance
+                return instance
             }
         }
     }

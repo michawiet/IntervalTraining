@@ -1,30 +1,35 @@
 package eu.mikko.intervaltraining.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.*
-import eu.mikko.intervaltraining.entities.TrainingNotificationEntity
+import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
+import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.repository.TrainingNotificationRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 
-class TrainingNotificationViewModel(private val repository: TrainingNotificationRepository) : ViewModel() {
-    val allTrainingNotifications: LiveData<List<TrainingNotificationEntity>> = repository.allTrainingNotification.asLiveData()
+class TrainingNotificationViewModel(application: Application) : AndroidViewModel(application) {
 
-    fun insert(trainingNotificationEntity: TrainingNotificationEntity) = viewModelScope.launch {
-        repository.insert(trainingNotificationEntity)
+    val readAllData: LiveData<List<TrainingNotification>>
+    private val repository: TrainingNotificationRepository
+
+    init {
+        val trainingNotificationDao = IntervalTrainingDatabase.getDatabase(application).trainingNotificationDao()
+        repository = TrainingNotificationRepository(trainingNotificationDao)
+        readAllData = repository.readAllTrainingNotifications
     }
 
-    fun update(trainingNotificationEntity: TrainingNotificationEntity) = viewModelScope.launch {
-        repository.update(trainingNotificationEntity)
-    }
-}
-
-class TrainingNotificationViewModelFactory(private val repository: TrainingNotificationRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if(modelClass.isAssignableFrom(TrainingNotificationViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return TrainingNotificationViewModel(repository) as T
+    fun insert(trainingNotification: TrainingNotification) = viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insert(trainingNotification)
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
+
+    fun update(trainingNotification: TrainingNotification) = viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(trainingNotification)
+        }
+    }
+
 
 }

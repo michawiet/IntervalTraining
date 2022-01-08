@@ -7,18 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.os.ConfigurationCompat
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.data.DayOfWeekRecyclerViewItem
-import eu.mikko.intervaltraining.entities.TrainingNotificationEntity
+import eu.mikko.intervaltraining.model.TrainingNotification
 import kotlinx.android.synthetic.main.training_notification_item.view.*
 import java.time.DayOfWeek
 import java.time.format.TextStyle
-import java.util.*
 
-class TrainingNotificationListAdapter : ListAdapter<TrainingNotificationEntity, TrainingNotificationListAdapter.TrainingNotificationViewHolder>(TrainingNotificationsComparator()) {
+class TrainingNotificationListAdapter : RecyclerView.Adapter<TrainingNotificationListAdapter.TrainingNotificationViewHolder>() {
+
+    private var trainingNotificationList = emptyList<TrainingNotification>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -28,8 +27,17 @@ class TrainingNotificationListAdapter : ListAdapter<TrainingNotificationEntity, 
     }
 
     override fun onBindViewHolder(holder: TrainingNotificationViewHolder, position: Int) {
-        val current = getItem(position)
-        holder.bind(current)
+        val currentItem = trainingNotificationList[position]
+        holder.bind(currentItem)
+    }
+
+    override fun getItemCount(): Int {
+        return trainingNotificationList.size
+    }
+
+    fun setData(list: List<TrainingNotification>) {
+        this.trainingNotificationList = list
+        notifyDataSetChanged()
     }
 
     class TrainingNotificationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -37,7 +45,7 @@ class TrainingNotificationListAdapter : ListAdapter<TrainingNotificationEntity, 
         private val notificationTimeTextView: TextView = itemView.training_notification_time
         private val notificationSwitch: SwitchMaterial = itemView.training_notification_switch
 
-        fun bind(data: TrainingNotificationEntity) {
+        fun bind(data: TrainingNotification) {
             weekdayNameTextView.text = DayOfWeek.valueOf(data.dayOfWeek).getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
             notificationTimeTextView.text = data.time
             notificationSwitch.isChecked = data.isEnabled
@@ -51,24 +59,6 @@ class TrainingNotificationListAdapter : ListAdapter<TrainingNotificationEntity, 
             }
         }
     }
-}
 
-class TrainingNotificationsComparator : DiffUtil.ItemCallback<TrainingNotificationEntity>() {
-    override fun areItemsTheSame(
-        oldItem: TrainingNotificationEntity,
-        newItem: TrainingNotificationEntity
-    ): Boolean {
-        return oldItem === newItem
-    }
-
-    override fun areContentsTheSame(
-        oldItem: TrainingNotificationEntity,
-        newItem: TrainingNotificationEntity
-    ): Boolean {
-        return (oldItem.isEnabled == newItem.isEnabled
-                && oldItem.dayOfWeek == newItem.dayOfWeek
-                && oldItem.id == newItem.id
-                && oldItem.time == newItem.time)
-    }
 
 }

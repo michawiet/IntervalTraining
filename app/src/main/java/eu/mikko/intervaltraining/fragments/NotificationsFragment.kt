@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.ConfigurationCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.data.DayOfWeekRecyclerViewItem
 import eu.mikko.intervaltraining.adapters.TrainingNotificationListAdapter
+import eu.mikko.intervaltraining.viewmodel.TrainingNotificationViewModel
 import kotlinx.android.synthetic.main.fragment_notifications.*
-import java.time.DayOfWeek
-import java.time.format.TextStyle
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -22,37 +21,35 @@ import kotlin.collections.ArrayList
  */
 class NotificationsFragment : Fragment() {
 
-    private fun getWeekdayNotificationList(): List<DayOfWeekRecyclerViewItem> {
-        val list = ArrayList<DayOfWeekRecyclerViewItem>()
-        // TODO("read data from local storage/sqlite")
-
-        for(day in DayOfWeek.values()) {
-            val item = DayOfWeekRecyclerViewItem(day.getDisplayName(TextStyle.FULL,
-                ConfigurationCompat.getLocales(resources.configuration)[0]),
-                "12:00",
-                false,
-                day
-            )
-            list += item
-        }
-
-        return list
-    }
+    private lateinit var mTrainingNotificationViewModel: TrainingNotificationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_notifications, container, false)
+        val view = inflater.inflate(R.layout.fragment_notifications, container, false)
+
+        val adapter = TrainingNotificationListAdapter()
+        val recyclerView = view.recycler_view
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        //recycler_view.setHasFixedSize(true)
+
+        mTrainingNotificationViewModel = ViewModelProvider(this).get(TrainingNotificationViewModel::class.java)
+        mTrainingNotificationViewModel.readAllData.observe(viewLifecycleOwner, Observer { trainingNotification ->
+            adapter.setData(trainingNotification)
+        })
+
+        return view
+    //return inflater.inflate(R.layout.fragment_notifications, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val weekdayNotificationList = getWeekdayNotificationList()
-        //val recycleView = findViewById<RecyclerView>(R.id.recycler_view)
-        recycler_view.adapter = TrainingNotificationListAdapter()
-        recycler_view.layoutManager = LinearLayoutManager(context)
-        recycler_view.setHasFixedSize(true)
-    }
+    //override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    //    super.onViewCreated(view, savedInstanceState)
+//
+    //    //recycler_view.adapter = TrainingNotificationListAdapter()
+    //    //recycler_view.layoutManager = LinearLayoutManager(context)
+    //    //recycler_view.setHasFixedSize(true)
+    //}
 }

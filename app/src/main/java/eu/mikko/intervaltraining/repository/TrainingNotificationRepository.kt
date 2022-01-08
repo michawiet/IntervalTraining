@@ -2,22 +2,22 @@ package eu.mikko.intervaltraining.repository
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import eu.mikko.intervaltraining.dao.TrainingNotificationDao
-import eu.mikko.intervaltraining.entities.TrainingNotificationEntity
-import kotlinx.coroutines.flow.Flow
+import eu.mikko.intervaltraining.data.TrainingNotificationDao
+import eu.mikko.intervaltraining.model.TrainingNotification
 
 class TrainingNotificationRepository(private val trainingNotificationDao: TrainingNotificationDao) {
-    val allTrainingNotification: Flow<List<TrainingNotificationEntity>> = trainingNotificationDao.getAll()
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun insert(trainingNotificationEntity: TrainingNotificationEntity) {
-        trainingNotificationDao.insert(trainingNotificationEntity)
+    val readAllTrainingNotifications: LiveData<List<TrainingNotification>> = trainingNotificationDao.readAllData()
+
+    //@Suppress("RedundantSuspendModifier")
+    //@WorkerThread
+    suspend fun insert(trainingNotification: TrainingNotification) {
+        trainingNotificationDao.insert(trainingNotification)
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun update(trainingNotificationEntity: TrainingNotificationEntity) {
-        trainingNotificationDao.update(trainingNotificationEntity)
+    //@Suppress("RedundantSuspendModifier")
+    //@WorkerThread
+    suspend fun update(trainingNotification: TrainingNotification) {
+        trainingNotificationDao.update(trainingNotification)
     }
 }
