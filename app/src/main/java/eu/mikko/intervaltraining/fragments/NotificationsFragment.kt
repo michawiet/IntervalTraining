@@ -37,7 +37,8 @@ class NotificationsFragment : Fragment() {
 
         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, TrainingReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, tn.id, intent, 0)
+        intent.action = Intent.ACTION_DEFAULT
+        val pendingIntent = PendingIntent.getBroadcast(context, tn.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.timeInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent)
     }
@@ -46,8 +47,8 @@ class NotificationsFragment : Fragment() {
         //id is a request code
         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, TrainingReminderReceiver::class.java)
-        intent.putExtra("id", id)
-        val pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0)
+        intent.action = Intent.ACTION_DEFAULT
+        val pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         alarmManager.cancel(pendingIntent)
     }
