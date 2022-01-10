@@ -1,32 +1,27 @@
 package eu.mikko.intervaltraining.fragments
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.res.Resources
-import android.graphics.Color
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.mikko.intervaltraining.R
+import eu.mikko.intervaltraining.Utilities.Companion.generateCalendar
 import eu.mikko.intervaltraining.adapters.TrainingNotificationListAdapter
+import eu.mikko.intervaltraining.model.TrainingNotification
+import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
 import eu.mikko.intervaltraining.viewmodel.TrainingNotificationViewModel
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
-import android.widget.RelativeLayout.LayoutParams
-import android.widget.TextView
-import androidx.core.os.ConfigurationCompat
-import eu.mikko.intervaltraining.model.TrainingNotification
-import java.time.DayOfWeek
-import java.time.format.TextStyle
-import kotlin.math.min
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -37,30 +32,62 @@ class NotificationsFragment : Fragment() {
 
     private lateinit var mTrainingNotificationViewModel: TrainingNotificationViewModel
 
+    private fun startAlarm(tn: TrainingNotification) {
+        val c = generateCalendar(tn)
+
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, TrainingReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, tn.id, intent, 0)
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.timeInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent)
+    }
+
+    private fun cancelAlarm(id: Int) {
+        //id is a request code
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, TrainingReminderReceiver::class.java)
+        intent.putExtra("id", id)
+        val pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0)
+
+        alarmManager.cancel(pendingIntent)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_notifications, container, false)
-
         val adapter = TrainingNotificationListAdapter( {
             TimePickerDialog(context,
+                //timeSetListener
                 { view, hourOfDay, minute ->
-                    val newTime = String.format("%02d:%02d", hourOfDay, minute)
-                    Toast.makeText(context, "Notification on ${it.dayOfWeek} is ${it.isEnabled} at $hourOfDay:$minute", Toast.LENGTH_SHORT).show()
-                    // Update the notification in database
-                    mTrainingNotificationViewModel.update(TrainingNotification(it.id, it.dayOfWeek, newTime, true))
-                    // If the pending intent exists, update it
+                    val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, hourOfDay, minute, true)
+                    Toast.makeText(context, "Notification on ${newTrainingNotification.dayOfWeek} is ${newTrainingNotification.isEnabled} at $hourOfDay:$minute", Toast.LENGTH_SHORT).show()
 
-                    // Else create new pending intent
+                    // if enabled cancel old, add new
+                    if(it.isEnabled)
+                        cancelAlarm(it.id)
+                    startAlarm(newTrainingNotification)
+
+                    // Update the notification in database
+                    mTrainingNotificationViewModel.update(newTrainingNotification)
                 },
-                Integer.parseInt(it.time.subSequence(0, 2).toString()),
-                Integer.parseInt(it.time.subSequence(3, 5).toString()),
+                it.hour,
+                it.minute,
                 true
             ).show()
         }, {
-            Toast.makeText(context, "Notification toggled! ${it.dayOfWeek}; ${it.isEnabled}; ${it.time}", Toast.LENGTH_SHORT).show()
-            mTrainingNotificationViewModel.update(TrainingNotification(it.id, it.dayOfWeek, it.time, !it.isEnabled))
+            val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, it.hour, it.minute, !it.isEnabled)
+            Toast.makeText(context, "Notification toggled! ${it.dayOfWeek}; now is ${!it.isEnabled}; ${it.hour}:${it.minute}", Toast.LENGTH_SHORT).show()
+
+            // If enabled, cancel the alarm
+            if(it.isEnabled)
+                cancelAlarm(it.id)
+            else
+                startAlarm(newTrainingNotification)
+            // Else create new pending intent
+
+            mTrainingNotificationViewModel.update(newTrainingNotification)
         })
 
         val recyclerView = view.recycler_view

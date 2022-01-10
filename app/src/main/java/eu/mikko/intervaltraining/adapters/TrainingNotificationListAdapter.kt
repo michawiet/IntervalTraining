@@ -37,7 +37,7 @@ class TrainingNotificationListAdapter(private val clickToChangeTimeListener: (Tr
             DayOfWeek
             .valueOf(currentItem.dayOfWeek)
             .getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
-        holder.notificationTimeTextView.text = currentItem.time
+        holder.notificationTimeTextView.text = String.format("%02d:%02d", currentItem.hour, currentItem.minute)
         holder.notificationSwitch.isChecked = currentItem.isEnabled
     }
 

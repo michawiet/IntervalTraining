@@ -13,8 +13,8 @@ interface TrainingNotificationDao {
     @Update
     suspend fun update(trainingNotification: TrainingNotification)
 
-    //@Delete
-    //fun delete(trainingNotificationEntity: TrainingNotification)
+    @Query("SELECT * FROM training_notifications_table WHERE id=:id")
+    suspend fun getTrainingNotificationById(id: Int): TrainingNotification
 
     @Query("SELECT * FROM training_notifications_table ORDER BY id ASC")
     fun readAllData(): LiveData<List<TrainingNotification>>

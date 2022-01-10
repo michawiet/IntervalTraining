@@ -17,4 +17,7 @@
     <string name="timer_minutes_hint">m</string>
     <string name="timer_seconds_hint">s</string>
     <string name="activity_type_default">Run!</string>
+    <string name="training_scheduled_notification">It is time for your training!</string>
+    <string name="training_notification_channel_name">Training reminder</string>
+    <string name="progress_notification_channel_name">Progress</string>
 </resources>

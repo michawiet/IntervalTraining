@@ -9,5 +9,6 @@ data class TrainingNotification(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val dayOfWeek: String,
-    val time: String,
+    val hour: Int,
+    val minute: Int,
     val isEnabled: Boolean)
