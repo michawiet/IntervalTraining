@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import eu.mikko.intervaltraining.model.TrainingNotification
+import eu.mikko.intervaltraining.model.*
 
-@Database(entities = [TrainingNotification::class], version = 1, exportSchema = false)
+@Database(entities = [TrainingNotification::class, Interval::class, Run::class], version = 1, exportSchema = false)
 abstract class IntervalTrainingDatabase: RoomDatabase() {
 
-    abstract fun trainingNotificationDao(): TrainingNotificationDao
+    abstract fun getTrainingNotificationDao(): TrainingNotificationDao
+    abstract fun getRunDao(): RunDao
+    abstract fun getIntervalDao(): IntervalDao
 
     companion object {
         @Volatile

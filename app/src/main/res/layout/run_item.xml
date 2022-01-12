@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/training_notification_time"
+        android:layout_width="73dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:text="@string/notification_time"
+        android:textColor="@color/black_inactive"
+        android:textSize="24sp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/training_name_text_view"
+        android:layout_width="150dp"
+        android:layout_height="22dp"
+        android:gravity="center_vertical"
+        android:text="@string/notification_weekday"
+        android:textColor="@color/black_disabled"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="@id/training_notification_time"
+        app:layout_constraintTop_toBottomOf="@id/training_notification_time" />
+
+    <View
+        android:id="@+id/divider_run_item"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="-8dp"
+        app:layout_constraintBottom_toBottomOf="@id/training_name_text_view"
+        android:background="?android:attr/listDivider"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,13 +6,7 @@ import eu.mikko.intervaltraining.model.TrainingNotification
 
 class TrainingNotificationRepository(private val trainingNotificationDao: TrainingNotificationDao) {
 
-    val readAllTrainingNotifications: LiveData<List<TrainingNotification>> = trainingNotificationDao.readAllData()
+    fun readAllTrainingNotifications(): LiveData<List<TrainingNotification>> = trainingNotificationDao.readAllData()
 
-    suspend fun insert(trainingNotification: TrainingNotification) {
-        trainingNotificationDao.insert(trainingNotification)
-    }
-
-    suspend fun update(trainingNotification: TrainingNotification) {
-        trainingNotificationDao.update(trainingNotification)
-    }
+    suspend fun update(trainingNotification: TrainingNotification) = trainingNotificationDao.update(trainingNotification)
 }

@@ -27,7 +27,7 @@ class TrainingReminderReceiver : BroadcastReceiver() {
     }
 
     private fun resetAllAlarms(context: Context?) {
-        val database = IntervalTrainingDatabase.getDatabase(context!!).trainingNotificationDao()
+        val database = IntervalTrainingDatabase.getDatabase(context!!).getTrainingNotificationDao()
         val getDataJob = GlobalScope.async { database.getAllNotifications() }
 
         getDataJob.invokeOnCompletion { cause ->

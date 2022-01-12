@@ -12,12 +12,21 @@
     <string name="notification_weekday">Weekday</string>
     <string name="notification_time">12:00</string>
     <string name="set_time_of_notification">set time of notification</string>
-    <string name="interval_timer_default">00:00</string>
-    <string name="activity_timer_default">00:00</string>
+    <string name="interval_timer_default">--:--</string>
+    <string name="activity_timer_default">--:--</string>
     <string name="timer_minutes_hint">m</string>
     <string name="timer_seconds_hint">s</string>
-    <string name="activity_type_default">Run!</string>
+    <string name="activity_type_default">Walk</string>
     <string name="training_scheduled_notification">It is time for your training!</string>
     <string name="training_notification_channel_name">Training reminder</string>
     <string name="progress_notification_channel_name">Progress</string>
+    <string name="workout_distance_unit">km</string>
+    <string name="workout_speed_unit">km/h</string>\
+    <string name="workout_distance_default">0.00</string>
+    <string name="workout_speed_default">--:--</string>
+    <string name="stats_total_distance_km">Total distance km</string>
+    <string name="stats_total_time">Total Time</string>
+    <string name="stats_default_total_time">00:00:00</string>
+    <string name="stats_total_distance_default">0</string>
+    <string name="minutes_seconds_default">00:00</string>
 </resources>

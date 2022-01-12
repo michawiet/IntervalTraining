@@ -2,21 +2,15 @@ package eu.mikko.intervaltraining
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.mikko.intervaltraining.adapters.ViewPagerAdapter
 import eu.mikko.intervaltraining.fragments.HomeFragment
 import eu.mikko.intervaltraining.fragments.NotificationsFragment
 import eu.mikko.intervaltraining.fragments.ProgressFragment
-import eu.mikko.intervaltraining.fragments.TrainingFragment
+import eu.mikko.intervaltraining.fragments.RunFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_notifications.*
-import java.time.DayOfWeek
-import java.time.format.TextStyle
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val progressFragment = ProgressFragment()
         val notificationsFragment = NotificationsFragment()
-        val trainingFragment = TrainingFragment()
+        val trainingFragment = RunFragment()
 
         viewPagerAdapter.addFragment(homeFragment)
         viewPagerAdapter.addFragment(progressFragment)

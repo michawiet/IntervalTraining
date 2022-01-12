@@ -8,28 +8,20 @@ import eu.mikko.intervaltraining.repository.TrainingNotificationRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TrainingNotificationViewModel(application: Application) : AndroidViewModel(application) {
+class ReminderNotificationViewModel(application: Application) : AndroidViewModel(application) {
 
     val readAllData: LiveData<List<TrainingNotification>>
     private val repository: TrainingNotificationRepository
 
     init {
-        val trainingNotificationDao = IntervalTrainingDatabase.getDatabase(application).trainingNotificationDao()
+        val trainingNotificationDao = IntervalTrainingDatabase.getDatabase(application).getTrainingNotificationDao()
         repository = TrainingNotificationRepository(trainingNotificationDao)
-        readAllData = repository.readAllTrainingNotifications
+        readAllData = repository.readAllTrainingNotifications()
     }
 
-    fun insert(trainingNotification: TrainingNotification) = viewModelScope.launch {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.insert(trainingNotification)
-        }
-    }
-
-    fun update(trainingNotification: TrainingNotification) = viewModelScope.launch {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun update(trainingNotification: TrainingNotification) = viewModelScope.launch(Dispatchers.IO) {
             repository.update(trainingNotification)
         }
-    }
 
 
 }

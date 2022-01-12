@@ -18,19 +18,12 @@ import eu.mikko.intervaltraining.Utilities.Companion.generateCalendar
 import eu.mikko.intervaltraining.adapters.TrainingNotificationListAdapter
 import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
-import eu.mikko.intervaltraining.viewmodel.TrainingNotificationViewModel
-import kotlinx.android.synthetic.main.fragment_notifications.*
+import eu.mikko.intervaltraining.viewmodel.ReminderNotificationViewModel
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
-import java.util.*
 
-/**
- * A simple [Fragment] subclass.
- * Use the [NotificationsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NotificationsFragment : Fragment() {
 
-    private lateinit var mTrainingNotificationViewModel: TrainingNotificationViewModel
+    private lateinit var mReminderNotificationViewModel: ReminderNotificationViewModel
 
     private fun startAlarm(tn: TrainingNotification) {
         val c = generateCalendar(tn)
@@ -63,15 +56,13 @@ class NotificationsFragment : Fragment() {
                 //timeSetListener
                 { view, hourOfDay, minute ->
                     val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, hourOfDay, minute, true)
-                    Toast.makeText(context, "Notification on ${newTrainingNotification.dayOfWeek} is ${newTrainingNotification.isEnabled} at $hourOfDay:$minute", Toast.LENGTH_SHORT).show()
-
                     // if enabled cancel old, add new
                     if(it.isEnabled)
                         cancelAlarm(it.id)
                     startAlarm(newTrainingNotification)
 
                     // Update the notification in database
-                    mTrainingNotificationViewModel.update(newTrainingNotification)
+                    mReminderNotificationViewModel.update(newTrainingNotification)
                 },
                 it.hour,
                 it.minute,
@@ -88,7 +79,7 @@ class NotificationsFragment : Fragment() {
                 startAlarm(newTrainingNotification)
             // Else create new pending intent
 
-            mTrainingNotificationViewModel.update(newTrainingNotification)
+            mReminderNotificationViewModel.update(newTrainingNotification)
         })
 
         val recyclerView = view.recycler_view
@@ -96,8 +87,8 @@ class NotificationsFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        mTrainingNotificationViewModel = ViewModelProvider(this)[TrainingNotificationViewModel::class.java]
-        mTrainingNotificationViewModel.readAllData.observe(viewLifecycleOwner, { trainingNotification ->
+        mReminderNotificationViewModel = ViewModelProvider(this)[ReminderNotificationViewModel::class.java]
+        mReminderNotificationViewModel.readAllData.observe(viewLifecycleOwner, { trainingNotification ->
                 adapter.setData(trainingNotification)
             })
 

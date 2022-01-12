@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/runStartFragment">
+
+    <fragment
+        android:id="@+id/runStartFragment"
+        android:name="eu.mikko.intervaltraining.fragments.RunStartFragment"
+        android:label="RunStartFragment" >
+        <action
+            android:id="@+id/action_runStartFragment_to_runFragment"
+            app:destination="@id/runFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/runFragment"
+        android:name="eu.mikko.intervaltraining.fragments.RunFragment"
+        android:label="RunFragment" >
+        <action
+            android:id="@+id/action_runFragment_to_runSummaryFragment"
+            app:destination="@id/runSummaryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/runSummaryFragment"
+        android:name="eu.mikko.intervaltraining.fragments.RunSummaryFragment"
+        android:label="RunSummaryFragment" >
+        <action
+            android:id="@+id/action_runSummaryFragment_to_runStartFragment"
+            app:destination="@id/runStartFragment" />
+    </fragment>
+</navigation>
