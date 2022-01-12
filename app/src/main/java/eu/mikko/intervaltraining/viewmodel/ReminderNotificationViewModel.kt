@@ -2,26 +2,22 @@ package eu.mikko.intervaltraining.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
 import eu.mikko.intervaltraining.model.TrainingNotification
-import eu.mikko.intervaltraining.repository.TrainingNotificationRepository
+import eu.mikko.intervaltraining.repositories.TrainingNotificationRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReminderNotificationViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class ReminderNotificationViewModel @Inject constructor(private val repository: TrainingNotificationRepository) : ViewModel() {
 
-    val readAllData: LiveData<List<TrainingNotification>>
-    private val repository: TrainingNotificationRepository
+    //val readAllData = repository.readAllTrainingNotifications()
 
-    init {
-        val trainingNotificationDao = IntervalTrainingDatabase.getDatabase(application).getTrainingNotificationDao()
-        repository = TrainingNotificationRepository(trainingNotificationDao)
-        readAllData = repository.readAllTrainingNotifications()
-    }
-
-    fun update(trainingNotification: TrainingNotification) = viewModelScope.launch(Dispatchers.IO) {
-            repository.update(trainingNotification)
-        }
+    //fun update(trainingNotification: TrainingNotification) = viewModelScope.launch(Dispatchers.IO) {
+    //        repository.update(trainingNotification)
+    //}
 
 
 }

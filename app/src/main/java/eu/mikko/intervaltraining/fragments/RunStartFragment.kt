@@ -1,19 +1,26 @@
 package eu.mikko.intervaltraining.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
+import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
+import kotlinx.android.synthetic.main.fragment_run_start.*
 
-class RunStartFragment : Fragment() {
+@AndroidEntryPoint
+class RunStartFragment : Fragment(R.layout.fragment_run_start) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_run_start, container, false)
+    private val viewModel: TrainingViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        runStartButton.setOnClickListener {
+            //
+            findNavController().navigate(R.id.action_runStartFragment_to_runFragment)
+        }
     }
 }

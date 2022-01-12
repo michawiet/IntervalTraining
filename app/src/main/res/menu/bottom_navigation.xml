@@ -2,25 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/home_nav"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_round_home_24"
         android:title="@string/home"
         app:showAsAction="always"
         android:checked="true" />
     <item
-        android:id="@+id/progress_nav"
+        android:id="@+id/progressFragment"
         android:icon="@drawable/ic_round_show_chart_24"
         android:title="@string/progress"
         app:showAsAction="ifRoom"
         android:checked="false" />
     <item
-        android:id="@+id/notifications_nav"
+        android:id="@+id/notificationsFragment"
         android:icon="@drawable/ic_round_notifications_24"
         android:title="@string/notifications"
         app:showAsAction="ifRoom"
         android:checked="false" />
     <item
-        android:id="@+id/train_nav"
+        android:id="@+id/runStartFragment"
         android:icon="@drawable/ic_round_directions_run_24"
         android:title="@string/train"
         app:showAsAction="ifRoom"

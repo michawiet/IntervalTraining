@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import eu.mikko.intervaltraining.R
 
-class RunSummaryFragment : Fragment() {
+
+class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

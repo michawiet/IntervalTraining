@@ -1,23 +1,14 @@
 package eu.mikko.intervaltraining.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
-import eu.mikko.intervaltraining.model.Run
-import eu.mikko.intervaltraining.repository.RunRepository
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import eu.mikko.intervaltraining.repositories.RunRepository
+import javax.inject.Inject
 
-class ProgressViewModel(application: Application) : AndroidViewModel(application) {
-    val allRuns: LiveData<List<Run>>
-    val totalDistance: LiveData<Int>
-    val totalTimeInMillis: LiveData<Long>
-    private val runRepository: RunRepository
+@HiltViewModel
+class ProgressViewModel @Inject constructor(private val runRepository: RunRepository) : ViewModel() {
 
-    init {
-        val runDao = IntervalTrainingDatabase.getDatabase(application).getRunDao()
-        runRepository = RunRepository(runDao)
-        allRuns = runRepository.getAllRunsSortedByDate()
-        totalDistance = runRepository.getTotalDistance()
-        totalTimeInMillis = runRepository.getTotalTimeInMillis()
-    }
+    //val allRuns = runRepository.getAllRunsSortedByDate()
+    //val totalDistance = runRepository.getTotalDistance()
+    //val totalTimeInMillis = runRepository.getTotalTimeInMillis()
 }

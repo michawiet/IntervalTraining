@@ -1,33 +1,23 @@
 package eu.mikko.intervaltraining.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
-import eu.mikko.intervaltraining.model.Interval
+import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.mikko.intervaltraining.model.Run
-import eu.mikko.intervaltraining.repository.IntervalRepository
-import eu.mikko.intervaltraining.repository.RunRepository
+import eu.mikko.intervaltraining.repositories.IntervalRepository
+import eu.mikko.intervaltraining.repositories.RunRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TrainingViewModel(application: Application) : AndroidViewModel(application) {
-    private val intervalRepository: IntervalRepository
-    private val runRepository: RunRepository
-    val allIntervals: List<Interval>
+@HiltViewModel
+class TrainingViewModel @Inject constructor(
+    private val intervalRepository: IntervalRepository,
+    private val runRepository: RunRepository) : ViewModel() {
 
-    init {
-        val database = IntervalTrainingDatabase.getDatabase(application)
+    //val allIntervals = intervalRepository.getAllIntervals()
 
-        val intervalDao = database.getIntervalDao()
-        intervalRepository = IntervalRepository(intervalDao)
-        allIntervals = intervalRepository.getAllIntervals()
-
-        val runDao = database.getRunDao()
-        runRepository = RunRepository(runDao)
-    }
-
-    fun addNewRun(run: Run) = viewModelScope.launch(Dispatchers.IO) {
-        runRepository.insertRun(run)
-    }
+    //fun addNewRun(run: Run) = viewModelScope.launch(Dispatchers.IO) {
+    //    runRepository.insertRun(run)
+    //}
 }

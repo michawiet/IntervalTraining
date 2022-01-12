@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/runStartFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/runStartFragment"
@@ -19,6 +20,9 @@
         <action
             android:id="@+id/action_runFragment_to_runSummaryFragment"
             app:destination="@id/runSummaryFragment" />
+        <action
+            android:id="@+id/action_runFragment_to_runStartFragment"
+            app:destination="@id/runStartFragment" />
     </fragment>
     <fragment
         android:id="@+id/runSummaryFragment"
@@ -28,4 +32,17 @@
             android:id="@+id/action_runSummaryFragment_to_runStartFragment"
             app:destination="@id/runStartFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="eu.mikko.intervaltraining.fragments.NotificationsFragment"
+        android:label="NotificationsFragment" />
+    <fragment
+        android:id="@+id/progressFragment"
+        android:name="eu.mikko.intervaltraining.fragments.ProgressFragment"
+        android:label="ProgressFragment" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="eu.mikko.intervaltraining.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>

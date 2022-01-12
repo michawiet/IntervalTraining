@@ -20,12 +20,12 @@ class TrainingReminderReceiver : BroadcastReceiver() {
                 val notificationBuilder = notificationHelper.trainingScheduledNotification()
                 notificationHelper.getManager().notify(1, notificationBuilder.build())
             } else if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
-                Log.d("TrainingReminderReceiver", "on boot received")
-                resetAllAlarms(context)
+                //Log.d("TrainingReminderReceiver", "on boot received")
+                //resetAllAlarms(context)
             }
         }
     }
-
+    /*
     private fun resetAllAlarms(context: Context?) {
         val database = IntervalTrainingDatabase.getDatabase(context!!).getTrainingNotificationDao()
         val getDataJob = GlobalScope.async { database.getAllNotifications() }
@@ -58,4 +58,5 @@ class TrainingReminderReceiver : BroadcastReceiver() {
             alarmManager.cancel(pendingIntent)
         }
     }
+     */
 }
