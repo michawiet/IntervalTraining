@@ -2,26 +2,16 @@ package eu.mikko.intervaltraining.fragments
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.Utilities.Companion.generateCalendar
-import eu.mikko.intervaltraining.adapters.TrainingNotificationListAdapter
+import eu.mikko.intervaltraining.other.Utilities.generateCalendar
 import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
 import eu.mikko.intervaltraining.viewmodel.ReminderNotificationViewModel
-import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
 @AndroidEntryPoint
 class NotificationsFragment : Fragment(R.layout.fragment_notifications) {

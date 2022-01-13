@@ -8,6 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
+import eu.mikko.intervaltraining.other.Constants.DATABASE_ASSET_PATH
+import eu.mikko.intervaltraining.other.Constants.DATABASE_NAME
 import javax.inject.Singleton
 
 @Module
@@ -20,10 +22,10 @@ object AppModule {
         Room.databaseBuilder(
         app,
         IntervalTrainingDatabase::class.java,
-        "interval_training"
-    ).createFromAsset(
-        "database/interval_training.db"
-    ).build()
+            DATABASE_NAME
+        ).createFromAsset(
+            DATABASE_ASSET_PATH
+        ).build()
 
     @Singleton
     @Provides

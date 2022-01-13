@@ -1,16 +1,8 @@
 package eu.mikko.intervaltraining.notifications
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import eu.mikko.intervaltraining.Utilities.Companion.generateCalendar
-import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import java.time.DayOfWeek
 
 class TrainingReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
