@@ -5,6 +5,16 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
+    <action
+        android:id="@+id/action_global_run_fragment"
+        app:destination="@+id/runFragment"
+        app:launchSingleTop="true" />
+
+    <action
+        android:id="@+id/action_global_run_start_fragment"
+        app:destination="@+id/runStartFragment"
+        app:launchSingleTop="true" />
+
     <fragment
         android:id="@+id/runStartFragment"
         android:name="eu.mikko.intervaltraining.fragments.RunStartFragment"

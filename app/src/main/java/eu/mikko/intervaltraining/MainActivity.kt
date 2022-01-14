@@ -1,18 +1,13 @@
 package eu.mikko.intervaltraining
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import eu.mikko.intervaltraining.adapters.ViewPagerAdapter
-import eu.mikko.intervaltraining.fragments.HomeFragment
-import eu.mikko.intervaltraining.fragments.NotificationsFragment
-import eu.mikko.intervaltraining.fragments.ProgressFragment
-import eu.mikko.intervaltraining.fragments.RunFragment
+import eu.mikko.intervaltraining.other.Constants.ACTION_SHOW_RUN_FRAGMENT
 import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
@@ -21,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        navigateToRunFragmentIfNeeded(intent)
 
         bottom_navigation.setupWithNavController(navHostFragment.findNavController())
 
@@ -32,5 +29,16 @@ class MainActivity : AppCompatActivity() {
                     else -> bottom_navigation.visibility = View.GONE
                 }
             }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToRunFragmentIfNeeded(intent)
+    }
+
+    private fun navigateToRunFragmentIfNeeded(intent: Intent?) {
+        if(intent?.action == ACTION_SHOW_RUN_FRAGMENT) {
+            navHostFragment.findNavController().navigate(R.id.action_global_run_fragment)
+        }
     }
 }

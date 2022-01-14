@@ -11,6 +11,10 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import eu.mikko.intervaltraining.R
+import eu.mikko.intervaltraining.other.Constants.PROGRESS_CHANNEL_ID
+import eu.mikko.intervaltraining.other.Constants.PROGRESS_CHANNEL_NAME
+import eu.mikko.intervaltraining.other.Constants.TRAINING_REMINDER_CHANNEL_ID
+import eu.mikko.intervaltraining.other.Constants.TRAINING_REMINDER_CHANNEL_NAME
 
 class NotificationHelper(base: Context?) : ContextWrapper(base) {
 
@@ -18,15 +22,15 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun createChannel() {
-        val trainingReminderChannel = NotificationChannel(channelTrainingRemindersID,
-                channelTrainingRemindersName,
+        val trainingReminderChannel = NotificationChannel(TRAINING_REMINDER_CHANNEL_ID,
+            TRAINING_REMINDER_CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_HIGH)
         trainingReminderChannel.enableVibration(true)
         trainingReminderChannel.enableLights(true)
         trainingReminderChannel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 
         val progressNotificationChannel =
-            NotificationChannel(channelProgressID, channelTrainingRemindersName, NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationChannel(PROGRESS_CHANNEL_ID, PROGRESS_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
 
         getManager().createNotificationChannel(trainingReminderChannel)
     }
@@ -39,25 +43,18 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
     }
 
     fun trainingScheduledNotification(): NotificationCompat.Builder =
-        NotificationCompat.Builder(applicationContext, channelTrainingRemindersID)
-            .setContentTitle(applicationContext.getString(R.string.app_name))
+        NotificationCompat.Builder(applicationContext, TRAINING_REMINDER_CHANNEL_ID)
+            .setContentTitle(TRAINING_REMINDER_CHANNEL_NAME)
             .setContentText(applicationContext.getString(R.string.training_scheduled_notification))
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setCategory("CATEGORY_REMINDER")
 
     fun trainingProgressNotification(progressStats: String): NotificationCompat.Builder =
-        NotificationCompat.Builder(applicationContext, channelProgressID)
+        NotificationCompat.Builder(applicationContext, PROGRESS_CHANNEL_ID)
             .setContentTitle(R.string.app_name.toString())
             .setContentText(progressStats)
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setCategory("CATEGORY_REMINDER")
-
-    companion object {
-        const val channelTrainingRemindersID = "trainingRemindersID"
-        const val channelTrainingRemindersName = "Training reminder"
-        const val channelProgressID = "progressNotificationsID"
-        const val channelProgressName = R.string.progress_notification_channel_name.toString()
-    }
 
     init {
         createChannel()

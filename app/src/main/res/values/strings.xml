@@ -16,13 +16,14 @@
     <string name="activity_timer_default">--:--</string>
     <string name="timer_minutes_hint">m</string>
     <string name="timer_seconds_hint">s</string>
-    <string name="activity_type_default">Walk</string>
+    <string name="activity_type_walk">Walk</string>
+    <string name="activity_type_run">Run</string>
     <string name="training_scheduled_notification">It is time for your training!</string>
     <string name="training_notification_channel_name">Training reminder</string>
     <string name="progress_notification_channel_name">Progress</string>
     <string name="workout_distance_unit">km</string>
-    <string name="workout_speed_unit">km/h</string>\
-    <string name="workout_distance_default">0.00</string>
+    <string name="workout_speed_unit">/km</string>\
+    <string name="workout_distance_default">0.000</string>
     <string name="workout_speed_default">--:--</string>
     <string name="stats_total_distance_km">Total distance km</string>
     <string name="stats_total_time">Total Time</string>

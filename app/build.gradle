@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+
     def roomVersion = "2.4.0"
     def lifecycleVersion = "2.4.0"
     def constraintLayoutVersion = "2.1.2"
@@ -51,6 +52,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
 
     // UI
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
@@ -70,7 +73,7 @@ dependencies {
 
     // Location Services
     implementation 'com.google.android.gms:play-services-location:19.0.1'
-    //implementation 'com.google.android.gms:play-services-maps:19.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     //
     implementation 'androidx.activity:activity-ktx:1.4.0'

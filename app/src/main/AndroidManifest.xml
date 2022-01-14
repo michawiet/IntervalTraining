@@ -25,6 +25,9 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".services.TrackingService"
+            android:foregroundServiceType="location" />
+
         <receiver android:name=".notifications.TrainingReminderReceiver" android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
