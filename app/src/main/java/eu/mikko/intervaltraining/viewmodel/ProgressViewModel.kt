@@ -8,7 +8,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProgressViewModel @Inject constructor(private val runRepository: RunRepository) : ViewModel() {
 
-    //val allRuns = runRepository.getAllRunsSortedByDate()
-    //val totalDistance = runRepository.getTotalDistance()
-    //val totalTimeInMillis = runRepository.getTotalTimeInMillis()
+    val allRuns = runRepository.getAllRunsSortedByDate()
+    val totalDistance = runRepository.getTotalDistance()
+    val totalTimeInMillis = runRepository.getTotalTimeInMillis()
 }

@@ -20,11 +20,12 @@ class MainActivity : AppCompatActivity() {
         navigateToRunFragmentIfNeeded(intent)
 
         bottom_navigation.setupWithNavController(navHostFragment.findNavController())
+        bottom_navigation.setOnItemReselectedListener { /* Prevent from reloading */ }
 
         navHostFragment.findNavController()
             .addOnDestinationChangedListener { _, destination, _ ->
                 when(destination.id) {
-                    R.id.homeFragment, R.id.progressFragment, R.id.runStartFragment, R.id.notificationsFragment ->
+                    R.id.progressFragment, R.id.runStartFragment, R.id.notificationsFragment ->
                         bottom_navigation.visibility = View.VISIBLE
                     else -> bottom_navigation.visibility = View.GONE
                 }

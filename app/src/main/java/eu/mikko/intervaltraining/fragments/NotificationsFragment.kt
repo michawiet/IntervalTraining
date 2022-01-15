@@ -2,16 +2,26 @@ package eu.mikko.intervaltraining.fragments
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
+import eu.mikko.intervaltraining.adapters.TrainingNotificationListAdapter
 import eu.mikko.intervaltraining.other.Utilities.generateCalendar
 import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
 import eu.mikko.intervaltraining.viewmodel.ReminderNotificationViewModel
+import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
 @AndroidEntryPoint
 class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
@@ -38,7 +48,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
 
         alarmManager.cancel(pendingIntent)
     }
-/*
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,11 +59,11 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
                 //timeSetListener
                 { _, hourOfDay, minute ->
                     val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, hourOfDay, minute, true)
-                    // if enabled cancel old, add new
+                    // if enabled cancel old
                     if(it.isEnabled)
                         cancelAlarm(it.id)
+                    //add new alarm
                     startAlarm(newTrainingNotification)
-
                     // Update the notification in database
                     this.viewModel.update(newTrainingNotification)
                 },
@@ -63,15 +73,10 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
             ).show()
         }, {
             val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, it.hour, it.minute, !it.isEnabled)
-            Toast.makeText(context, "Notification toggled! ${it.dayOfWeek}; now is ${!it.isEnabled}; ${it.hour}:${it.minute}", Toast.LENGTH_SHORT).show()
-
-            // If enabled, cancel the alarm
             if(it.isEnabled)
                 cancelAlarm(it.id)
             else
                 startAlarm(newTrainingNotification)
-            // Else create new pending intent
-
             this.viewModel.update(newTrainingNotification)
         })
 
@@ -80,11 +85,10 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        this.viewModel = ViewModelProvider(this)[ReminderNotificationViewModel::class.java]
         this.viewModel.readAllData.observe(viewLifecycleOwner, { trainingNotification ->
                 adapter.setData(trainingNotification)
-            })
+        })
 
         return view
-    }*/
+    }
 }

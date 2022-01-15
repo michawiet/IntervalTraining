@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Interval (
     @PrimaryKey(autoGenerate = false)
     val workoutStep: Int,
-    val warmupSeconds: Int,
-    val runSeconds: Int,
-    val walkSeconds: Int,
-    val totalWorkoutTime: Int)
+    val warmupSeconds: Long,
+    val runSeconds: Long,
+    val walkSeconds: Long,
+    val totalWorkoutTime: Long)

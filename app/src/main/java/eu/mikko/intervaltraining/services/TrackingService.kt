@@ -46,8 +46,10 @@ typealias Intervals = MutableList<Interval>
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
 
-    var isFirstRun = true
+    //Easy access to calculating distance and getting speed
     var lastLocation: Location? = null
+
+    var isFirstRun = true
     var serviceKilled = false
 
     @Inject
@@ -63,10 +65,11 @@ class TrackingService : LifecycleService() {
     companion object {
         val isTracking = MutableLiveData<Boolean>()
         val pathPointsOfIntervals = MutableLiveData<Intervals>()
-        val currentSpeedMetersPerSecond = MutableLiveData<Float>(0f)
-        val distanceInMeters = MutableLiveData<Float>(0f)
+        val currentSpeedMetersPerSecond = MutableLiveData<Float>()
+        val distanceInMeters = MutableLiveData<Float>()
+
         // Toggled between walk and run by the intervals
-        val isRunningInterval = MutableLiveData<Boolean>(false)
+        val isRunningInterval = MutableLiveData<Boolean>()
 
         //activity timer
         val timeRunInMillis = MutableLiveData<Long>()
@@ -77,8 +80,11 @@ class TrackingService : LifecycleService() {
     private fun postInitialValues() {
         isTracking.postValue(false)
         pathPointsOfIntervals.postValue(mutableListOf())
+        currentSpeedMetersPerSecond.postValue(0f)
+        distanceInMeters.postValue(0f)
         timeRunInSeconds.postValue(0L)
         timeRunInMillis.postValue(0L)
+        isRunningInterval.postValue(false)
     }
 
     override fun onCreate() {
@@ -96,7 +102,7 @@ class TrackingService : LifecycleService() {
     private fun killService() {
         serviceKilled = true
         isFirstRun = true
-        //pauseService()
+        pauseService()
         postInitialValues()
         stopForeground(true)
         stopSelf()
@@ -115,7 +121,8 @@ class TrackingService : LifecycleService() {
                     }
                 }
                 ACTION_PAUSE_SERVICE -> {
-                    //pauseService()
+                    Timber.d("Paused service")
+                    pauseService()
                 }
                 ACTION_STOP_SERVICE -> {
                     Timber.d("Stopped service")
@@ -153,6 +160,11 @@ class TrackingService : LifecycleService() {
             }
             timeRun += lapTime
         }
+    }
+
+    private fun pauseService() {
+        isTracking.postValue(false)
+        isTimerEnabled = false
     }
 
     private fun updateNotificationTrackingState(isTracking: Boolean) {
@@ -216,7 +228,9 @@ class TrackingService : LifecycleService() {
         }
     }
 
+
     // MutableLiveData<List<Location>>
+    //Not identical
     private fun addPathPoint(location: Location?) {
         location?.let {
             currentSpeedMetersPerSecond.value = location.speed

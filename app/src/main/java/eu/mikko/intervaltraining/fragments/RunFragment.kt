@@ -1,6 +1,7 @@
 package eu.mikko.intervaltraining.fragments
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -13,16 +14,25 @@ import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.other.Constants.ACTION_PAUSE_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_START_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_STOP_SERVICE
+import eu.mikko.intervaltraining.other.Constants.KEY_WORKOUT_STEP
 import eu.mikko.intervaltraining.other.TrackingUtility
 import eu.mikko.intervaltraining.services.Intervals
 import eu.mikko.intervaltraining.services.TrackingService
 import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run.*
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class RunFragment : Fragment(R.layout.fragment_run) {
+
+    // Shared preferences injection
+    @Inject
+    lateinit var sharedPref: SharedPreferences
+
+    @set:Inject
+    var workoutStep: Int = 1
 
     private val viewModel: TrainingViewModel by viewModels()
     private var isTracking = false
@@ -86,8 +96,8 @@ class RunFragment : Fragment(R.layout.fragment_run) {
             // convert meters to kilometers
             workout_distance.text = String.format("%.3f", it.div(1000))
         })
-        TrackingService.isRunningInterval.observe(viewLifecycleOwner, { isRunning ->
-            if(isRunning) {
+        TrackingService.isRunningInterval.observe(viewLifecycleOwner, { isRunningInterval ->
+            if(isRunningInterval) {
                 workout_interval_type.text = getString(R.string.activity_type_run)
                 //trigger tts with "Start running!" message
 
@@ -123,4 +133,14 @@ class RunFragment : Fragment(R.layout.fragment_run) {
             it.action = action
             requireContext().startService(it)
         }
+
+    //private saveRun()
+
+    private fun writeNewWorkoutStepToSharedPref(newWorkoutStep: Int) {
+        //TODO("check if increased workout step is not greater than last workout step (36, but read from viewmodel")
+
+        sharedPref.edit()
+            .putInt(KEY_WORKOUT_STEP, newWorkoutStep)
+            .apply()
+    }
 }

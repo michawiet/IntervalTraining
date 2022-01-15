@@ -13,11 +13,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ReminderNotificationViewModel @Inject constructor(private val repository: TrainingNotificationRepository) : ViewModel() {
 
-    //val readAllData = repository.readAllTrainingNotifications()
+    val readAllData = repository.readAllTrainingNotifications()
 
-    //fun update(trainingNotification: TrainingNotification) = viewModelScope.launch(Dispatchers.IO) {
-    //        repository.update(trainingNotification)
-    //}
+    fun update(trainingNotification: TrainingNotification) = viewModelScope.launch {
+            repository.update(trainingNotification)
+    }
 
 
 }

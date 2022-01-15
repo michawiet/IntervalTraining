@@ -1,6 +1,8 @@
 package eu.mikko.intervaltraining.di
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
@@ -10,6 +12,8 @@ import dagger.hilt.components.SingletonComponent
 import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
 import eu.mikko.intervaltraining.other.Constants.DATABASE_ASSET_PATH
 import eu.mikko.intervaltraining.other.Constants.DATABASE_NAME
+import eu.mikko.intervaltraining.other.Constants.KEY_WORKOUT_STEP
+import eu.mikko.intervaltraining.other.Constants.SHARED_PREFERENCES_NAME
 import javax.inject.Singleton
 
 @Module
@@ -38,4 +42,13 @@ object AppModule {
     @Singleton
     @Provides
     fun provideTrainingNotificationDao(db: IntervalTrainingDatabase) = db.getTrainingNotificationDao()
+
+    @Singleton
+    @Provides
+    fun provideSharedPreferences(@ApplicationContext app: Context) =
+        app.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)
+
+    @Singleton
+    @Provides
+    fun provideWorkoutStep(sharedPref: SharedPreferences) = sharedPref.getInt(KEY_WORKOUT_STEP, 1)
 }

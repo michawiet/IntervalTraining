@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/progressFragment">
 
     <action
         android:id="@+id/action_global_run_fragment"
@@ -50,9 +50,4 @@
         android:id="@+id/progressFragment"
         android:name="eu.mikko.intervaltraining.fragments.ProgressFragment"
         android:label="ProgressFragment" />
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="eu.mikko.intervaltraining.fragments.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
 </navigation>

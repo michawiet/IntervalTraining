@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:padding="8dp">
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineIntervalChart"
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/runTimePieChart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <View
         android:id="@+id/divider_one"
@@ -42,6 +42,33 @@
         app:layout_constraintTop_toBottomOf="@id/divider_one" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvWarmupLengthInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Warmup walk"
+        android:textColor="#757575"
+        android:textSize="12sp"
+        android:typeface="monospace"
+        app:layout_constraintEnd_toEndOf="@+id/tvWarmupLength"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/tvWarmupLength"
+        app:layout_constraintTop_toBottomOf="@id/tvWarmupLength" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvWarmupLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/minutes_seconds_default"
+        android:textSize="18sp"
+        android:textColor="@color/black_inactive"
+        android:typeface="monospace"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvIntervalLengthTitle"
+        app:layout_constraintEnd_toStartOf="@+id/tvRunTime"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvWalkIntervalLengthInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,13 +77,13 @@
         android:textColor="#757575"
         android:textSize="12sp"
         android:typeface="monospace"
-        app:layout_constraintEnd_toEndOf="@+id/tvTotalDistance"
+        app:layout_constraintEnd_toEndOf="@+id/tvWalkTime"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/tvTotalDistance"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalDistance" />
+        app:layout_constraintStart_toStartOf="@+id/tvWalkTime"
+        app:layout_constraintTop_toBottomOf="@id/tvWalkTime" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvTotalDistance"
+        android:id="@+id/tvWalkTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/minutes_seconds_default"
@@ -66,7 +93,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tvIntervalLengthTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline2" />
+        app:layout_constraintStart_toEndOf="@+id/tvRunTime" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvRunIntervalLengthInfo"
@@ -77,13 +104,13 @@
         android:textColor="#757575"
         android:textSize="12sp"
         android:typeface="monospace"
-        app:layout_constraintEnd_toEndOf="@+id/tvTotalTime"
+        app:layout_constraintEnd_toEndOf="@+id/tvRunTime"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/tvTotalTime"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalTime" />
+        app:layout_constraintStart_toStartOf="@+id/tvRunTime"
+        app:layout_constraintTop_toBottomOf="@id/tvRunTime" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvTotalTime"
+        android:id="@+id/tvRunTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/minutes_seconds_default"
@@ -93,7 +120,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tvIntervalLengthTitle"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/guideline2" />
 
     <View
         android:id="@+id/divider_two"
@@ -104,29 +131,54 @@
         android:background="?android:attr/listDivider"/>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvSetsTitle"
+        android:id="@+id/tvTotalActiveTimeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="@string/sets_of_intervals_title"
+        android:text="@string/active_time_title"
         android:textColor="@color/black_active"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintTop_toBottomOf="@id/divider_two" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvSetsCount"
+        android:id="@+id/tvTotalActiveTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default_sets_0"
+        android:text="@string/minutes_seconds_default"
         android:textSize="18sp"
         android:textColor="@color/black_inactive"
         android:typeface="monospace"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvSetsTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalActiveTimeTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline2" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvWorkoutStepTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="@string/workout_step"
+        android:textColor="@color/black_active"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/divider_two" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvWorkoutStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/workout_step_default"
+        android:textSize="18sp"
+        android:textColor="@color/black_inactive"
+        android:typeface="monospace"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvWorkoutStepTitle"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

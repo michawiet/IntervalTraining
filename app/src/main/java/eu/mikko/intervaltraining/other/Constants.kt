@@ -1,7 +1,5 @@
 package eu.mikko.intervaltraining.other
 
-import eu.mikko.intervaltraining.R
-
 object Constants {
     // database
     const val DATABASE_NAME = "interval_training"
@@ -18,7 +16,11 @@ object Constants {
 
     const val LOCATION_UPDATE_INTERVAL = 2000L
     const val FASTEST_LOCATION_INTERVAL = 1000L
-    const val TIMER_UPDATE_INTERVAL = 500L
+    const val TIMER_UPDATE_INTERVAL = 50L
+
+    // shared pref
+    const val SHARED_PREFERENCES_NAME = "sharedPref"
+    const val KEY_WORKOUT_STEP = "KEY_WORKOUT_STEP"
 
     //notifications
     const val TRACKING_NOTIFICATION_CHANNEL_ID = "tracking_channel"
