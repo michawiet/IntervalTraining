@@ -4,23 +4,25 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
+import eu.mikko.intervaltraining.model.Interval
+import eu.mikko.intervaltraining.model.Run
+import eu.mikko.intervaltraining.other.Constants.ACTION_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.ACTION_PAUSE_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_START_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_STOP_SERVICE
+import eu.mikko.intervaltraining.other.Constants.EXTRAS_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.KEY_WORKOUT_STEP
 import eu.mikko.intervaltraining.other.TrackingUtility
 import eu.mikko.intervaltraining.services.Intervals
 import eu.mikko.intervaltraining.services.TrackingService
 import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run.*
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -35,6 +37,7 @@ class RunFragment : Fragment(R.layout.fragment_run) {
     var workoutStep: Int = 1
 
     private val viewModel: TrainingViewModel by viewModels()
+    private lateinit var interval: Interval
     private var isTracking = false
     private var pathPointsOfIntervals = mutableListOf<Intervals>()
 
@@ -62,7 +65,6 @@ class RunFragment : Fragment(R.layout.fragment_run) {
                 .setTitle(getString(R.string.stop_activity_title))
                 .setMessage(getString(R.string.stop_activity_message))
                 .setPositiveButton(getString(R.string.confirm_cancel)) { dialog, _ ->
-                    // TODO("cancel all the stuff")
                     stopRun()
                     dialog.cancel()
                 }.setNegativeButton(getString(R.string.confirm_continue)) { dialog, _ ->
@@ -70,6 +72,13 @@ class RunFragment : Fragment(R.layout.fragment_run) {
                 }.create()
                 .show()
         }
+
+        viewModel.getIntervalByWorkoutStep(this.workoutStep).observe(viewLifecycleOwner, {
+            sendIntervalsToService(it)
+            activityPlayPauseFab.show()
+            interval = it
+        })
+
         subscribeToObservers()
     }
 
@@ -107,6 +116,9 @@ class RunFragment : Fragment(R.layout.fragment_run) {
                 //trigger tts with "Start running!" message
             }
         })
+        TrackingService.intervalTimer.observe(viewLifecycleOwner, {
+            interval_timer.text = TrackingUtility.getFormattedStopWatchTime(it)
+        })
     }
 
     private fun toggleRun() {
@@ -134,7 +146,26 @@ class RunFragment : Fragment(R.layout.fragment_run) {
             requireContext().startService(it)
         }
 
-    //private saveRun()
+    private fun sendIntervalsToService(interval: Interval) {
+        //val runData = TrackingUtility.RunData(interval)
+        val intent = Intent(requireContext(), TrackingService::class.java)
+        val pInterval = TrackingUtility.ParcelableInterval(interval.warmupSeconds, interval.runSeconds, interval.walkSeconds, interval.totalWorkoutTime)
+        intent.putExtra(EXTRAS_INTERVAL_DATA, pInterval)
+        intent.action = ACTION_INTERVAL_DATA
+        requireContext().startService(intent)
+    }
+
+    private fun saveRun() {
+        val newRun = Run()
+        newRun.apply {
+            //timeInMillis
+            //avgSpeedInKMH
+            //distanceInMeters
+            //timestamp
+            //rating
+        }
+        //viewModel.insertNewRun(newRun)
+    }
 
     private fun writeNewWorkoutStepToSharedPref(newWorkoutStep: Int) {
         //TODO("check if increased workout step is not greater than last workout step (36, but read from viewmodel")

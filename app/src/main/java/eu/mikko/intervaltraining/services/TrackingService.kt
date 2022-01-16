@@ -22,9 +22,11 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
+import eu.mikko.intervaltraining.other.Constants.ACTION_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.ACTION_PAUSE_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_START_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_STOP_SERVICE
+import eu.mikko.intervaltraining.other.Constants.EXTRAS_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.FASTEST_LOCATION_INTERVAL
 import eu.mikko.intervaltraining.other.Constants.LOCATION_UPDATE_INTERVAL
 import eu.mikko.intervaltraining.other.Constants.TIMER_UPDATE_INTERVAL
@@ -40,31 +42,33 @@ import timber.log.Timber
 import javax.inject.Inject
 
 //typealias IntervalChunk = MutableList<Location>
-typealias Interval = MutableList<LatLng>
-typealias Intervals = MutableList<Interval>
+typealias IntervalPathPoints = MutableList<LatLng>
+typealias Intervals = MutableList<IntervalPathPoints>
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
-
     //Easy access to calculating distance and getting speed
     var lastLocation: Location? = null
 
     var isFirstRun = true
     var serviceKilled = false
 
+    lateinit var runData: TrackingUtility.RunData
+
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    private val timeRunInSeconds = MutableLiveData<Long>()
-
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
-
     lateinit var curNotificationBuilder: NotificationCompat.Builder
 
+    private val timeRunInSeconds = MutableLiveData<Long>()
+
     companion object {
+        // tracking
         val isTracking = MutableLiveData<Boolean>()
         val pathPointsOfIntervals = MutableLiveData<Intervals>()
+        //tracking stats
         val currentSpeedMetersPerSecond = MutableLiveData<Float>()
         val distanceInMeters = MutableLiveData<Float>()
 
@@ -74,17 +78,24 @@ class TrackingService : LifecycleService() {
         //activity timer
         val timeRunInMillis = MutableLiveData<Long>()
         //interval timer, counting down
-        //val intervalTimer = MutableLiveData<Long>(0L)
+        val intervalTimer = MutableLiveData<Long>()
+        val maxTimeInInterval = MutableLiveData<Long>()
+
+        val isActivityOver = MutableLiveData<Boolean>()
     }
 
     private fun postInitialValues() {
         isTracking.postValue(false)
         pathPointsOfIntervals.postValue(mutableListOf())
+
         currentSpeedMetersPerSecond.postValue(0f)
         distanceInMeters.postValue(0f)
+        isRunningInterval.postValue(false)
+
         timeRunInSeconds.postValue(0L)
         timeRunInMillis.postValue(0L)
-        isRunningInterval.postValue(false)
+
+        isActivityOver.postValue(false)
     }
 
     override fun onCreate() {
@@ -128,10 +139,25 @@ class TrackingService : LifecycleService() {
                     Timber.d("Stopped service")
                     killService()
                 }
+                ACTION_INTERVAL_DATA -> {
+                    if(it.hasExtra(EXTRAS_INTERVAL_DATA)) {
+                        it.getParcelableExtra<TrackingUtility.ParcelableInterval>(EXTRAS_INTERVAL_DATA)
+                            .also { it -> if (it != null) { setRunData(it) } }
+                        Timber.d("Received data; workoutTime = ${this.runData.totalWorkoutTime}; intervals.size = ${this.runData.intervals}")
+                    }
+                }
             }
         }
 
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun setRunData(it: TrackingUtility.ParcelableInterval) {
+        runData = TrackingUtility.RunData(it)
+        currentInterval = 0
+        currentIntervalData = runData.intervals[currentInterval]
+        maxTimeInInterval.postValue(runData.intervals[currentInterval].lengthMillis)
+        intervalTimer.postValue(0L)
     }
 
     private var isTimerEnabled = false
@@ -139,6 +165,8 @@ class TrackingService : LifecycleService() {
     private var timeRun = 0L
     private var timeStarted = 0L
     private var lastSecondTimeStamp = 0L
+    private var currentInterval = 0
+    private lateinit var currentIntervalData: TrackingUtility.RunData.IntervalData
 
     private fun startTimer() {
         addEmptyInterval()
@@ -147,11 +175,26 @@ class TrackingService : LifecycleService() {
         isTimerEnabled = true
 
         CoroutineScope(Dispatchers.Main).launch {
+            var timeLeftInInterval = 0L
             while(isTracking.value!!) {
                 // Time diff of now and timeStarted
                 lapTime = System.currentTimeMillis() - timeStarted
                 // post the new lapTime
                 timeRunInMillis.postValue(timeRun + lapTime)
+
+                if(timeRun + lapTime >= runData.totalWorkoutTime) {
+                    pauseService()
+                    isActivityOver.postValue(true)
+                    break
+                }
+
+                // update interval timer
+                timeLeftInInterval = (currentIntervalData.startMillis + currentIntervalData.lengthMillis) - (timeRun + lapTime)
+                intervalTimer.postValue(if(timeLeftInInterval < 0 ) 0 else timeLeftInInterval)
+                if(timeLeftInInterval <= 0L) {
+                    nextInterval()
+                }
+
                 if(timeRunInMillis.value!! >= lastSecondTimeStamp + 1000L) {
                     timeRunInSeconds.postValue(timeRunInSeconds.value!! + 1)
                     lastSecondTimeStamp += 1000L
@@ -159,6 +202,15 @@ class TrackingService : LifecycleService() {
                 delay(TIMER_UPDATE_INTERVAL)
             }
             timeRun += lapTime
+        }
+    }
+
+    private fun nextInterval() {
+        currentInterval++
+        if(runData.intervals.size > currentInterval) {
+            currentIntervalData = runData.intervals[currentInterval]
+            maxTimeInInterval.postValue(currentIntervalData.lengthMillis)
+            isRunningInterval.postValue(currentIntervalData.isRunningInterval)
         }
     }
 
@@ -230,7 +282,7 @@ class TrackingService : LifecycleService() {
 
 
     // MutableLiveData<List<Location>>
-    //Not identical
+    // TODO("Not identical")
     private fun addPathPoint(location: Location?) {
         location?.let {
             currentSpeedMetersPerSecond.value = location.speed
@@ -248,6 +300,7 @@ class TrackingService : LifecycleService() {
             }
         }
     }
+
     //call after interval timer runs out
     private fun addEmptyInterval() = pathPointsOfIntervals.value?.apply {
         add(mutableListOf())
@@ -255,7 +308,6 @@ class TrackingService : LifecycleService() {
     } ?: pathPointsOfIntervals.postValue(mutableListOf(mutableListOf()))
 
     private fun startForegroundService() {
-        // grab the interval data of the current step
         startTimer()
         isTracking.postValue(true)
 
