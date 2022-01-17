@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Interval
@@ -18,11 +19,17 @@ import eu.mikko.intervaltraining.other.Constants.ACTION_START_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_STOP_SERVICE
 import eu.mikko.intervaltraining.other.Constants.EXTRAS_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.KEY_WORKOUT_STEP
+import eu.mikko.intervaltraining.other.Constants.TIMER_UPDATE_INTERVAL
 import eu.mikko.intervaltraining.other.TrackingUtility
-import eu.mikko.intervaltraining.services.Intervals
+import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
+import eu.mikko.intervaltraining.other.TrackingUtility.getTotalDistance
+import eu.mikko.intervaltraining.other.TrackingUtility.rateWorkout
+import eu.mikko.intervaltraining.services.IntervalPathPoints
 import eu.mikko.intervaltraining.services.TrackingService
 import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run.*
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -36,10 +43,12 @@ class RunFragment : Fragment(R.layout.fragment_run) {
     @set:Inject
     var workoutStep: Int = 1
 
+    private var maxWorkoutStep = 36
+
     private val viewModel: TrainingViewModel by viewModels()
     private lateinit var interval: Interval
     private var isTracking = false
-    private var pathPointsOfIntervals = mutableListOf<Intervals>()
+    private var pathPointsOfIntervals = mutableListOf<IntervalPathPoints>()
 
     private var curTimeInMillis = 0L
 
@@ -50,13 +59,11 @@ class RunFragment : Fragment(R.layout.fragment_run) {
                 //resume the service
                 sendCommandToService(ACTION_START_SERVICE)
                 isTracking = true
-                activityStopFab.show()
-                activityPlayPauseFab.hide()
+                activityPlayPauseFab.setImageResource(R.drawable.ic_round_pause_24)
             } else {
-              sendCommandToService(ACTION_PAUSE_SERVICE)
-              isTracking = false
-              activityStopFab.show()
-              //activityPlayPauseFab.setImageIcon(R.drawable.ic_round_pause_24)
+                sendCommandToService(ACTION_PAUSE_SERVICE)
+                isTracking = false
+                activityPlayPauseFab.setImageResource(R.drawable.ic_round_play_arrow_24)
             }
         }
         activityStopFab.setOnClickListener {
@@ -79,27 +86,20 @@ class RunFragment : Fragment(R.layout.fragment_run) {
             interval = it
         })
 
+        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner, {
+            maxWorkoutStep = it
+        })
+
         subscribeToObservers()
     }
 
     private fun subscribeToObservers() {
-        TrackingService.isTracking.observe(viewLifecycleOwner, {
-            // updateTracking()
-        })
         TrackingService.timeRunInMillis.observe(viewLifecycleOwner, {
             curTimeInMillis = it
             activity_timer.text = TrackingUtility.getFormattedStopWatchTime(curTimeInMillis)
         })
         TrackingService.currentSpeedMetersPerSecond.observe(viewLifecycleOwner, {
-            try {
-                val pace = 1000 / (it * 60)
-                val leftover = pace % 1
-                val minutes = (pace - leftover).roundToInt()
-                val seconds = (leftover * 60).roundToInt()
-                workout_speed.text = String.format("%02d:%02d", minutes, seconds)
-            } catch (e: IllegalArgumentException) {
-                workout_speed.text = getString(R.string.workout_speed_default)
-            }
+            workout_speed.text = getKilometersPerMinuteFromMetersPerSecond(it)
         })
         TrackingService.distanceInMeters.observe(viewLifecycleOwner, {
             // convert meters to kilometers
@@ -109,7 +109,6 @@ class RunFragment : Fragment(R.layout.fragment_run) {
             if(isRunningInterval) {
                 workout_interval_type.text = getString(R.string.activity_type_run)
                 //trigger tts with "Start running!" message
-
             }
             else {
                 workout_interval_type.text = getString(R.string.activity_type_walk)
@@ -118,26 +117,27 @@ class RunFragment : Fragment(R.layout.fragment_run) {
         })
         TrackingService.intervalTimer.observe(viewLifecycleOwner, {
             interval_timer.text = TrackingUtility.getFormattedStopWatchTime(it)
-        })
-    }
 
-    private fun toggleRun() {
-        if(isTracking) {
-            //show stop button????? XD
-            sendCommandToService(ACTION_PAUSE_SERVICE)
-        } else {
-            sendCommandToService(ACTION_START_SERVICE)
-        }
+        })
+        TrackingService.intervalProgress.observe(viewLifecycleOwner, {
+            interval_progress_bar.setProgressWithAnimation(it, TIMER_UPDATE_INTERVAL)
+        })
+        TrackingService.activityProgress.observe(viewLifecycleOwner, {
+            workout_progress_bar.setProgressWithAnimation(it, TIMER_UPDATE_INTERVAL)
+        })
+        TrackingService.isActivityOver.observe(viewLifecycleOwner, {
+            if(it) {
+                saveRun()
+            }
+        })
+        TrackingService.pathPointsOfIntervals.observe(viewLifecycleOwner, {
+            pathPointsOfIntervals = it
+        })
     }
 
     private fun stopRun() {
         sendCommandToService(ACTION_STOP_SERVICE)
         findNavController().navigate(R.id.action_runFragment_to_runStartFragment)
-    }
-
-    private fun updateTracking(isTracking: Boolean) {
-        this.isTracking = isTracking
-        //activityPlayPauseFab.
     }
 
     private fun sendCommandToService(action: String) =
@@ -147,7 +147,6 @@ class RunFragment : Fragment(R.layout.fragment_run) {
         }
 
     private fun sendIntervalsToService(interval: Interval) {
-        //val runData = TrackingUtility.RunData(interval)
         val intent = Intent(requireContext(), TrackingService::class.java)
         val pInterval = TrackingUtility.ParcelableInterval(interval.warmupSeconds, interval.runSeconds, interval.walkSeconds, interval.totalWorkoutTime)
         intent.putExtra(EXTRAS_INTERVAL_DATA, pInterval)
@@ -158,20 +157,39 @@ class RunFragment : Fragment(R.layout.fragment_run) {
     private fun saveRun() {
         val newRun = Run()
         newRun.apply {
-            //timeInMillis
-            //avgSpeedInKMH
-            //distanceInMeters
-            //timestamp
-            //rating
+            timeInMillis = interval.totalWorkoutTime * 1000L
+            distanceInMeters = getTotalDistance(pathPointsOfIntervals).toInt()
+            avgSpeedMetersPerSecond = distanceInMeters.div(interval.totalWorkoutTime.toFloat())
+            timestamp = Calendar.getInstance().timeInMillis
+            rating = rateWorkout(interval, pathPointsOfIntervals)
         }
-        //viewModel.insertNewRun(newRun)
+        writeNewWorkoutStepToSharedPref(newRun.rating)
+        viewModel.insertNewRun(newRun)
+        when {
+            newRun.rating > 75 -> writeNewWorkoutStepToSharedPref(workoutStep + 1)
+            newRun.rating > 50 -> writeNewWorkoutStepToSharedPref(workoutStep)
+            else -> writeNewWorkoutStepToSharedPref(workoutStep - 1)
+        }
+        Snackbar.make(
+            requireActivity().findViewById(R.id.rootView),
+            "Run saved successfully with a score of ${newRun.rating}",
+            Snackbar.LENGTH_LONG
+        ).show()
+        stopRun()
+        Timber.d("Run data was saved!")
     }
 
     private fun writeNewWorkoutStepToSharedPref(newWorkoutStep: Int) {
         //TODO("check if increased workout step is not greater than last workout step (36, but read from viewmodel")
+        var correctedWorkoutStep = newWorkoutStep
+
+        if(newWorkoutStep < 1)
+            correctedWorkoutStep = 1
+        else if(newWorkoutStep > maxWorkoutStep)
+            correctedWorkoutStep = maxWorkoutStep
 
         sharedPref.edit()
-            .putInt(KEY_WORKOUT_STEP, newWorkoutStep)
+            .putInt(KEY_WORKOUT_STEP, correctedWorkoutStep)
             .apply()
     }
 }

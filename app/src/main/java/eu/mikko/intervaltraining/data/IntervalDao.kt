@@ -12,4 +12,7 @@ interface IntervalDao {
 
     @Query("SELECT * FROM intervals_table WHERE workoutStep=:workoutStep")
     fun getIntervalByWorkoutStep(workoutStep: Int): LiveData<Interval>
+
+    @Query("SELECT MAX(workoutStep) FROM intervals_table")
+    fun getMaxWorkoutStep(): LiveData<Int>
 }

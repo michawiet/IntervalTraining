@@ -20,7 +20,7 @@
             android:layout_marginTop="16dp"
             app:cpb_background_progressbar_color="@color/primary_50"
             app:cpb_background_progressbar_width="10dp"
-            app:cpb_progress="75"
+            app:cpb_progress="0"
             app:cpb_progressbar_color="@color/primary_500"
             app:cpb_progressbar_width="10dp"
             app:cpb_round_border="true" />
@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="@id/workout_progress_bar"
             app:layout_constraintBottom_toBottomOf="@id/workout_progress_bar"
             app:layout_constraintEnd_toEndOf="@id/workout_progress_bar"
-            app:cpb_progress="25"
+            app:cpb_progress="0"
             app:cpb_round_border="true"
             app:cpb_background_progressbar_color="@color/primary_100"
             app:cpb_background_progressbar_width="10dp"

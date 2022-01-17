@@ -22,4 +22,6 @@ class TrainingViewModel @Inject constructor(
     fun insertNewRun(run: Run) = viewModelScope.launch {
         runRepository.insertRun(run)
     }
+
+    fun getMaxWorkoutStep() = intervalRepository.getMaxWorkoutStep()
 }

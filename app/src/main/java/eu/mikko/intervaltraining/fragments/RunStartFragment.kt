@@ -14,7 +14,6 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Interval
@@ -25,7 +24,6 @@ import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run_start.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.text.NumberFormat
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,12 +48,11 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
         workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_STEP, 1)
         viewModel.getIntervalByWorkoutStep(workoutStep).observe(viewLifecycleOwner, {
             tvWarmupLength.text = getFormattedTimeFromSeconds(it.warmupSeconds)
-            tvWalkTime.text = getFormattedTimeFromSeconds(it.walkSeconds)
-            tvRunTime.text = getFormattedTimeFromSeconds(it.runSeconds)
+            tvTotalDistanceCovered.text = getFormattedTimeFromSeconds(it.walkSeconds)
+            tvTotalTimeSpentTrackingActivity.text = getFormattedTimeFromSeconds(it.runSeconds)
             tvTotalActiveTime.text = getFormattedTimeFromSeconds(it.totalWorkoutTime)
             tvWorkoutStep.text = workoutStep.toString()
 
-            // TODO("fill in the chart with interval information")
             setupPieChart(it)
         })
     }
@@ -100,7 +97,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
             setCenterTextSize(20f)
             setCenterTextColor(Color.parseColor("#222222"))
             setCenterTextTypeface(Typeface.DEFAULT_BOLD)
-            centerText = "Total\ntime\nby type"
+            centerText = "Time\nyou"
             invalidate()
         }
     }

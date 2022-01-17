@@ -41,19 +41,19 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-//typealias IntervalChunk = MutableList<Location>
-typealias IntervalPathPoints = MutableList<LatLng>
+typealias IntervalChunk = MutableList<LatLng>
+typealias IntervalPathPoints = MutableList<IntervalChunk>
 typealias Intervals = MutableList<IntervalPathPoints>
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
     //Easy access to calculating distance and getting speed
-    var lastLocation: Location? = null
+    private var lastLocation: Location? = null
 
-    var isFirstRun = true
-    var serviceKilled = false
+    private var isFirstRun = true
+    private var serviceKilled = false
 
-    lateinit var runData: TrackingUtility.RunData
+    private lateinit var runData: TrackingUtility.RunData
 
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -79,6 +79,8 @@ class TrackingService : LifecycleService() {
         val timeRunInMillis = MutableLiveData<Long>()
         //interval timer, counting down
         val intervalTimer = MutableLiveData<Long>()
+        val intervalProgress = MutableLiveData<Float>()
+        val activityProgress = MutableLiveData<Float>()
         val maxTimeInInterval = MutableLiveData<Long>()
 
         val isActivityOver = MutableLiveData<Boolean>()
@@ -94,6 +96,8 @@ class TrackingService : LifecycleService() {
 
         timeRunInSeconds.postValue(0L)
         timeRunInMillis.postValue(0L)
+        intervalProgress.postValue(0f)
+        activityProgress.postValue(0f)
 
         isActivityOver.postValue(false)
     }
@@ -169,7 +173,11 @@ class TrackingService : LifecycleService() {
     private lateinit var currentIntervalData: TrackingUtility.RunData.IntervalData
 
     private fun startTimer() {
-        addEmptyInterval()
+        if(isFirstRun)
+            addEmptyInterval()
+        else
+            addEmptyIntervalChunk()
+
         isTracking.postValue(true)
         timeStarted = System.currentTimeMillis()
         isTimerEnabled = true
@@ -182,15 +190,17 @@ class TrackingService : LifecycleService() {
                 // post the new lapTime
                 timeRunInMillis.postValue(timeRun + lapTime)
 
+                activityProgress.postValue((timeRun + lapTime).div(runData.totalWorkoutTime.toFloat()) * 100f)
+
                 if(timeRun + lapTime >= runData.totalWorkoutTime) {
-                    pauseService()
+                    isTracking.postValue(false)
                     isActivityOver.postValue(true)
-                    break
                 }
 
                 // update interval timer
                 timeLeftInInterval = (currentIntervalData.startMillis + currentIntervalData.lengthMillis) - (timeRun + lapTime)
                 intervalTimer.postValue(if(timeLeftInInterval < 0 ) 0 else timeLeftInInterval)
+                intervalProgress.postValue(100f - (timeLeftInInterval.div(currentIntervalData.lengthMillis.toFloat()) * 100f))
                 if(timeLeftInInterval <= 0L) {
                     nextInterval()
                 }
@@ -211,6 +221,7 @@ class TrackingService : LifecycleService() {
             currentIntervalData = runData.intervals[currentInterval]
             maxTimeInInterval.postValue(currentIntervalData.lengthMillis)
             isRunningInterval.postValue(currentIntervalData.isRunningInterval)
+            addEmptyInterval()
         }
     }
 
@@ -266,20 +277,19 @@ class TrackingService : LifecycleService() {
         }
     }
 
-    val locationCallback = object : LocationCallback() {
+    private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
             super.onLocationResult(p0)
             if(isTracking.value!!) {
                 p0?.locations?.let { locations ->
                     for(location in locations) {
                         addPathPoint(location)
-                        Timber.d("NEW LOCATION: ${location.latitude}, ${location.longitude}")
+                        //Timber.d("NEW LOCATION: ${location.latitude}, ${location.longitude}")
                     }
                 }
             }
         }
     }
-
 
     // MutableLiveData<List<Location>>
     // TODO("Not identical")
@@ -293,7 +303,7 @@ class TrackingService : LifecycleService() {
                 }
                 lastLocation = location
                 // Most recent interval, add current location
-                last().add(LatLng(location.latitude, location.longitude))
+                last().last().add(LatLng(location.latitude, location.longitude))
 
                 // Make the changes by main thread
                 pathPointsOfIntervals.postValue(this)
@@ -302,10 +312,17 @@ class TrackingService : LifecycleService() {
     }
 
     //call after interval timer runs out
+    private fun addEmptyIntervalChunk() {
+        // lists.intervals
+        pathPointsOfIntervals.value?.last()?.add(mutableListOf())
+        pathPointsOfIntervals.postValue(pathPointsOfIntervals.value)
+    }
+
+
     private fun addEmptyInterval() = pathPointsOfIntervals.value?.apply {
-        add(mutableListOf())
+        add(mutableListOf(mutableListOf()))
         pathPointsOfIntervals.postValue(this)
-    } ?: pathPointsOfIntervals.postValue(mutableListOf(mutableListOf()))
+    } ?: pathPointsOfIntervals.postValue(mutableListOf(mutableListOf(mutableListOf())))
 
     private fun startForegroundService() {
         startTimer()

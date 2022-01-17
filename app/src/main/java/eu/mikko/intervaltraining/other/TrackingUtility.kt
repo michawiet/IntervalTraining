@@ -2,11 +2,18 @@ package eu.mikko.intervaltraining.other
 
 import android.Manifest
 import android.content.Context
+import android.location.Location
 import android.os.Build
 import android.os.Parcelable
+import eu.mikko.intervaltraining.R
+import eu.mikko.intervaltraining.model.Interval
+import eu.mikko.intervaltraining.services.IntervalPathPoints
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.fragment_run.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.concurrent.TimeUnit
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 object TrackingUtility {
 
@@ -82,6 +89,81 @@ object TrackingUtility {
                 timeLeft -= intervals.last().lengthMillis
                 isCurrentRunningInterval = !isCurrentRunningInterval
             }
+        }
+    }
+
+    fun getTotalDistance(intervals: MutableList<IntervalPathPoints>): Float {
+        var totalDistance = 0f
+
+        for (interval in intervals) {
+            totalDistance += getIntervalDistance(interval)
+        }
+
+        return totalDistance
+    }
+
+    fun getIntervalDistance(interval: IntervalPathPoints): Float {
+        var distance = 0f
+        for(chunk in interval) {
+            //for loop with check of size
+            for(i in 0..chunk.size - 2) {
+                val pos1 = chunk[i]
+                val pos2 = chunk[i + 1]
+                val result = FloatArray(1)
+
+                Location.distanceBetween(
+                    pos1.latitude,
+                    pos1.longitude,
+                    pos2.latitude,
+                    pos2.longitude,
+                    result
+                )
+
+                distance += result[0]
+            }
+        }
+        return distance
+    }
+
+    fun rateInterval(avgSpeed: Float, isRunningInterval: Boolean): Int {
+        var rating: Int = if(isRunningInterval) {
+            ((-1 * ((avgSpeed - 3) * 1.2).pow(4) + 1) * 100).toInt()
+        } else {
+            ((-1 * ((avgSpeed - 1.3) * 1.7).pow(4) + 1) * 100).toInt()
+        }
+
+        return if(rating > 0) rating else 0
+    }
+
+    fun rateWorkout(intervalData: Interval, intervals: MutableList<IntervalPathPoints>): Int {
+        var sum = 0
+        var count = 0
+        var isRunningInterval = true
+
+        //warmup
+        sum += rateInterval(getIntervalDistance(intervals[0]) / intervalData.warmupSeconds, false)
+        count++
+
+
+        for(i in 1 until intervals.size) {
+            val speed = getIntervalDistance(intervals[i]) / if(isRunningInterval) intervalData.runSeconds else intervalData.walkSeconds
+            sum += rateInterval(speed, isRunningInterval)
+            count++
+            isRunningInterval = !isRunningInterval
+        }
+
+        return sum / count
+    }
+
+    fun getKilometersPerMinuteFromMetersPerSecond(speed: Float): String {
+        return try {
+            val pace = 1000 / (speed * 60)
+            val leftover = pace % 1
+            val minutes = (pace - leftover).roundToInt()
+            val seconds = (leftover * 60).roundToInt()
+            String.format("%02d:%02d", minutes, seconds)
+        } catch (e: IllegalArgumentException) {
+            "--:--"
         }
     }
 }

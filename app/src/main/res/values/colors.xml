@@ -18,6 +18,7 @@
     <color name="orange">#FFA24E</color>
     <color name="red">#D93025</color>
     <color name="light_red">#FCE8E6</color>
+    <color name="background_color">#fffafafa</color>
 
     <color name="primary_50">#E8EAF6</color>
     <color name="primary_100">#C5CBE9</color>

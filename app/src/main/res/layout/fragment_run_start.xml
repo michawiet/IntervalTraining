@@ -65,7 +65,7 @@
         android:typeface="monospace"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tvIntervalLengthTitle"
-        app:layout_constraintEnd_toStartOf="@+id/tvRunTime"
+        app:layout_constraintEnd_toStartOf="@+id/tvTotalTimeSpentTrackingActivity"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -77,13 +77,13 @@
         android:textColor="#757575"
         android:textSize="12sp"
         android:typeface="monospace"
-        app:layout_constraintEnd_toEndOf="@+id/tvWalkTime"
+        app:layout_constraintEnd_toEndOf="@+id/tvTotalDistanceCovered"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/tvWalkTime"
-        app:layout_constraintTop_toBottomOf="@id/tvWalkTime" />
+        app:layout_constraintStart_toStartOf="@+id/tvTotalDistanceCovered"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalDistanceCovered" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvWalkTime"
+        android:id="@+id/tvTotalDistanceCovered"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/minutes_seconds_default"
@@ -93,7 +93,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tvIntervalLengthTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvRunTime" />
+        app:layout_constraintStart_toEndOf="@+id/tvTotalTimeSpentTrackingActivity" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvRunIntervalLengthInfo"
@@ -104,13 +104,13 @@
         android:textColor="#757575"
         android:textSize="12sp"
         android:typeface="monospace"
-        app:layout_constraintEnd_toEndOf="@+id/tvRunTime"
+        app:layout_constraintEnd_toEndOf="@+id/tvTotalTimeSpentTrackingActivity"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/tvRunTime"
-        app:layout_constraintTop_toBottomOf="@id/tvRunTime" />
+        app:layout_constraintStart_toStartOf="@+id/tvTotalTimeSpentTrackingActivity"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalTimeSpentTrackingActivity" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvRunTime"
+        android:id="@+id/tvTotalTimeSpentTrackingActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/minutes_seconds_default"
