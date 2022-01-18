@@ -36,8 +36,6 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
 
     var workoutStep: Int = 1
 
-    private lateinit var currentInterval: Interval
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestPermissions()
@@ -97,7 +95,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
             setCenterTextSize(20f)
             setCenterTextColor(Color.parseColor("#222222"))
             setCenterTextTypeface(Typeface.DEFAULT_BOLD)
-            centerText = "Time\nyou"
+            centerText = "Time\nyou\nwill"
             invalidate()
         }
     }

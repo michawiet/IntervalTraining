@@ -45,6 +45,18 @@ object TrackingUtility {
         return String.format("%02d:%02d", minutes, seconds)
     }
 
+    fun getFormattedStopWatchTimeWithMillis(ms: Long): String {
+        var millis = ms
+
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
+        millis -= TimeUnit.MINUTES.toMillis(minutes)
+
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
+        millis -= TimeUnit.SECONDS.toMillis(seconds)
+
+        return String.format("%02d:%02d:%01d", minutes, seconds, millis.div(100))
+    }
+
     fun getFormattedTimeFromSeconds(s: Long): String {
         var seconds = s
 

@@ -284,15 +284,12 @@ class TrackingService : LifecycleService() {
                 p0?.locations?.let { locations ->
                     for(location in locations) {
                         addPathPoint(location)
-                        //Timber.d("NEW LOCATION: ${location.latitude}, ${location.longitude}")
                     }
                 }
             }
         }
     }
 
-    // MutableLiveData<List<Location>>
-    // TODO("Not identical")
     private fun addPathPoint(location: Location?) {
         location?.let {
             currentSpeedMetersPerSecond.value = location.speed
@@ -317,7 +314,6 @@ class TrackingService : LifecycleService() {
         pathPointsOfIntervals.value?.last()?.add(mutableListOf())
         pathPointsOfIntervals.postValue(pathPointsOfIntervals.value)
     }
-
 
     private fun addEmptyInterval() = pathPointsOfIntervals.value?.apply {
         add(mutableListOf(mutableListOf()))

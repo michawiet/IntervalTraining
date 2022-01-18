@@ -12,7 +12,7 @@
     <string name="notification_weekday">Weekday</string>
     <string name="notification_time">12:00</string>
     <string name="set_time_of_notification">set time of notification</string>
-    <string name="interval_timer_default">--:--</string>
+    <string name="interval_timer_default">--:--:-</string>
     <string name="activity_timer_default">--:--</string>
     <string name="timer_minutes_hint">m</string>
     <string name="timer_seconds_hint">s</string>
@@ -42,4 +42,5 @@
     <string name="current_workout_step_file_key">current_workout_step</string>
     <string name="workout_step">Workout step</string>
     <string name="workout_step_default">1</string>
+    <string name="interval_timer_hint">Interval timer</string>
 </resources>

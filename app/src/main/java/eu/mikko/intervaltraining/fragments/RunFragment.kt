@@ -2,8 +2,13 @@ package eu.mikko.intervaltraining.fragments
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.View
+import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
+import androidx.core.os.ConfigurationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -28,6 +33,7 @@ import eu.mikko.intervaltraining.services.IntervalPathPoints
 import eu.mikko.intervaltraining.services.TrackingService
 import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run.*
+import org.w3c.dom.Text
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -52,8 +58,22 @@ class RunFragment : Fragment(R.layout.fragment_run) {
 
     private var curTimeInMillis = 0L
 
+    private lateinit var tts: TextToSpeech
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tts = TextToSpeech(requireContext()) { status ->
+            if(status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
+                if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                    Timber.d("Language not available")
+                }
+            } else {
+                Timber.d("TTS initialization failed")
+            }
+        }
+
         activityPlayPauseFab.setOnClickListener {
             if (!isTracking) {
                 //resume the service
@@ -66,18 +86,14 @@ class RunFragment : Fragment(R.layout.fragment_run) {
                 activityPlayPauseFab.setImageResource(R.drawable.ic_round_play_arrow_24)
             }
         }
+
         activityStopFab.setOnClickListener {
             //Dialog to confirm the action
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.stop_activity_title))
-                .setMessage(getString(R.string.stop_activity_message))
-                .setPositiveButton(getString(R.string.confirm_cancel)) { dialog, _ ->
-                    stopRun()
-                    dialog.cancel()
-                }.setNegativeButton(getString(R.string.confirm_continue)) { dialog, _ ->
-                    dialog.cancel()
-                }.create()
-                .show()
+            stopActivityCallback()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            stopActivityCallback()
         }
 
         viewModel.getIntervalByWorkoutStep(this.workoutStep).observe(viewLifecycleOwner, {
@@ -91,6 +107,19 @@ class RunFragment : Fragment(R.layout.fragment_run) {
         })
 
         subscribeToObservers()
+    }
+
+    private fun stopActivityCallback() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.stop_activity_title))
+            .setMessage(getString(R.string.stop_activity_message))
+            .setPositiveButton(getString(R.string.confirm_cancel)) { dialog, _ ->
+                stopRun()
+                dialog.cancel()
+            }.setNegativeButton(getString(R.string.confirm_continue)) { dialog, _ ->
+                dialog.cancel()
+            }.create()
+            .show()
     }
 
     private fun subscribeToObservers() {
@@ -109,15 +138,18 @@ class RunFragment : Fragment(R.layout.fragment_run) {
             if(isRunningInterval) {
                 workout_interval_type.text = getString(R.string.activity_type_run)
                 //trigger tts with "Start running!" message
+                val string = getText(R.string.activity_type_run)
+                tts.speak("Start running!", TextToSpeech.QUEUE_FLUSH, null)
             }
             else {
                 workout_interval_type.text = getString(R.string.activity_type_walk)
+                tts.speak("Start walking!", TextToSpeech.QUEUE_FLUSH, null)
                 //trigger tts with "Start running!" message
             }
         })
         TrackingService.intervalTimer.observe(viewLifecycleOwner, {
-            interval_timer.text = TrackingUtility.getFormattedStopWatchTime(it)
-
+            //interval_timer.text = TrackingUtility.getFormattedStopWatchTime(it)
+            interval_timer.text = TrackingUtility.getFormattedStopWatchTimeWithMillis(it)
         })
         TrackingService.intervalProgress.observe(viewLifecycleOwner, {
             interval_progress_bar.setProgressWithAnimation(it, TIMER_UPDATE_INTERVAL)

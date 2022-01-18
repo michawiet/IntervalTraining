@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stats_total_distance_default"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textColor="@color/black_active"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/divider_from_line_chart_progress"
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stats_default_total_time"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textColor="@color/black_active"
         android:typeface="monospace"
         android:layout_marginTop="8dp"
@@ -72,8 +72,8 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.35" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/runTimePieChart"
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="-8dp"
-        app:layout_constraintBottom_toBottomOf="@id/runTimePieChart"
+        app:layout_constraintBottom_toBottomOf="@id/barChart"
         android:background="?android:attr/listDivider"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout

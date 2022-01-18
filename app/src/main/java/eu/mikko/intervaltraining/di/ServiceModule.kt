@@ -30,9 +30,7 @@ object ServiceModule {
     @Provides
     fun provideMainActivityPendingIntent(@ApplicationContext app: Context) = PendingIntent.getActivity(
         app, 8,
-        Intent(app, MainActivity::class.java).also {
-            it.action = Constants.ACTION_SHOW_RUN_FRAGMENT
-        },
+        Intent(app, MainActivity::class.java),
         FLAG_UPDATE_CURRENT)
 
     @ServiceScoped
