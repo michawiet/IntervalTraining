@@ -10,13 +10,13 @@
     <item
         android:id="@+id/notificationsFragment"
         android:icon="@drawable/ic_round_notifications_24"
-        android:title="@string/notifications"
+        android:title="@string/reminders"
         app:showAsAction="ifRoom"
         android:checked="false" />
     <item
         android:id="@+id/runStartFragment"
         android:icon="@drawable/ic_round_directions_run_24"
-        android:title="@string/train"
+        android:title="@string/training"
         app:showAsAction="ifRoom"
         android:checked="false" />
 </menu>

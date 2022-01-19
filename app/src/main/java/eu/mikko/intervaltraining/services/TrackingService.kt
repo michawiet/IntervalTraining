@@ -114,7 +114,7 @@ class TrackingService : LifecycleService() {
 
         isTracking.observe(this, {
             updateLocationTracking(it)
-            updateNotificationTrackingState(it)
+            updateNotificationTrackingState()
         })
 
         tts = TextToSpeech(applicationContext) { status ->
@@ -132,8 +132,8 @@ class TrackingService : LifecycleService() {
     private fun killService() {
         serviceKilled = true
         isFirstRun = true
-        pauseService()
         postInitialValues()
+        pauseService()
         //kill tts
         tts.stop()
         tts.shutdown()
@@ -259,30 +259,13 @@ class TrackingService : LifecycleService() {
         isTimerEnabled = false
     }
 
-    private fun updateNotificationTrackingState(isTracking: Boolean) {
-        val notificationActionText = if(isTracking) "Pause" else "Resume"
-        val pendingIntent = if(isTracking) {
-            val pauseIntent = Intent(this, TrackingService::class.java).apply {
-                action = ACTION_PAUSE_SERVICE
-            }
-            PendingIntent.getService(this, 8, pauseIntent, FLAG_UPDATE_CURRENT)
-        } else {
-            val resumeIntent = Intent(this, TrackingService::class.java).apply {
-                action = ACTION_START_SERVICE
-            }
-            PendingIntent.getService(this, 8, resumeIntent, FLAG_UPDATE_CURRENT)
-        }
-
+    private fun updateNotificationTrackingState() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        curNotificationBuilder.javaClass.getDeclaredField("mActions").apply {
-            isAccessible = true
-            set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())
-        }
         if(!serviceKilled) {
-            curNotificationBuilder = baseNotificationBuilder
-                .addAction(R.drawable.ic_round_pause_24, notificationActionText, pendingIntent)
-            notificationManager.notify(TRACKING_NOTIFICATION_ID, curNotificationBuilder.build())
+            notificationManager.notify(TRACKING_NOTIFICATION_ID, baseNotificationBuilder.build())
+        } else {
+            notificationManager.cancel(TRACKING_NOTIFICATION_ID)
         }
     }
 

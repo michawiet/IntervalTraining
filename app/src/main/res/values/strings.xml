@@ -2,8 +2,8 @@
     <string name="app_name">Interval Training</string>
     <string name="home">Home</string>
     <string name="progress">Progress</string>
-    <string name="notifications">Notifications</string>
-    <string name="train">Train</string>
+    <string name="reminders">Reminders</string>
+    <string name="training">Training</string>
     <string name="pause_activity">Pause</string>
     <string name="resume_activity">Resume</string>
     <string name="stop_activity">Stop</string>
@@ -43,4 +43,5 @@
     <string name="workout_step">Workout step</string>
     <string name="workout_step_default">1</string>
     <string name="interval_timer_hint">Interval timer</string>
+    <string name="warmup_title">Warmup</string>
 </resources>
