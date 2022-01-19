@@ -1,15 +1,13 @@
 package eu.mikko.intervaltraining.notifications
 
-import android.content.ContextWrapper
-import android.app.NotificationManager
 import android.annotation.TargetApi
 import android.app.Notification
-import android.os.Build
 import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
-import androidx.core.app.NotificationChannelCompat
+import android.content.ContextWrapper
+import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_CHANNEL_ID
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_CHANNEL_NAME
@@ -24,15 +22,23 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
     private fun createChannel() {
         val trainingReminderChannel = NotificationChannel(TRAINING_REMINDER_CHANNEL_ID,
             TRAINING_REMINDER_CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH)
-        trainingReminderChannel.enableVibration(true)
-        trainingReminderChannel.enableLights(true)
-        trainingReminderChannel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+                NotificationManager.IMPORTANCE_HIGH).also {
+            it.enableVibration(true)
+            it.enableLights(true)
+            it.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        }
 
         val progressNotificationChannel =
-            NotificationChannel(PROGRESS_CHANNEL_ID, PROGRESS_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationChannel(PROGRESS_CHANNEL_ID,
+                PROGRESS_CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT).also {
+                it.enableVibration(true)
+                it.enableLights(true)
+                it.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+            }
 
         getManager().createNotificationChannel(trainingReminderChannel)
+        getManager().createNotificationChannel(progressNotificationChannel)
     }
 
     fun getManager() : NotificationManager {
@@ -49,10 +55,9 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setCategory("CATEGORY_REMINDER")
 
-    fun trainingProgressNotification(progressStats: String): NotificationCompat.Builder =
+    fun progressNotification(): NotificationCompat.Builder =
         NotificationCompat.Builder(applicationContext, PROGRESS_CHANNEL_ID)
-            .setContentTitle(R.string.app_name.toString())
-            .setContentText(progressStats)
+            .setContentTitle(PROGRESS_CHANNEL_NAME)
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setCategory("CATEGORY_REMINDER")
 

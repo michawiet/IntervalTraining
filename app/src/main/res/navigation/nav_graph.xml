@@ -28,18 +28,7 @@
         android:name="eu.mikko.intervaltraining.fragments.RunFragment"
         android:label="RunFragment" >
         <action
-            android:id="@+id/action_runFragment_to_runSummaryFragment"
-            app:destination="@id/runSummaryFragment" />
-        <action
             android:id="@+id/action_runFragment_to_runStartFragment"
-            app:destination="@id/runStartFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/runSummaryFragment"
-        android:name="eu.mikko.intervaltraining.fragments.RunSummaryFragment"
-        android:label="RunSummaryFragment" >
-        <action
-            android:id="@+id/action_runSummaryFragment_to_runStartFragment"
             app:destination="@id/runStartFragment" />
     </fragment>
     <fragment

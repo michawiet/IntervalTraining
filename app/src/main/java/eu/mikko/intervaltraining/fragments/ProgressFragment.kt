@@ -18,11 +18,15 @@ import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedTimeFromSecon
 import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
 import eu.mikko.intervaltraining.viewmodel.ProgressViewModel
 import kotlinx.android.synthetic.main.fragment_progress.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProgressFragment : Fragment(R.layout.fragment_progress) {
 
     private val viewModel: ProgressViewModel by viewModels()
+
+    @set:Inject
+    var workoutStep: Int = 1
 
     private lateinit var progressAdapter: ProgressAdapter
 
@@ -52,6 +56,9 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
                 invalidate()
             }
         })
+        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner, {
+            tvGoalProgress.text = (workoutStep - 1).div((it - 1).toFloat()).times(100f).toInt().toString().plus(" %")
+        })
     }
 
     class LabelFormatter : IndexAxisValueFormatter() {
@@ -75,8 +82,7 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
             setDrawGridLines(false)
         }
         barChart.apply {
-            description.text = "Avg Speed Over Time"
-            description.textSize = 10f
+            description.text = "Pace over time"
             legend.isEnabled = false
         }
         barChart.legend.isEnabled = false

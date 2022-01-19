@@ -15,4 +15,8 @@ interface IntervalDao {
 
     @Query("SELECT MAX(workoutStep) FROM intervals_table")
     fun getMaxWorkoutStep(): LiveData<Int>
+
+    //Only for use in broadcast receiver
+    @Query("SELECT MAX(workoutStep) FROM intervals_table")
+    fun getMaxWorkoutStepNonLive(): Int
 }

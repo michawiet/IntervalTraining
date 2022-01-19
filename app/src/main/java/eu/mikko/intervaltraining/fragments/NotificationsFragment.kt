@@ -10,19 +10,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.ConfigurationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.adapters.TrainingNotificationListAdapter
-import eu.mikko.intervaltraining.other.Utilities.generateCalendar
 import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
+import eu.mikko.intervaltraining.other.Utilities.generateCalendar
 import eu.mikko.intervaltraining.viewmodel.ReminderNotificationViewModel
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 import java.time.DayOfWeek
@@ -36,7 +34,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     private fun startAlarm(tn: TrainingNotification) {
         val c = generateCalendar(tn)
 
-        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, TrainingReminderReceiver::class.java)
         intent.action = Intent.ACTION_DEFAULT
         val pendingIntent = PendingIntent.getBroadcast(context, tn.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -46,7 +44,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
 
     private fun cancelAlarm(id: Int) {
         //id is a request code
-        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, TrainingReminderReceiver::class.java)
         intent.action = Intent.ACTION_DEFAULT
         val pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)

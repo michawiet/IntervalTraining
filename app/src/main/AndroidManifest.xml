@@ -28,13 +28,17 @@
         <service android:name=".services.TrackingService"
             android:foregroundServiceType="location" />
 
-        <receiver android:name=".notifications.TrainingReminderReceiver" android:exported="true">
+        <receiver android:name=".notifications.TrainingReminderReceiver" android:exported="true"/>
+        <receiver android:name=".notifications.ProgressReceiver" android:exported="true"/>
+
+        <receiver android:name=".notifications.RestartReminderReceiver" android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

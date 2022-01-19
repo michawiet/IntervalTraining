@@ -30,9 +30,9 @@
     <string name="stats_default_total_time">00:00:00</string>
     <string name="stats_total_distance_default">0</string>
     <string name="minutes_seconds_default">00:00</string>
-    <string name="interval_length">Interval length</string>
+    <string name="interval_duration">Interval duration</string>
     <string name="start_run_button">Start your run</string>
-    <string name="active_time_title">Workout length</string>
+    <string name="active_time_title">Workout duration</string>
     <string name="run_interval_length_hint">Run</string>
     <string name="walk_interval_length_hint">Walk</string>
     <string name="stop_activity_title">Stop training?</string>

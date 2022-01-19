@@ -18,4 +18,7 @@ interface RunDao {
 
     @Query("SELECT SUM(distanceInMeters) FROM runs_table")
     fun getTotalDistance(): LiveData<Int>
+
+    @Query("SELECT * FROM runs_table WHERE timestamp > :lowerBoundTimestamp")
+    fun getRunsWithHigherTimestamp(lowerBoundTimestamp: Long): LiveData<List<Run>>
 }

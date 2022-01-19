@@ -8,12 +8,14 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.location.Location
 import android.os.Looper
+import android.speech.tts.TextToSpeech
 import androidx.core.app.NotificationCompat
+import androidx.core.os.ConfigurationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -64,6 +66,8 @@ class TrackingService : LifecycleService() {
 
     private val timeRunInSeconds = MutableLiveData<Long>()
 
+    private lateinit var tts: TextToSpeech
+
     companion object {
         // tracking
         val isTracking = MutableLiveData<Boolean>()
@@ -108,10 +112,21 @@ class TrackingService : LifecycleService() {
         postInitialValues()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
 
-        isTracking.observe(this, Observer {
+        isTracking.observe(this, {
             updateLocationTracking(it)
             updateNotificationTrackingState(it)
         })
+
+        tts = TextToSpeech(applicationContext) { status ->
+            if(status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
+                if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                    Timber.d("Language not available")
+                }
+            } else {
+                Timber.d("TTS initialization failed")
+            }
+        }
     }
 
     private fun killService() {
@@ -119,9 +134,13 @@ class TrackingService : LifecycleService() {
         isFirstRun = true
         pauseService()
         postInitialValues()
+        //kill tts
+        tts.stop()
+        tts.shutdown()
         stopForeground(true)
         stopSelf()
     }
+
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
@@ -130,6 +149,9 @@ class TrackingService : LifecycleService() {
                     if(isFirstRun) {
                         startForegroundService()
                         isFirstRun = false
+                        if(tts.speak("Warmup started! Start walking!", TextToSpeech.QUEUE_FLUSH, null, null) == TextToSpeech.ERROR) {
+                            Timber.d("Voice synth error...")
+                        }
                     } else {
                         Timber.d("Resuming service...")
                         startTimer()
@@ -147,7 +169,6 @@ class TrackingService : LifecycleService() {
                     if(it.hasExtra(EXTRAS_INTERVAL_DATA)) {
                         it.getParcelableExtra<TrackingUtility.ParcelableInterval>(EXTRAS_INTERVAL_DATA)
                             .also { it -> if (it != null) { setRunData(it) } }
-                        Timber.d("Received data; workoutTime = ${this.runData.totalWorkoutTime}; intervals.size = ${this.runData.intervals}")
                     }
                 }
             }
@@ -222,6 +243,14 @@ class TrackingService : LifecycleService() {
             maxTimeInInterval.postValue(currentIntervalData.lengthMillis)
             isRunningInterval.postValue(currentIntervalData.isRunningInterval)
             addEmptyInterval()
+            if(currentIntervalData.isRunningInterval) {
+                //trigger tts with "Start running!" message
+                tts.speak("Start running!", TextToSpeech.QUEUE_FLUSH, null, null)
+            }
+            else {
+                tts.speak("Start walking!", TextToSpeech.QUEUE_FLUSH, null, null)
+                //trigger tts with "Start running!" message
+            }
         }
     }
 

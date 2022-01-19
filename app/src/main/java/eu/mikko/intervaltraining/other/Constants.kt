@@ -1,5 +1,7 @@
 package eu.mikko.intervaltraining.other
 
+import java.time.DayOfWeek
+
 object Constants {
     // database
     const val DATABASE_NAME = "interval_training"
@@ -35,4 +37,8 @@ object Constants {
     const val PROGRESS_CHANNEL_ID = "progressNotificationsID"
     const val PROGRESS_CHANNEL_NAME = "Progress"
     const val PROGRESS_NOTIFICATION_ID = 9
+
+    const val PROGRESS_NOTIFICATION_HOUR = 20
+    const val PROGRESS_NOTIFICATION_MINUTE = 0
+    val PROGRESS_NOTIFICATION_DAY = DayOfWeek.SUNDAY
 }
