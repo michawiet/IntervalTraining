@@ -80,7 +80,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float) = getFormattedTimeFromSeconds(value.toLong())
             }
-            colors = listOf(Color.parseColor("#4777c0"),Color.parseColor("#a374c6"))
+            colors = listOf(Color.parseColor("#426FC0"),Color.parseColor("#E87A30"))
             setValueTextColors(listOf(Color.WHITE))
         }
 

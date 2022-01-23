@@ -5,7 +5,7 @@ import java.time.DayOfWeek
 object Constants {
     // database
     const val DATABASE_NAME = "interval_training"
-    const val DATABASE_ASSET_PATH = "database/interval_training.db"
+    const val DATABASE_ASSET_PATH = "database/interval_training_mock.db"
 
     // permissions
     const val REQUEST_CODE_LOCATION_PERMISSION = 0
@@ -41,4 +41,7 @@ object Constants {
     const val PROGRESS_NOTIFICATION_HOUR = 20
     const val PROGRESS_NOTIFICATION_MINUTE = 0
     val PROGRESS_NOTIFICATION_DAY = DayOfWeek.SUNDAY
+
+    const val RUN_PACE = "06:00"
+    const val WALK_PACE = "12:00"
 }

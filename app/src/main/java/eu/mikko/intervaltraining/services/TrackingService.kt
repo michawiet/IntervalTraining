@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -23,7 +21,6 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
-import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.other.Constants.ACTION_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.ACTION_PAUSE_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_START_SERVICE
@@ -35,6 +32,7 @@ import eu.mikko.intervaltraining.other.Constants.TIMER_UPDATE_INTERVAL
 import eu.mikko.intervaltraining.other.Constants.TRACKING_NOTIFICATION_CHANNEL_ID
 import eu.mikko.intervaltraining.other.Constants.TRACKING_NOTIFICATION_CHANNEL_NAME
 import eu.mikko.intervaltraining.other.Constants.TRACKING_NOTIFICATION_ID
+import eu.mikko.intervaltraining.other.ParcelableInterval
 import eu.mikko.intervaltraining.other.TrackingUtility
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -167,7 +165,7 @@ class TrackingService : LifecycleService() {
                 }
                 ACTION_INTERVAL_DATA -> {
                     if(it.hasExtra(EXTRAS_INTERVAL_DATA)) {
-                        it.getParcelableExtra<TrackingUtility.ParcelableInterval>(EXTRAS_INTERVAL_DATA)
+                        it.getParcelableExtra<ParcelableInterval>(EXTRAS_INTERVAL_DATA)
                             .also { it -> if (it != null) { setRunData(it) } }
                     }
                 }
@@ -177,7 +175,7 @@ class TrackingService : LifecycleService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun setRunData(it: TrackingUtility.ParcelableInterval) {
+    private fun setRunData(it: ParcelableInterval) {
         runData = TrackingUtility.RunData(it)
         currentInterval = 0
         currentIntervalData = runData.intervals[currentInterval]

@@ -21,9 +21,12 @@ import eu.mikko.intervaltraining.other.Constants.ACTION_STOP_SERVICE
 import eu.mikko.intervaltraining.other.Constants.EXTRAS_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.KEY_WORKOUT_STEP
 import eu.mikko.intervaltraining.other.Constants.TIMER_UPDATE_INTERVAL
+import eu.mikko.intervaltraining.other.ParcelableInterval
+import eu.mikko.intervaltraining.other.ParcelableRun
 import eu.mikko.intervaltraining.other.TrackingUtility
 import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
 import eu.mikko.intervaltraining.other.TrackingUtility.getTotalDistance
+import eu.mikko.intervaltraining.other.TrackingUtility.rateIntervals
 import eu.mikko.intervaltraining.other.TrackingUtility.rateWorkout
 import eu.mikko.intervaltraining.services.IntervalPathPoints
 import eu.mikko.intervaltraining.services.TrackingService
@@ -96,6 +99,7 @@ class RunFragment : Fragment(R.layout.fragment_run) {
             .setMessage(getString(R.string.stop_activity_message))
             .setPositiveButton(getString(R.string.confirm_cancel)) { dialog, _ ->
                 stopRun()
+                findNavController().navigate(R.id.action_runFragment_to_runStartFragment)
                 dialog.cancel()
             }.setNegativeButton(getString(R.string.confirm_continue)) { dialog, _ ->
                 dialog.cancel()
@@ -135,7 +139,7 @@ class RunFragment : Fragment(R.layout.fragment_run) {
         })
         TrackingService.isActivityOver.observe(viewLifecycleOwner, {
             if(it) {
-                saveRun()
+                passRunResultToSummaryFragment()
             }
         })
         TrackingService.pathPointsOfIntervals.observe(viewLifecycleOwner, {
@@ -145,7 +149,6 @@ class RunFragment : Fragment(R.layout.fragment_run) {
 
     private fun stopRun() {
         sendCommandToService(ACTION_STOP_SERVICE)
-        findNavController().navigate(R.id.action_runFragment_to_runStartFragment)
     }
 
     private fun sendCommandToService(action: String) =
@@ -156,12 +159,12 @@ class RunFragment : Fragment(R.layout.fragment_run) {
 
     private fun sendIntervalsToService(interval: Interval) {
         val intent = Intent(requireContext(), TrackingService::class.java)
-        val pInterval = TrackingUtility.ParcelableInterval(interval.warmupSeconds, interval.runSeconds, interval.walkSeconds, interval.totalWorkoutTime)
+        val pInterval = ParcelableInterval(interval.warmupSeconds, interval.runSeconds, interval.walkSeconds, interval.totalWorkoutTime)
         intent.putExtra(EXTRAS_INTERVAL_DATA, pInterval)
         intent.action = ACTION_INTERVAL_DATA
         requireContext().startService(intent)
     }
-
+    @Deprecated("lul")
     private fun saveRun() {
         val newRun = Run()
         newRun.apply {
@@ -185,6 +188,22 @@ class RunFragment : Fragment(R.layout.fragment_run) {
         ).show()
         stopRun()
         Timber.d("Run data was saved!")
+    }
+
+    private fun passRunResultToSummaryFragment() {
+        val timestamp = Calendar.getInstance().timeInMillis
+        val distanceInMeters = getTotalDistance(pathPointsOfIntervals).toInt()
+        val avgSpeedMetersPerSecond = distanceInMeters.div(interval.totalWorkoutTime.toFloat())
+        val timeInMillis = interval.totalWorkoutTime * 1000L
+        val rating: Int = rateWorkout(interval, pathPointsOfIntervals)
+
+        val run = ParcelableRun(timestamp, avgSpeedMetersPerSecond, distanceInMeters, timeInMillis, rating)
+        val ratedIntervals = rateIntervals(interval, pathPointsOfIntervals)
+
+        stopRun()
+
+        val action = RunFragmentDirections.actionRunFragmentToRunSummaryFragment(run, ratedIntervals)
+        findNavController().navigate(action)
     }
 
     private fun writeNewWorkoutStepToSharedPref(newWorkoutStep: Int) {

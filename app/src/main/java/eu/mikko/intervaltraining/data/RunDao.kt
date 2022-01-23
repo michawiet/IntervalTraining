@@ -20,5 +20,5 @@ interface RunDao {
     fun getTotalDistance(): LiveData<Int>
 
     @Query("SELECT * FROM runs_table WHERE timestamp > :lowerBoundTimestamp")
-    fun getRunsWithHigherTimestamp(lowerBoundTimestamp: Long): LiveData<List<Run>>
+    fun getRunsWithHigherTimestamp(lowerBoundTimestamp: Long): List<Run>
 }

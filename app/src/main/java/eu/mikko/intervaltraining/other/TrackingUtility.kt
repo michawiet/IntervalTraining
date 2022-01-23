@@ -4,12 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.location.Location
 import android.os.Build
-import android.os.Parcelable
-import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Interval
 import eu.mikko.intervaltraining.services.IntervalPathPoints
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_run.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.concurrent.TimeUnit
 import kotlin.math.pow
@@ -65,12 +61,6 @@ object TrackingUtility {
 
         return String.format("%02d:%02d", minutes, seconds)
     }
-
-    @Parcelize
-    data class ParcelableInterval(val warmupSeconds: Long,
-                                  val runSeconds: Long,
-                                  val walkSeconds: Long,
-                                  val totalWorkoutTime: Long) : Parcelable
 
     data class RunData(private val intervalData: ParcelableInterval) {
         data class IntervalData(val startMillis: Long, val lengthMillis: Long, val isRunningInterval: Boolean)
@@ -165,6 +155,24 @@ object TrackingUtility {
         }
 
         return sum / count
+    }
+
+    fun rateIntervals(intervalData: Interval, intervals: MutableList<IntervalPathPoints>): Array<RunIntervalResult> {
+        val ratingArray = arrayListOf<RunIntervalResult>()
+        var isRunningInterval = true
+
+        //warmup
+        val tmpSpeed = getIntervalDistance(intervals[0]) / intervalData.warmupSeconds
+        val tmpResult = rateInterval(tmpSpeed, false)
+        ratingArray.add(RunIntervalResult(tmpSpeed, tmpResult, false))
+
+        for(i in 1 until intervals.size) {
+            val speed = getIntervalDistance(intervals[i]) / if(isRunningInterval) intervalData.runSeconds else intervalData.walkSeconds
+            ratingArray.add(RunIntervalResult(speed, rateInterval(speed, isRunningInterval), isRunningInterval))
+            isRunningInterval = !isRunningInterval
+        }
+
+        return ratingArray.toTypedArray()
     }
 
     fun getKilometersPerMinuteFromMetersPerSecond(speed: Float): String {

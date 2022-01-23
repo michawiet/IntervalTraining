@@ -25,7 +25,8 @@ object Utilities {
         }
 
         if(calendar.time < Date())
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
+            calendar.add(Calendar.DAY_OF_MONTH, 7)
+
         return calendar
     }
 }

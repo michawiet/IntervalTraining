@@ -11,8 +11,6 @@ import eu.mikko.intervaltraining.data.RunDao
 import eu.mikko.intervaltraining.other.Constants
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_NOTIFICATION_ID
 import eu.mikko.intervaltraining.other.Constants.SHARED_PREFERENCES_NAME
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import timber.log.Timber
 
 class ProgressReceiver : BroadcastReceiver() {
@@ -34,33 +32,25 @@ class ProgressReceiver : BroadcastReceiver() {
             .allowMainThreadQueries()
             .createFromAsset(Constants.DATABASE_ASSET_PATH)
             .build()
-        //val numberOfWorkoutsDone = getNumberOfWorkoutsDone(database.getRunDao())
-        return getProgressInPercent(database.getIntervalDao(), context)
+        val numberOfWorkoutsDone = getNumberOfWorkoutsDone(database.getRunDao())
+        val progressPercent = getProgressPercent(database.getIntervalDao(), context)
+        return String.format("$numberOfWorkoutsDone $progressPercent")
     }
 
     private fun getNumberOfWorkoutsDone(runDao: RunDao): String {
-        var numberOfWorkoutsDone = ""
-        val getDataJob = GlobalScope.async { runDao.getRunsWithHigherTimestamp(System.currentTimeMillis() - (AlarmManager.INTERVAL_DAY * 7)) }
-        getDataJob.invokeOnCompletion { cause ->
-            if (cause != null) {
-                Timber.d("Could not fetch data")
-            } else {
-                val list = getDataJob.getCompleted().value
-                numberOfWorkoutsDone = if(list == null || list.isEmpty()) {
-                    "You did not train this week!"
-                } else {
-                    when(list.size) {
-                        1 -> "It is recommended that you to train at least 2 times per week!"
-                        in 2 .. 3 -> "You met the recommendations for the number of training days this week."
-                        else -> "It is recommended to train 2 to 3 times per week - more than that increases the chance of injury!"
-                    }
-                }
+        val list = runDao.getRunsWithHigherTimestamp(System.currentTimeMillis() - (AlarmManager.INTERVAL_DAY * 7))
+        return if(list.isEmpty()) {
+            "You did not train this week! Train 3 times per week!"
+        } else {
+            when(list.size) {
+                in 1 .. 2 -> "It is recommended that you train 3 times per week!"
+                3 -> "You met the recommendations for the number of training days this week."
+                else -> "It is recommended to train 3 times per week - more than that increases the chance of injury!"
             }
         }
-        return numberOfWorkoutsDone
     }
 
-    private fun getProgressInPercent(intervalDao: IntervalDao, context: Context?): String {
+    private fun getProgressPercent(intervalDao: IntervalDao, context: Context?): String {
         var progressInfo = ""
         val sharedPref = context!!.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
         val currentWorkoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_STEP, 1) - 1

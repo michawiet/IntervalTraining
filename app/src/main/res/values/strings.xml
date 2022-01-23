@@ -37,6 +37,8 @@
     <string name="walk_interval_length_hint">Walk</string>
     <string name="stop_activity_title">Stop training?</string>
     <string name="stop_activity_message">This will cause the current session to be discarded.</string>
+    <string name="discard_workout_title">Discard workout?</string>
+    <string name="discard_workout_message">Workout will not be saved!</string>
     <string name="confirm_cancel">Yes</string>
     <string name="confirm_continue">No</string>
     <string name="current_workout_step_file_key">current_workout_step</string>

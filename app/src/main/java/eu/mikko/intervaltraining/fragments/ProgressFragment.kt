@@ -46,7 +46,7 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
         viewModel.allRuns.observe(viewLifecycleOwner, {
             if(it != null)
                 progressAdapter.submitList(it)
-            val allAvgSpeeds= it.indices.map { i -> BarEntry(i.toFloat(), it[i].avgSpeedMetersPerSecond) }
+            val allAvgSpeeds = it.indices.map { i -> BarEntry(i.toFloat(), it[i].avgSpeedMetersPerSecond) }
             val barDataSet = BarDataSet(allAvgSpeeds, "").apply {
                 setDrawValues(false)
                 color = Color.parseColor("#4777c0")
