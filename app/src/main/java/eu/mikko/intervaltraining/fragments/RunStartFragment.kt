@@ -20,6 +20,7 @@ import eu.mikko.intervaltraining.model.Interval
 import eu.mikko.intervaltraining.other.Constants
 import eu.mikko.intervaltraining.other.TrackingUtility
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedTimeFromSeconds
+import eu.mikko.intervaltraining.viewmodel.IntervalViewModel
 import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run_start.*
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -29,7 +30,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.PermissionCallbacks {
 
-    private val viewModel: TrainingViewModel by viewModels()
+    private val viewModel: IntervalViewModel by viewModels()
 
     @Inject
     lateinit var sharedPref: SharedPreferences

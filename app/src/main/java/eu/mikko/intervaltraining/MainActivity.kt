@@ -4,15 +4,13 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.notifications.ProgressReceiver
-import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
 import eu.mikko.intervaltraining.other.Constants.ACTION_SHOW_RUN_FRAGMENT
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_NOTIFICATION_DAY
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_NOTIFICATION_HOUR
@@ -21,7 +19,6 @@ import eu.mikko.intervaltraining.other.Constants.PROGRESS_NOTIFICATION_MINUTE
 import eu.mikko.intervaltraining.other.Utilities
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
-import java.time.DayOfWeek
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -38,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.findNavController()
             .addOnDestinationChangedListener { _, destination, _ ->
                 when(destination.id) {
-                    R.id.progressFragment, R.id.runStartFragment, R.id.notificationsFragment ->
+                    R.id.progressFragment, R.id.runListFragment, R.id.runStartFragment, R.id.notificationsFragment ->
                         bottom_navigation.visibility = View.VISIBLE
                     else -> bottom_navigation.visibility = View.GONE
                 }

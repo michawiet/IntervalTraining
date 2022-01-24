@@ -3,7 +3,7 @@ package eu.mikko.intervaltraining.services
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.NotificationManager.IMPORTANCE_LOW
+import android.app.NotificationManager.*
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -21,6 +21,7 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
+import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.other.Constants.ACTION_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.ACTION_PAUSE_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_START_SERVICE
@@ -86,6 +87,8 @@ class TrackingService : LifecycleService() {
         val maxTimeInInterval = MutableLiveData<Long>()
 
         val isActivityOver = MutableLiveData<Boolean>()
+
+        val currentLocation = MutableLiveData<LatLng>()
     }
 
     private fun postInitialValues() {
@@ -102,6 +105,8 @@ class TrackingService : LifecycleService() {
         activityProgress.postValue(0f)
 
         isActivityOver.postValue(false)
+
+        currentLocation.postValue(LatLng(0.0, 0.0))
     }
 
     override fun onCreate() {
@@ -138,7 +143,6 @@ class TrackingService : LifecycleService() {
         stopForeground(true)
         stopSelf()
     }
-
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
@@ -260,7 +264,7 @@ class TrackingService : LifecycleService() {
     private fun updateNotificationTrackingState() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if(!serviceKilled) {
+        if(!serviceKilled && isTimerEnabled) {
             notificationManager.notify(TRACKING_NOTIFICATION_ID, baseNotificationBuilder.build())
         } else {
             notificationManager.cancel(TRACKING_NOTIFICATION_ID)
@@ -269,7 +273,7 @@ class TrackingService : LifecycleService() {
 
     @SuppressLint("MissingPermission")
     private fun updateLocationTracking(isTracking: Boolean) {
-        if(isTracking) {
+        if(isTracking || !serviceKilled) {
             if(TrackingUtility.hasLocationPermissions(this)) {
                 val request = LocationRequest.create().apply {
                     interval = LOCATION_UPDATE_INTERVAL
@@ -291,9 +295,15 @@ class TrackingService : LifecycleService() {
         override fun onLocationResult(p0: LocationResult) {
             super.onLocationResult(p0)
             if(isTracking.value!!) {
-                p0?.locations?.let { locations ->
+                p0.locations.let { locations ->
                     for(location in locations) {
                         addPathPoint(location)
+                    }
+                }
+            } else {
+                p0.locations.let {
+                    for(location in it) {
+                        currentLocation.postValue(LatLng(location.latitude, location.longitude))
                     }
                 }
             }
@@ -340,10 +350,10 @@ class TrackingService : LifecycleService() {
 
         startForeground(TRACKING_NOTIFICATION_ID, baseNotificationBuilder.build())
 
-        timeRunInSeconds.observe(this, {
-            if(!serviceKilled) {
+        isRunningInterval.observe(this, {
+            if(!serviceKilled && isTimerEnabled) {
                 val notification = curNotificationBuilder
-                    .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000))
+                    .setContentText(if(it) getString(R.string.activity_type_run) else getString(R.string.activity_type_walk))
                 notificationManager.notify(TRACKING_NOTIFICATION_ID, notification.build())
             }
         })
@@ -353,7 +363,7 @@ class TrackingService : LifecycleService() {
         val channel = NotificationChannel(
             TRACKING_NOTIFICATION_CHANNEL_ID,
             TRACKING_NOTIFICATION_CHANNEL_NAME,
-            IMPORTANCE_LOW
+            IMPORTANCE_DEFAULT
         )
         notificationManager.createNotificationChannel(channel)
     }

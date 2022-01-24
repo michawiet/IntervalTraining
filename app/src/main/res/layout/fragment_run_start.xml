@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintBottom_toTopOf="@id/progressHorizontalGuideline"
         tools:layout_editor_absoluteX="16dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/progressHorizontalGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="-4dp"
-        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        app:layout_constraintBottom_toBottomOf="@id/progressHorizontalGuideline"
         android:background="?android:attr/listDivider"/>
 
     <com.google.android.material.textview.MaterialTextView
@@ -119,8 +119,8 @@
         android:typeface="monospace"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tvIntervalLengthTitle"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="@+id/guideline2" />
+        app:layout_constraintEnd_toStartOf="@+id/progressLeftVerticalGuideline"
+        app:layout_constraintStart_toStartOf="@+id/progressLeftVerticalGuideline" />
 
     <View
         android:id="@+id/divider_two"
@@ -139,7 +139,7 @@
         android:textColor="@color/black_active"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
+        app:layout_constraintEnd_toStartOf="@id/progressLeftVerticalGuideline"
         app:layout_constraintTop_toBottomOf="@id/divider_two" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -153,7 +153,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tvTotalActiveTimeTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline2" />
+        app:layout_constraintEnd_toStartOf="@id/progressLeftVerticalGuideline" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvWorkoutStepTitle"
@@ -163,7 +163,7 @@
         android:text="@string/workout_step"
         android:textColor="@color/black_active"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider_two" />
 
@@ -177,11 +177,11 @@
         android:typeface="monospace"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tvWorkoutStepTitle"
-        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/progressLeftVerticalGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"

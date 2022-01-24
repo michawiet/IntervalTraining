@@ -38,9 +38,9 @@ object ServiceModule {
     fun provideBaseNotificationBuilder(@ApplicationContext app: Context, pendingIntent: PendingIntent) =
         NotificationCompat.Builder(app, Constants.TRACKING_NOTIFICATION_CHANNEL_ID)
             .setAutoCancel(false)
-            .setOngoing(true)
+            .setOngoing(false)
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setContentTitle(app.getString(R.string.app_name))
-            .setContentText("00:00")
+            .setContentText(app.getString(R.string.activity_type_walk))
             .setContentIntent(pendingIntent)
 }

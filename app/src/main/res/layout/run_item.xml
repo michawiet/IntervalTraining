@@ -23,8 +23,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
+            <ImageView
+                android:id="@+id/ivRunItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/dividerImageView"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="-8dp"
+                app:layout_constraintBottom_toBottomOf="@id/ivRunItem"
+                android:background="?android:attr/listDivider"/>
+
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
+                android:id="@+id/progressLeftVerticalGuideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -41,8 +55,8 @@
                 android:textStyle="normal"
                 android:typeface="monospace"
                 app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/card_view_constraint_layout_run_item" />
+                app:layout_constraintEnd_toEndOf="@id/progressLeftVerticalGuideline"
+                app:layout_constraintTop_toTopOf="@id/dividerImageView" />
 
             <TextView
                 android:id="@+id/tvLengthTitle"
@@ -67,8 +81,8 @@
                 android:textStyle="normal"
                 android:typeface="monospace"
                 app:layout_constraintEnd_toEndOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/card_view_constraint_layout_run_item" />
+                app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
+                app:layout_constraintTop_toTopOf="@id/dividerImageView" />
 
             <TextView
                 android:id="@+id/tvDistanceTitle"
@@ -102,7 +116,7 @@
                 android:typeface="monospace"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintEnd_toEndOf="@id/progressLeftVerticalGuideline"
                 app:layout_constraintTop_toTopOf="@id/divider" />
 
             <TextView
@@ -129,7 +143,7 @@
                 android:typeface="monospace"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
                 app:layout_constraintTop_toTopOf="@id/divider" />
 
             <TextView
@@ -146,15 +160,15 @@
 
             <TextView
                 android:id="@+id/tvDateRunItem"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:gravity="center_vertical"
-                android:text="01.01.1970"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/black_disabled"
+                android:text="weekday, 01 monthName 1970, 00:00"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/black_inactive"
                 android:textSize="12sp"
                 android:textStyle="normal"
-                android:typeface="monospace"
+                android:typeface="normal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvRatingTitle" />
 

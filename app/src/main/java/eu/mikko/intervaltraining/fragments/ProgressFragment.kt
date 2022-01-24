@@ -2,23 +2,25 @@ package eu.mikko.intervaltraining.fragments
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.adapters.ProgressAdapter
+import eu.mikko.intervaltraining.model.Run
+import eu.mikko.intervaltraining.other.DistanceValueFormatter
+import eu.mikko.intervaltraining.other.MinutesValueFormatter
+import eu.mikko.intervaltraining.other.PaceLabelFormatter
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedTimeFromSeconds
 import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
 import eu.mikko.intervaltraining.viewmodel.ProgressViewModel
 import kotlinx.android.synthetic.main.fragment_progress.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class ProgressFragment : Fragment(R.layout.fragment_progress) {
@@ -28,12 +30,10 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
     @set:Inject
     var workoutStep: Int = 1
 
-    private lateinit var progressAdapter: ProgressAdapter
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-        setupBarChart()
+
+        setupCombinedChart()
 
         viewModel.totalDistance.observe(viewLifecycleOwner, {
             if(it != null)
@@ -44,17 +44,8 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
                 tvTotalTimeSpentTrackingActivity.text = getFormattedTimeFromSeconds(it.div(1000))
         })
         viewModel.allRuns.observe(viewLifecycleOwner, {
-            if(it != null)
-                progressAdapter.submitList(it)
-            val allAvgSpeeds = it.indices.map { i -> BarEntry(i.toFloat(), it[i].avgSpeedMetersPerSecond) }
-            val barDataSet = BarDataSet(allAvgSpeeds, "").apply {
-                setDrawValues(false)
-                color = Color.parseColor("#4777c0")
-            }
-            barChart.apply {
-                data = BarData(barDataSet)
-                invalidate()
-            }
+            setDataForCombinedChart(it)
+            combinedProgressChart.invalidate()
         })
         viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner, {
             tvGoalProgress.text = (workoutStep - 1).div((it - 1).toFloat()).times(100f).toInt().toString().plus(" %")
@@ -67,30 +58,98 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
         }
     }
 
-    private fun setupBarChart() {
-        barChart.xAxis.apply {
-            position = XAxis.XAxisPosition.BOTTOM
-            setDrawLabels(false)
-            setDrawGridLines(false)
+    private fun setDataForCombinedChart(list: List<Run>) {
+        val mockList = arrayListOf<Run>()
+        for(i in 0 .. 10) {
+            mockList.add(Run(0,
+                Random.nextInt(1, 27).div(9f),
+                Random.nextInt(30, 50).times(100),
+                Random.nextLong(25L, 30L).times(60L).times(1000L),
+                Random.nextInt(70, 100)))
         }
-        barChart.axisLeft.apply {
-            valueFormatter = LabelFormatter()
-            setDrawGridLines(false)
+
+        val distances = arrayListOf<Entry>()
+        val activityTypeTimes = arrayListOf<BarEntry>()
+
+        var i = 1f
+        for(run in mockList) {
+            distances.add(Entry(i, run.distanceInMeters.div(1000f)))
+            activityTypeTimes.add(BarEntry(i, floatArrayOf(5f, 25f)))
+
+            i += 1f
         }
-        barChart.axisRight.apply {
-            setDrawLabels(false)
-            setDrawGridLines(false)
+
+        val distanceDataSet = LineDataSet(distances, "Distance").apply {
+            setDrawValues(true)
+            color = Color.parseColor("#426FC0")
+            lineWidth = 4f
+            axisDependency = YAxis.AxisDependency.LEFT
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            cubicIntensity = 0.2f
+            circleRadius = 2.0f
+            valueTextSize = 10f
+            setDrawValues(false)
+            setCircleColor(Color.parseColor("#426FC0"))
+            circleHoleColor = Color.parseColor("#9DADDA")
+
         }
-        barChart.apply {
-            description.text = "Pace over time"
-            legend.isEnabled = false
+
+        val activityTypeTimesDataSet = BarDataSet(activityTypeTimes, "").apply {
+            stackLabels = arrayOf("Walk length", "Run length")
+            colors = listOf(Color.parseColor("#CBCBCB"), Color.parseColor("#FFD891"))
+            axisDependency = YAxis.AxisDependency.RIGHT
+            barBorderColor = Color.parseColor("#A1A1A1")
+            barBorderWidth = 2f
+            valueTextSize = 12f
+            valueFormatter = MinutesValueFormatter()
         }
-        barChart.legend.isEnabled = false
+
+        val lineData = LineData(distanceDataSet)
+        val barData = BarData(activityTypeTimesDataSet)
+        val data = CombinedData().apply {
+            setData(lineData)
+            setData(barData)
+            barData.barWidth = 0.5f
+        }
+
+        combinedProgressChart.apply {
+            setData(data)
+            isScaleYEnabled = false
+            xAxis.apply {
+                axisMinimum = 0.4f
+                axisMaximum = mockList.size.plus(0.5f)
+            }
+            axisLeft.apply {
+                axisMinimum = 0f
+                axisMaximum = 8f
+            }
+            axisRight.apply {
+                axisMinimum = 0f
+            }
+        }
     }
 
-    private fun setupRecyclerView() = recycler_view.apply {
-        progressAdapter = ProgressAdapter()
-        adapter = progressAdapter
-        layoutManager = LinearLayoutManager(requireContext())
+    private fun setupCombinedChart() {
+        combinedProgressChart.apply {
+            xAxis.apply {
+                setDrawLabels(false)
+                setDrawGridLines(false)
+            }
+            axisLeft.apply {
+                setDrawGridLines(true)
+                setDrawLabels(true)
+                valueFormatter = DistanceValueFormatter()
+            }
+            axisRight.apply {
+                setDrawGridLines(false)
+                setDrawLabels(false)
+            }
+            description.text = ""
+            legend.apply {
+                textSize = 15f
+                form = Legend.LegendForm.CIRCLE
+                isWordWrapEnabled = true
+            }
+        }
     }
 }

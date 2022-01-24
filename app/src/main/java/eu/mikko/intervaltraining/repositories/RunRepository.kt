@@ -8,7 +8,9 @@ class RunRepository @Inject constructor (val runDao: RunDao) {
 
     suspend fun insertRun(run: Run) = runDao.insertRun(run)
 
-    fun getAllRunsSortedByDate() = runDao.getAllRunsSortedByDate()
+    fun getAllRunsSortedByDateAsc() = runDao.getAllRunsSortedByDateAsc()
+
+    fun getAllRunsSortedByDateDesc() = runDao.getAllRunsSortedByDateDesc()
 
     fun getTotalTimeInMillis() = runDao.getTotalTimeInMillis()
 

@@ -127,8 +127,8 @@ object TrackingUtility {
         return distance
     }
 
-    fun rateInterval(avgSpeed: Float, isRunningInterval: Boolean): Int {
-        var rating: Int = if(isRunningInterval) {
+    private fun rateInterval(avgSpeed: Float, isRunningInterval: Boolean): Int {
+        val rating: Int = if(isRunningInterval) {
             ((-1 * ((avgSpeed - 3) * 1.2).pow(4) + 1) * 100).toInt()
         } else {
             ((-1 * ((avgSpeed - 1.3) * 1.7).pow(4) + 1) * 100).toInt()
@@ -157,18 +157,18 @@ object TrackingUtility {
         return sum / count
     }
 
-    fun rateIntervals(intervalData: Interval, intervals: MutableList<IntervalPathPoints>): Array<RunIntervalResult> {
-        val ratingArray = arrayListOf<RunIntervalResult>()
+    fun rateIntervals(intervalData: Interval, intervals: MutableList<IntervalPathPoints>): Array<ParcelableRunIntervalResult> {
+        val ratingArray = arrayListOf<ParcelableRunIntervalResult>()
         var isRunningInterval = true
 
         //warmup
         val tmpSpeed = getIntervalDistance(intervals[0]) / intervalData.warmupSeconds
         val tmpResult = rateInterval(tmpSpeed, false)
-        ratingArray.add(RunIntervalResult(tmpSpeed, tmpResult, false))
+        ratingArray.add(ParcelableRunIntervalResult(tmpSpeed, tmpResult, false))
 
         for(i in 1 until intervals.size) {
             val speed = getIntervalDistance(intervals[i]) / if(isRunningInterval) intervalData.runSeconds else intervalData.walkSeconds
-            ratingArray.add(RunIntervalResult(speed, rateInterval(speed, isRunningInterval), isRunningInterval))
+            ratingArray.add(ParcelableRunIntervalResult(speed, rateInterval(speed, isRunningInterval), isRunningInterval))
             isRunningInterval = !isRunningInterval
         }
 
@@ -179,8 +179,12 @@ object TrackingUtility {
         return try {
             val pace = 1000 / (speed * 60)
             val leftover = pace % 1
-            val minutes = (pace - leftover).roundToInt()
-            val seconds = (leftover * 60).roundToInt()
+            var minutes = (pace - leftover).roundToInt()
+            var seconds = (leftover * 60).roundToInt()
+            if(seconds == 60) {
+                minutes += 1
+                seconds = 0
+            }
             String.format("%02d:%02d", minutes, seconds)
         } catch (e: IllegalArgumentException) {
             "--:--"

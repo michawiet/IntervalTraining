@@ -1,5 +1,6 @@
 package eu.mikko.intervaltraining.other
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
@@ -9,4 +10,7 @@ data class ParcelableRun(
     val avgSpeedMetersPerSecond: Float,
     val distanceInMeters: Int,
     val timeInMillis: Long,
-    val rating: Int) : Parcelable
+    val rating: Int,
+    val workoutStep: Int,
+    var map: Bitmap? = null
+) : Parcelable

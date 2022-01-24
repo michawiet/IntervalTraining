@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class RunIntervalResult(
+data class ParcelableRunIntervalResult(
     val avgSpeedMetersPerSecond: Float,
     val rating: Int,
     val isRunning: Boolean

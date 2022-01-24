@@ -1,25 +1,31 @@
 package eu.mikko.intervaltraining.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Interval
-import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.other.Constants.ACTION_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.ACTION_PAUSE_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_START_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_STOP_SERVICE
 import eu.mikko.intervaltraining.other.Constants.EXTRAS_INTERVAL_DATA
-import eu.mikko.intervaltraining.other.Constants.KEY_WORKOUT_STEP
+import eu.mikko.intervaltraining.other.Constants.MAP_ZOOM
+import eu.mikko.intervaltraining.other.Constants.POLYLINE_WIDTH
 import eu.mikko.intervaltraining.other.Constants.TIMER_UPDATE_INTERVAL
 import eu.mikko.intervaltraining.other.ParcelableInterval
 import eu.mikko.intervaltraining.other.ParcelableRun
@@ -30,9 +36,8 @@ import eu.mikko.intervaltraining.other.TrackingUtility.rateIntervals
 import eu.mikko.intervaltraining.other.TrackingUtility.rateWorkout
 import eu.mikko.intervaltraining.services.IntervalPathPoints
 import eu.mikko.intervaltraining.services.TrackingService
-import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
+import eu.mikko.intervaltraining.viewmodel.IntervalViewModel
 import kotlinx.android.synthetic.main.fragment_run.*
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -48,15 +53,34 @@ class RunFragment : Fragment(R.layout.fragment_run) {
 
     private var maxWorkoutStep = 36
 
-    private val viewModel: TrainingViewModel by viewModels()
+    private val viewModel: IntervalViewModel by viewModels()
     private lateinit var interval: Interval
     private var isTracking = false
     private var pathPointsOfIntervals = mutableListOf<IntervalPathPoints>()
+    private var isRunningInterval = false
 
     private var curTimeInMillis = 0L
 
+    private var map: GoogleMap? = null
+
+    //Permissions are checked with TrackingUtility.hasLocationPermissions(requireContext())
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mapView.onCreate(savedInstanceState)
+
+        mapView.getMapAsync {
+            it.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.empty_map_style))
+            if(TrackingUtility.hasLocationPermissions(requireContext())) {
+                it.isMyLocationEnabled = true
+            }
+            it.uiSettings.setAllGesturesEnabled(false)
+            it.uiSettings.isMyLocationButtonEnabled = false
+
+            map = it
+            addAllPolylines()
+        }
 
         activityPlayPauseFab.setOnClickListener {
             if (!isTracking) {
@@ -108,6 +132,18 @@ class RunFragment : Fragment(R.layout.fragment_run) {
     }
 
     private fun subscribeToObservers() {
+        /*
+        TrackingService.isTracking.observe(viewLifecycleOwner, {
+        if(it) {
+        isTracking = false
+        activityPlayPauseFab.setImageResource(R.drawable.ic_round_play_arrow_24)
+        }
+        })
+        */
+        TrackingService.currentLocation.observe(viewLifecycleOwner, {
+            if(it.latitude != 0.0 && it.longitude != 0.0)
+                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, MAP_ZOOM))
+        })
         TrackingService.timeRunInMillis.observe(viewLifecycleOwner, {
             curTimeInMillis = it
             activity_timer.text = TrackingUtility.getFormattedStopWatchTime(curTimeInMillis)
@@ -119,13 +155,10 @@ class RunFragment : Fragment(R.layout.fragment_run) {
             // convert meters to kilometers
             workout_distance.text = String.format("%.3f", it.div(1000))
         })
-        TrackingService.isRunningInterval.observe(viewLifecycleOwner, { isRunningInterval ->
-            if(isRunningInterval) {
-                workout_interval_type.text = getString(R.string.activity_type_run)
-            }
-            else {
-                workout_interval_type.text = getString(R.string.activity_type_walk)
-            }
+        TrackingService.isRunningInterval.observe(viewLifecycleOwner, {
+            this.isRunningInterval = it
+            if(it) workout_interval_type.text = getString(R.string.activity_type_run)
+            else workout_interval_type.text = getString(R.string.activity_type_walk)
         })
         TrackingService.intervalTimer.observe(viewLifecycleOwner, {
             //interval_timer.text = TrackingUtility.getFormattedStopWatchTime(it)
@@ -144,6 +177,8 @@ class RunFragment : Fragment(R.layout.fragment_run) {
         })
         TrackingService.pathPointsOfIntervals.observe(viewLifecycleOwner, {
             pathPointsOfIntervals = it
+            addLatestPolyline()
+            moveCameraToUser()
         })
     }
 
@@ -164,59 +199,132 @@ class RunFragment : Fragment(R.layout.fragment_run) {
         intent.action = ACTION_INTERVAL_DATA
         requireContext().startService(intent)
     }
-    @Deprecated("lul")
-    private fun saveRun() {
-        val newRun = Run()
-        newRun.apply {
-            timeInMillis = interval.totalWorkoutTime * 1000L
-            distanceInMeters = getTotalDistance(pathPointsOfIntervals).toInt()
-            avgSpeedMetersPerSecond = distanceInMeters.div(interval.totalWorkoutTime.toFloat())
-            timestamp = Calendar.getInstance().timeInMillis
-            rating = rateWorkout(interval, pathPointsOfIntervals)
-        }
-        writeNewWorkoutStepToSharedPref(newRun.rating)
-        viewModel.insertNewRun(newRun)
-        when {
-            newRun.rating > 75 -> writeNewWorkoutStepToSharedPref(workoutStep + 1)
-            newRun.rating > 50 -> writeNewWorkoutStepToSharedPref(workoutStep)
-            else -> writeNewWorkoutStepToSharedPref(workoutStep - 1)
-        }
-        Snackbar.make(
-            requireActivity().findViewById(R.id.rootView),
-            "Run saved successfully with a score of ${newRun.rating}",
-            Snackbar.LENGTH_LONG
-        ).show()
-        stopRun()
-        Timber.d("Run data was saved!")
-    }
 
+    //Permission check for disabling my location?
+    @SuppressLint("MissingPermission")
     private fun passRunResultToSummaryFragment() {
-        val timestamp = Calendar.getInstance().timeInMillis
-        val distanceInMeters = getTotalDistance(pathPointsOfIntervals).toInt()
-        val avgSpeedMetersPerSecond = distanceInMeters.div(interval.totalWorkoutTime.toFloat())
-        val timeInMillis = interval.totalWorkoutTime * 1000L
-        val rating: Int = rateWorkout(interval, pathPointsOfIntervals)
+        zoomToSeeWholeTrack()
+        map?.isMyLocationEnabled = false
+        map?.snapshot { bmp ->
+            val timestamp = Calendar.getInstance().timeInMillis
+            val distanceInMeters = getTotalDistance(pathPointsOfIntervals).toInt()
+            val avgSpeedMetersPerSecond = distanceInMeters.div(interval.totalWorkoutTime.toFloat())
+            val timeInMillis = interval.totalWorkoutTime * 1000L
+            val rating: Int = rateWorkout(interval, pathPointsOfIntervals)
 
-        val run = ParcelableRun(timestamp, avgSpeedMetersPerSecond, distanceInMeters, timeInMillis, rating)
-        val ratedIntervals = rateIntervals(interval, pathPointsOfIntervals)
+            val run = ParcelableRun(
+                timestamp,
+                avgSpeedMetersPerSecond,
+                distanceInMeters,
+                timeInMillis,
+                rating,
+                workoutStep,
+                bmp
+            )
 
-        stopRun()
+            val ratedIntervals = rateIntervals(interval, pathPointsOfIntervals)
 
-        val action = RunFragmentDirections.actionRunFragmentToRunSummaryFragment(run, ratedIntervals)
-        findNavController().navigate(action)
+            stopRun()
+
+            val action = RunFragmentDirections.actionRunFragmentToRunSummaryFragment(run, ratedIntervals)
+            findNavController().navigate(action)
+        }
     }
 
-    private fun writeNewWorkoutStepToSharedPref(newWorkoutStep: Int) {
-        //TODO("check if increased workout step is not greater than last workout step (36, but read from viewmodel")
-        var correctedWorkoutStep = newWorkoutStep
+    private fun moveCameraToUser() {
+        if(pathPointsOfIntervals.isNotEmpty() && pathPointsOfIntervals.last().isNotEmpty() && pathPointsOfIntervals.last().last().isNotEmpty()) {
+            map?.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    pathPointsOfIntervals.last().last().last(),
+                    MAP_ZOOM
+                )
+            )
+        }
+    }
 
-        if(newWorkoutStep < 1)
-            correctedWorkoutStep = 1
-        else if(newWorkoutStep > maxWorkoutStep)
-            correctedWorkoutStep = maxWorkoutStep
+    private fun zoomToSeeWholeTrack() {
+        val bounds = LatLngBounds.Builder()
+        for(interval in pathPointsOfIntervals) {
+            for(chunk in interval) {
+                for(pos in chunk)
+                    bounds.include(pos)
+            }
+        }
 
-        sharedPref.edit()
-            .putInt(KEY_WORKOUT_STEP, correctedWorkoutStep)
-            .apply()
+        map?.moveCamera(
+            CameraUpdateFactory.newLatLngBounds(
+                bounds.build(),
+                mapView.width,
+                mapView.height,
+                (mapView.height * 0.05f).toInt()
+            )
+        )
+    }
+
+    private fun addAllPolylines() {
+        val walkColor = ContextCompat.getColor(requireContext(), R.color.walk_dark)
+        val runColor = ContextCompat.getColor(requireContext(), R.color.run_dark)
+        var isRunning = false
+        for (interval in pathPointsOfIntervals) {
+            for (polyline in interval) {
+                val polylineOptions = PolylineOptions()
+                    .color(if (isRunning) runColor else walkColor)
+                    .width(POLYLINE_WIDTH)
+                    .addAll(polyline)
+                map?.addPolyline(polylineOptions)
+            }
+            isRunning = !isRunning
+        }
+    }
+
+    private fun addLatestPolyline() {
+        if (pathPointsOfIntervals.isNotEmpty() && pathPointsOfIntervals.last()
+                .isNotEmpty() && pathPointsOfIntervals.last().last().size > 1
+        ) {
+            val preLastLatLng = pathPointsOfIntervals.last().last()[pathPointsOfIntervals.last()
+                .last().size - 2]
+            val lastLatLng = pathPointsOfIntervals.last().last().last()
+            val polylineOptions = PolylineOptions()
+                .color(
+                    if (isRunningInterval) ContextCompat.getColor(requireContext(),
+                        R.color.run_dark)
+                    else ContextCompat.getColor(requireContext(), R.color.walk_dark)
+                )
+                .width(POLYLINE_WIDTH)
+                .add(preLastLatLng)
+                .add(lastLatLng)
+            map?.addPolyline(polylineOptions)
+        }
+    }
+
+    //Google map functionality
+    override fun onResume() {
+        super.onResume()
+        mapView?.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView?.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView?.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView?.onPause()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView?.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView?.onSaveInstanceState(outState)
     }
 }

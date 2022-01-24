@@ -11,7 +11,10 @@ interface RunDao {
     suspend fun insertRun(run: Run)
 
     @Query("SELECT * FROM runs_table ORDER BY timestamp DESC")
-    fun getAllRunsSortedByDate(): LiveData<List<Run>>
+    fun getAllRunsSortedByDateDesc(): LiveData<List<Run>>
+
+    @Query("SELECT * FROM runs_table ORDER BY timestamp ASC")
+    fun getAllRunsSortedByDateAsc(): LiveData<List<Run>>
 
     @Query("SELECT SUM(timeInMillis) FROM runs_table")
     fun getTotalTimeInMillis(): LiveData<Long>

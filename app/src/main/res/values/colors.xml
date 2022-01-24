@@ -34,4 +34,9 @@
     <color name="A200">#939DFF</color>
     <color name="A400">#606EFF</color>
     <color name="A700">#4757FF</color>
+
+    <color name="walk_dark">#426FC0</color>
+    <color name="walk_light">#9DADDA</color>
+    <color name="run_dark">#E87A30</color>
+    <color name="run_light">#F6B499</color>
 </resources>

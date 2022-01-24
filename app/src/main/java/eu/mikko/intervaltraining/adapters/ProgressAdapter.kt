@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedStopWatchTime
 import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
+import kotlinx.android.synthetic.main.fragment_run_summary.*
 import kotlinx.android.synthetic.main.run_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,6 +43,7 @@ class ProgressAdapter : RecyclerView.Adapter<ProgressAdapter.ProgressViewHolder>
     override fun onBindViewHolder(holder: ProgressViewHolder, position: Int) {
         val run = differ.currentList[position]
         holder.itemView.apply {
+            Glide.with(this).load(run.map).into(ivRunItem)
             tvLength.text = getFormattedStopWatchTime(run.timeInMillis)
             tvDistance.text = run.distanceInMeters.div(1000).toString()
             tvAvgSpeed.text = getKilometersPerMinuteFromMetersPerSecond(run.avgSpeedMetersPerSecond)
@@ -48,7 +51,7 @@ class ProgressAdapter : RecyclerView.Adapter<ProgressAdapter.ProgressViewHolder>
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = run.timestamp
             }
-            val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy; HH:mm", Locale.getDefault())
             tvDateRunItem.text = dateFormat.format(calendar.time)
         }
 

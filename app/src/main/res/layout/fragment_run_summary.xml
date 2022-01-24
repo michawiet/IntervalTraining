@@ -2,197 +2,211 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <com.github.mikephil.charting.charts.CombinedChart
-        android:id="@+id/combinedChart"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/training_notification_card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintTop_toBottomOf="@id/guideline">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/card_view_constraint_layout_run_item"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="wrap_content">
+
+            <com.github.mikephil.charting.charts.CombinedChart
+                android:id="@+id/combinedChart"
+                android:layout_width="match_parent"
+                android:layout_height="320sp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/training_notification_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintTop_toBottomOf="@id/combinedChart">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/card_view_constraint_layout_run_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/progressLeftVerticalGuideline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <TextView
+                        android:id="@+id/tvLength"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="--:--"
+                        android:textColor="@color/black_active"
+                        android:textSize="20sp"
+                        android:textStyle="normal"
+                        android:typeface="monospace"
+                        app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
+                        app:layout_constraintEnd_toEndOf="@id/progressLeftVerticalGuideline"
+                        app:layout_constraintTop_toTopOf="@id/card_view_constraint_layout_run_item" />
+
+                    <TextView
+                        android:id="@+id/tvLengthTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Moving time"
+                        android:textColor="@color/black_inactive"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/tvLength"
+                        app:layout_constraintEnd_toEndOf="@id/tvLength"
+                        app:layout_constraintTop_toBottomOf="@id/tvLength" />
+
+                    <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/black_active"
+                        android:textSize="20sp"
+                        android:textStyle="normal"
+                        android:typeface="monospace"
+                        app:layout_constraintEnd_toEndOf="@id/card_view_constraint_layout_run_item"
+                        app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
+                        app:layout_constraintTop_toTopOf="@id/card_view_constraint_layout_run_item" />
+
+                    <TextView
+                        android:id="@+id/tvDistanceTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="km"
+                        android:textColor="@color/black_inactive"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/tvDistance"
+                        app:layout_constraintEnd_toEndOf="@id/tvDistance"
+                        app:layout_constraintTop_toBottomOf="@id/tvDistance" />
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="-8dp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvDistanceTitle"
+                        android:background="?android:attr/listDivider"/>
+
+                    <TextView
+                        android:id="@+id/tvAvgSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="--:--"
+                        android:textColor="@color/black_active"
+                        android:textSize="20sp"
+                        android:textStyle="normal"
+                        android:typeface="monospace"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
+                        app:layout_constraintEnd_toEndOf="@id/progressLeftVerticalGuideline"
+                        app:layout_constraintTop_toTopOf="@id/divider" />
+
+                    <TextView
+                        android:id="@+id/tvAvgSpeedTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="/km"
+                        android:textColor="@color/black_inactive"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/tvAvgSpeed"
+                        app:layout_constraintEnd_toEndOf="@id/tvAvgSpeed"
+                        app:layout_constraintTop_toBottomOf="@id/tvAvgSpeed" />
+
+                    <TextView
+                        android:id="@+id/tvRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0/100"
+                        android:textColor="@color/black_active"
+                        android:textSize="20sp"
+                        android:textStyle="normal"
+                        android:typeface="monospace"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toEndOf="@id/card_view_constraint_layout_run_item"
+                        app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
+                        app:layout_constraintTop_toTopOf="@id/divider" />
+
+                    <TextView
+                        android:id="@+id/tvRatingTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Rating"
+                        android:textColor="@color/black_inactive"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/tvRating"
+                        app:layout_constraintEnd_toEndOf="@id/tvRating"
+                        app:layout_constraintTop_toBottomOf="@id/tvRating" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <ImageView
+                android:id="@+id/summaryMapImageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/training_notification_card_view"/>
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
+                android:id="@+id/fabGuideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <TextView
-                android:id="@+id/tvLength"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="--:--"
-                android:textColor="@color/black_active"
-                android:textSize="20sp"
-                android:textStyle="normal"
-                android:typeface="monospace"
-                app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/card_view_constraint_layout_run_item" />
-
-            <TextView
-                android:id="@+id/tvLengthTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Moving time"
-                android:textColor="@color/black_inactive"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@id/tvLength"
-                app:layout_constraintEnd_toEndOf="@id/tvLength"
-                app:layout_constraintTop_toBottomOf="@id/tvLength" />
-
-            <TextView
-                android:id="@+id/tvDistance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@color/black_active"
-                android:textSize="20sp"
-                android:textStyle="normal"
-                android:typeface="monospace"
-                app:layout_constraintEnd_toEndOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/card_view_constraint_layout_run_item" />
-
-            <TextView
-                android:id="@+id/tvDistanceTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="km"
-                android:textColor="@color/black_inactive"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@id/tvDistance"
-                app:layout_constraintEnd_toEndOf="@id/tvDistance"
-                app:layout_constraintTop_toBottomOf="@id/tvDistance" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="-8dp"
-                app:layout_constraintBottom_toBottomOf="@id/tvDistanceTitle"
-                android:background="?android:attr/listDivider"/>
-
-            <TextView
-                android:id="@+id/tvAvgSpeed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="--:--"
-                android:textColor="@color/black_active"
-                android:textSize="20sp"
-                android:textStyle="normal"
-                android:typeface="monospace"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/divider" />
-
-            <TextView
-                android:id="@+id/tvAvgSpeedTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="/km"
-                android:textColor="@color/black_inactive"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@id/tvAvgSpeed"
-                app:layout_constraintEnd_toEndOf="@id/tvAvgSpeed"
-                app:layout_constraintTop_toBottomOf="@id/tvAvgSpeed" />
-
-            <TextView
-                android:id="@+id/tvRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="0/100"
-                android:textColor="@color/black_active"
-                android:textSize="20sp"
-                android:textStyle="normal"
-                android:typeface="monospace"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/divider" />
-
-            <TextView
-                android:id="@+id/tvRatingTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Rating"
-                android:textColor="@color/black_inactive"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@id/tvRating"
-                app:layout_constraintEnd_toEndOf="@id/tvRating"
-                app:layout_constraintTop_toBottomOf="@id/tvRating" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/fabGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="Save"
+        app:fabSize="normal"
         android:textColor="@color/primary_50"
-        android:layout_marginBottom="16dp"
-        app:iconTint="@color/primary_50"
-        app:icon="@drawable/ic_round_save_24"
+        app:backgroundTint="@color/primary_100"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/fabGuideline"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_round_save_24"
+        app:tint="@color/primary_600" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabDiscard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="Discard"
         android:textColor="@color/primary_50"
-        android:layout_marginBottom="16dp"
-        app:iconTint="@color/primary_50"
-        app:backgroundTint="@color/red"
-        app:icon="@drawable/ic_round_delete_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/fabGuideline" />
+        app:backgroundTint="@color/light_red"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@+id/fabSave"
+        app:layout_constraintEnd_toEndOf="@+id/fabSave"
+
+        app:layout_constraintStart_toStartOf="@+id/fabSave"
+        app:srcCompat="@drawable/ic_round_delete_24"
+        app:tint="@color/red" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
