@@ -6,11 +6,13 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
@@ -20,6 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.other.Constants
+import eu.mikko.intervaltraining.other.Constants.INTERVAL_AVERAGE_PRECISION_LOWER_BOUND
+import eu.mikko.intervaltraining.other.Constants.INTERVAL_GOOD_PRECISION_LOWER_BOUND
 import eu.mikko.intervaltraining.other.Constants.RUN_PACE
 import eu.mikko.intervaltraining.other.Constants.WALK_PACE
 import eu.mikko.intervaltraining.other.PaceLabelFormatter
@@ -53,7 +57,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         tvDistance.text = args.runData.distanceInMeters.div(1000).toString()
         tvAvgSpeed.text =
             TrackingUtility.getKilometersPerMinuteFromMetersPerSecond(args.runData.avgSpeedMetersPerSecond)
-        tvRating.text = args.runData.rating.toString()
+        tvRating.text = args.runData.rating.toString().plus("%")
 
         Glide.with(this).load(args.runData.map).into(summaryMapImageView)
 
@@ -87,27 +91,42 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
 
     class RatingLabelFormatter : IndexAxisValueFormatter() {
         override fun getFormattedValue(value: Float): String {
-            return value.toInt().toString()
+            return value.toInt().toString().plus("%")
         }
     }
 
     private fun setupCombinedDataChart() {
         combinedChart.apply {
+            isScaleYEnabled = false
             xAxis.apply {
                 setDrawLabels(false)
                 setDrawGridLines(false)
+                axisMinimum = 0.4f
+                valueFormatter = RatingLabelFormatter()
             }
             axisLeft.apply {
                 setDrawGridLines(false)
                 setDrawLabels(false)
+                axisMinimum = 0.8f
+                axisMaximum = 5f
             }
             axisRight.apply {
                 setDrawGridLines(false)
                 setDrawLabels(false)
+                axisMinimum = 0f
+                axisMaximum = 110f
+                addLimitLine(LimitLine(INTERVAL_GOOD_PRECISION_LOWER_BOUND.toFloat(), "Good precision limit").also {
+                    it.lineWidth = 2f
+                    it.enableDashedLine(20f, 20f, 0f)
+                    it.labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
+                    it.textSize = 10f
+                    it.lineColor = ContextCompat.getColor(requireContext(), R.color.black_disabled)
+                    it.textColor = ContextCompat.getColor(requireContext(), R.color.black_disabled)
+                })
             }
             description.text = ""
             legend.apply {
-                textSize = 20f
+                textSize = 14f
                 form = Legend.LegendForm.CIRCLE
                 isWordWrapEnabled = true
             }
@@ -139,38 +158,40 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         }
 
         val requiredPaceLineDataSet = LineDataSet(requiredSpeeds, "Required pace").apply {
-            setDrawValues(true)
-            color = Color.parseColor("#426FC0")
-            lineWidth = 4f
+            setDrawValues(false)
+            color = Color.parseColor("#DC426FC0")
+            lineWidth = 2f
             axisDependency = YAxis.AxisDependency.LEFT
             mode = LineDataSet.Mode.CUBIC_BEZIER
             cubicIntensity = 0.4f
-            circleRadius = 1.5f
-            setCircleColor(Color.parseColor("#426FC0"))
-            circleHoleColor = Color.parseColor("#9DADDA")
+            setDrawCircles(false)
+            setDrawCircleHole(false)
+            enableDashedLine(20f, 25f, 0f)
         }
         val achievedPaceLineDataSet = LineDataSet(achievedSpeeds, "Achieved pace").apply {
             setDrawValues(true)
             color = Color.parseColor("#E87A30")
+            setCircleColor(Color.parseColor("#E87A30"))
+            circleHoleColor = Color.parseColor("#F6B499")
+            circleRadius = 1.5f
             lineWidth = 4f
             axisDependency = YAxis.AxisDependency.LEFT
             mode = LineDataSet.Mode.CUBIC_BEZIER
             cubicIntensity = 0.4f
-            circleRadius = 1.5f
-            setCircleColor(Color.parseColor("#E87A30"))
-            circleHoleColor = Color.parseColor("#F6B499")
+            valueTextSize = 12f
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.black_active)
         }
-        val walkRatingsDataSet = BarDataSet(walkRatings, "Walk rating").apply {
+        val walkRatingsDataSet = BarDataSet(walkRatings, "Walk precision").apply {
             color = Color.parseColor("#CBCBCB")
-            axisDependency = YAxis.AxisDependency.RIGHT
             barBorderColor = Color.parseColor("#A1A1A1")
+            axisDependency = YAxis.AxisDependency.RIGHT
             barBorderWidth = 2f
             valueTextSize = 12f
         }
-        val runRatingsDataSet = BarDataSet(runRatings, "Run rating").apply {
+        val runRatingsDataSet = BarDataSet(runRatings, "Run precision").apply {
             color = Color.parseColor("#FFD891")
-            axisDependency = YAxis.AxisDependency.RIGHT
             barBorderColor = Color.parseColor("#F9BC00")
+            axisDependency = YAxis.AxisDependency.RIGHT
             barBorderWidth = 2f
             valueTextSize = 12f
         }
@@ -189,20 +210,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         combinedChart.apply {
             setData(data)
             invalidate()
-            xAxis.apply {
-                axisMinimum = 0.4f
-                axisMaximum = intervalResultList.size.plus(0.5f)
-                valueFormatter = RatingLabelFormatter()
-            }
-            axisRight.apply {
-                axisMinimum = 0f
-                axisMaximum = 110f
-            }
-            axisLeft.apply {
-                axisMinimum = 0.8f
-                axisMaximum = 5f
-            }
-            isScaleYEnabled = false
+            xAxis.axisMaximum = intervalResultList.size.plus(0.5f)
         }
     }
 
@@ -221,18 +229,17 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         writeNewWorkoutStepToSharedPref(newRun.rating)
         viewModel.insertNewRun(newRun)
         when {
-            newRun.rating > 75 -> writeNewWorkoutStepToSharedPref(workoutStep + 1)
-            newRun.rating > 50 -> writeNewWorkoutStepToSharedPref(workoutStep)
+            newRun.rating >= INTERVAL_GOOD_PRECISION_LOWER_BOUND -> writeNewWorkoutStepToSharedPref(workoutStep + 1)
+            newRun.rating >= INTERVAL_AVERAGE_PRECISION_LOWER_BOUND -> writeNewWorkoutStepToSharedPref(workoutStep)
             else -> writeNewWorkoutStepToSharedPref(workoutStep - 1)
         }
         Snackbar.make(
             requireActivity().findViewById(R.id.rootView),
-            "Run saved successfully with a score of ${newRun.rating}",
+            "Run saved successfully!",
             Snackbar.LENGTH_LONG
-        ).show()
+        ).setAnchorView(R.id.bottom_navigation).show()
         Timber.d("Run data was saved!")
 
-        //TODO "navigate to the progress? or somewhere"
         findNavController().navigate(R.id.action_runSummaryFragment_to_runStartFragment)
     }
 

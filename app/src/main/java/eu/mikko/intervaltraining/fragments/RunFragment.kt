@@ -204,7 +204,9 @@ class RunFragment : Fragment(R.layout.fragment_run) {
     @SuppressLint("MissingPermission")
     private fun passRunResultToSummaryFragment() {
         zoomToSeeWholeTrack()
-        map?.isMyLocationEnabled = false
+        if(TrackingUtility.hasLocationPermissions(requireContext())) {
+            map?.isMyLocationEnabled = false
+        }
         map?.snapshot { bmp ->
             val timestamp = Calendar.getInstance().timeInMillis
             val distanceInMeters = getTotalDistance(pathPointsOfIntervals).toInt()

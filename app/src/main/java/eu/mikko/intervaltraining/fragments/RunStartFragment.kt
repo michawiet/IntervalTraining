@@ -20,6 +20,7 @@ import eu.mikko.intervaltraining.model.Interval
 import eu.mikko.intervaltraining.other.Constants
 import eu.mikko.intervaltraining.other.TrackingUtility
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedTimeFromSeconds
+import eu.mikko.intervaltraining.other.TrackingUtility.getTotalActivityTimeFromInterval
 import eu.mikko.intervaltraining.viewmodel.IntervalViewModel
 import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run_start.*
@@ -57,25 +58,11 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
     }
 
     private fun setupPieChart(interval: Interval) {
-        var totalRunTime = 0L
-        var totalWalkTime = interval.warmupSeconds
-        var timeLeft = interval.totalWorkoutTime - totalWalkTime
-
-        var isRunning = true
-        while(timeLeft > 0) {
-            if(isRunning) {
-                totalRunTime += if(interval.runSeconds > timeLeft) timeLeft else interval.runSeconds
-                timeLeft -= interval.runSeconds
-            } else {
-                totalWalkTime += if (interval.walkSeconds > timeLeft) timeLeft else interval.walkSeconds
-                timeLeft -= interval.walkSeconds
-            }
-            isRunning = !isRunning
-        }
+        val totalTime = getTotalActivityTimeFromInterval(interval)
 
         val dataSet = PieDataSet(
-            listOf(PieEntry(totalWalkTime.toFloat(), getString(R.string.activity_type_walk)),
-                    PieEntry(totalRunTime.toFloat(), getString(R.string.activity_type_run)))
+            listOf(PieEntry(totalTime[0], getString(R.string.activity_type_walk)),
+                    PieEntry(totalTime[1], getString(R.string.activity_type_run)))
             , "")
         dataSet.apply {
             valueFormatter = object : ValueFormatter() {

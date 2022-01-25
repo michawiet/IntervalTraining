@@ -33,7 +33,7 @@
                 android:id="@+id/dividerImageView"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="-8dp"
+                android:layout_marginBottom="-4dp"
                 app:layout_constraintBottom_toBottomOf="@id/ivRunItem"
                 android:background="?android:attr/listDivider"/>
 
@@ -42,28 +42,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/progressMiddleVerticalGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/progressRightVerticalGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
 
             <TextView
                 android:id="@+id/tvLength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:text="--:--"
                 android:textColor="@color/black_active"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="normal"
                 android:typeface="monospace"
                 app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
                 app:layout_constraintEnd_toEndOf="@id/progressLeftVerticalGuideline"
-                app:layout_constraintTop_toTopOf="@id/dividerImageView" />
+                app:layout_constraintTop_toBottomOf="@id/dividerImageView" />
 
             <TextView
                 android:id="@+id/tvLengthTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Moving time"
+                android:text="Active time"
                 android:textColor="@color/black_inactive"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@id/tvLength"
@@ -74,15 +89,16 @@
                 android:id="@+id/tvDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/black_active"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="normal"
                 android:typeface="monospace"
-                app:layout_constraintEnd_toEndOf="@id/card_view_constraint_layout_run_item"
+                app:layout_constraintEnd_toStartOf="@+id/progressMiddleVerticalGuideline"
                 app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
-                app:layout_constraintTop_toTopOf="@id/dividerImageView" />
+                app:layout_constraintTop_toBottomOf="@id/dividerImageView" />
 
             <TextView
                 android:id="@+id/tvDistanceTitle"
@@ -100,7 +116,7 @@
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="-8dp"
+                android:layout_marginBottom="-4dp"
                 app:layout_constraintBottom_toBottomOf="@id/tvDistanceTitle"
                 android:background="?android:attr/listDivider"/>
 
@@ -108,16 +124,16 @@
                 android:id="@+id/tvAvgSpeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:text="--:--"
                 android:textColor="@color/black_active"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="normal"
                 android:typeface="monospace"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintEnd_toEndOf="@id/progressLeftVerticalGuideline"
-                app:layout_constraintTop_toTopOf="@id/divider" />
+                app:layout_constraintEnd_toStartOf="@+id/progressRightVerticalGuideline"
+                app:layout_constraintStart_toStartOf="@+id/progressMiddleVerticalGuideline"
+                app:layout_constraintTop_toBottomOf="@id/dividerImageView" />
 
             <TextView
                 android:id="@+id/tvAvgSpeedTitle"
@@ -135,23 +151,23 @@
                 android:id="@+id/tvRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
-                android:text="0/100"
+                android:text="0%"
                 android:textColor="@color/black_active"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="normal"
                 android:typeface="monospace"
-                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@id/card_view_constraint_layout_run_item"
-                app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
-                app:layout_constraintTop_toTopOf="@id/divider" />
+                app:layout_constraintStart_toStartOf="@+id/progressRightVerticalGuideline"
+                app:layout_constraintTop_toBottomOf="@id/dividerImageView" />
 
             <TextView
                 android:id="@+id/tvRatingTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Rating"
+                android:text="Precision"
                 android:textColor="@color/black_inactive"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@id/tvRating"
@@ -163,14 +179,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:gravity="center_vertical"
-                android:text="weekday, 01 monthName 1970, 00:00"
+                android:text="weekday, 01 month 1970, 00:00"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/black_inactive"
                 android:textSize="12sp"
                 android:textStyle="normal"
                 android:typeface="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvRatingTitle" />
+                app:layout_constraintTop_toBottomOf="@id/divider" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

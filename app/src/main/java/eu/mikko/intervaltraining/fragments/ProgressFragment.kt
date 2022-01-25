@@ -91,7 +91,6 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
             setDrawValues(false)
             setCircleColor(Color.parseColor("#426FC0"))
             circleHoleColor = Color.parseColor("#9DADDA")
-
         }
 
         val activityTypeTimesDataSet = BarDataSet(activityTypeTimes, "").apply {
@@ -114,24 +113,15 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
 
         combinedProgressChart.apply {
             setData(data)
-            isScaleYEnabled = false
-            xAxis.apply {
-                axisMinimum = 0.4f
-                axisMaximum = mockList.size.plus(0.5f)
-            }
-            axisLeft.apply {
-                axisMinimum = 0f
-                axisMaximum = 8f
-            }
-            axisRight.apply {
-                axisMinimum = 0f
-            }
+            xAxis.axisMaximum = mockList.size.plus(0.5f)
         }
     }
 
     private fun setupCombinedChart() {
         combinedProgressChart.apply {
+            isScaleYEnabled = false
             xAxis.apply {
+                axisMinimum = 0.4f
                 setDrawLabels(false)
                 setDrawGridLines(false)
             }
@@ -139,10 +129,13 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
                 setDrawGridLines(true)
                 setDrawLabels(true)
                 valueFormatter = DistanceValueFormatter()
+                axisMinimum = 0f
+                axisMaximum = 8f
             }
             axisRight.apply {
                 setDrawGridLines(false)
                 setDrawLabels(false)
+                axisMinimum = 0f
             }
             description.text = ""
             legend.apply {

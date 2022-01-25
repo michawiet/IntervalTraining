@@ -47,11 +47,11 @@ class ProgressAdapter : RecyclerView.Adapter<ProgressAdapter.ProgressViewHolder>
             tvLength.text = getFormattedStopWatchTime(run.timeInMillis)
             tvDistance.text = run.distanceInMeters.div(1000).toString()
             tvAvgSpeed.text = getKilometersPerMinuteFromMetersPerSecond(run.avgSpeedMetersPerSecond)
-            tvRating.text = run.rating.toString()
+            tvRating.text = run.rating.toString().plus("%")
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = run.timestamp
             }
-            val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy; HH:mm", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault())
             tvDateRunItem.text = dateFormat.format(calendar.time)
         }
 

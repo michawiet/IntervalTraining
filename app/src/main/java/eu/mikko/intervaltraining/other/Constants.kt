@@ -49,4 +49,7 @@ object Constants {
 
     const val POLYLINE_WIDTH = 8f
     const val MAP_ZOOM = 17f
+
+    const val INTERVAL_GOOD_PRECISION_LOWER_BOUND = 75
+    const val INTERVAL_AVERAGE_PRECISION_LOWER_BOUND = 50
 }

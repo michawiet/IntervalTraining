@@ -190,4 +190,25 @@ object TrackingUtility {
             "--:--"
         }
     }
+
+    //walkTime[0]
+    fun getTotalActivityTimeFromInterval(interval: Interval): FloatArray {
+        var totalRunTime = 0L
+        var totalWalkTime = interval.warmupSeconds
+        var timeLeft = interval.totalWorkoutTime - totalWalkTime
+
+        var isRunning = true
+        while(timeLeft > 0) {
+            if(isRunning) {
+                totalRunTime += if(interval.runSeconds > timeLeft) timeLeft else interval.runSeconds
+                timeLeft -= interval.runSeconds
+            } else {
+                totalWalkTime += if (interval.walkSeconds > timeLeft) timeLeft else interval.walkSeconds
+                timeLeft -= interval.walkSeconds
+            }
+            isRunning = !isRunning
+        }
+
+        return floatArrayOf(totalWalkTime.toFloat(), totalRunTime.toFloat())
+    }
 }

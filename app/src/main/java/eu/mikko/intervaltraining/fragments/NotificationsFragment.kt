@@ -60,7 +60,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
             requireActivity().findViewById(R.id.rootView),
             "Reminder at ${String.format("%02d:%02d", hour, minute)} enabled for $dayOfWeekDisplayName",
             Snackbar.LENGTH_LONG
-        ).show()
+        ).setAnchorView(R.id.bottom_navigation).show()
     }
 
     override fun onCreateView(
