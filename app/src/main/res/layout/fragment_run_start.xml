@@ -195,7 +195,7 @@
         android:textColor="@color/primary_50"
         android:layout_marginBottom="16dp"
         app:iconTint="@color/primary_50"
-        app:icon="@drawable/ic_round_directions_run_24"
+        app:icon="@drawable/ic_round_timer_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

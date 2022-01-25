@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Interval Training</string>
     <string name="home">Home</string>
-    <string name="progress">Progress</string>
+    <string name="statistics">Statistics</string>
     <string name="reminders">Reminders</string>
     <string name="training">Training</string>
     <string name="pause_activity">Pause</string>
@@ -31,7 +31,7 @@
     <string name="stats_total_distance_default">0</string>
     <string name="minutes_seconds_default">00:00</string>
     <string name="interval_duration">Interval duration</string>
-    <string name="start_run_button">Start your run</string>
+    <string name="start_run_button">Start training</string>
     <string name="active_time_title">Workout duration</string>
     <string name="run_interval_length_hint">Run</string>
     <string name="walk_interval_length_hint">Walk</string>
@@ -46,4 +46,5 @@
     <string name="workout_step_default">1</string>
     <string name="interval_timer_hint">Interval timer</string>
     <string name="warmup_title">Warmup</string>
+    <string name="activities">Activities</string>
 </resources>

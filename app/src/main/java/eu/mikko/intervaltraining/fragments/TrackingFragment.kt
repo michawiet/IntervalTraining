@@ -37,12 +37,12 @@ import eu.mikko.intervaltraining.other.TrackingUtility.rateWorkout
 import eu.mikko.intervaltraining.services.IntervalPathPoints
 import eu.mikko.intervaltraining.services.TrackingService
 import eu.mikko.intervaltraining.viewmodel.IntervalViewModel
-import kotlinx.android.synthetic.main.fragment_run.*
+import kotlinx.android.synthetic.main.fragment_tracking.*
 import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TrackingFragment : Fragment(R.layout.fragment_run) {
+class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     // Shared preferences injection
     @Inject

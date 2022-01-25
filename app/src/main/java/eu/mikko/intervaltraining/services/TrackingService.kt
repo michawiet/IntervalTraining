@@ -206,7 +206,7 @@ class TrackingService : LifecycleService() {
         isTimerEnabled = true
 
         CoroutineScope(Dispatchers.Main).launch {
-            var timeLeftInInterval = 0L
+            var timeLeftInInterval: Long
             while(isTracking.value!!) {
                 // Time diff of now and timeStarted
                 lapTime = System.currentTimeMillis() - timeStarted

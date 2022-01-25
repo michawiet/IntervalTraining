@@ -8,35 +8,40 @@ import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.other.DistanceValueFormatter
 import eu.mikko.intervaltraining.other.MinutesValueFormatter
-import eu.mikko.intervaltraining.other.PaceLabelFormatter
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedTimeFromSeconds
-import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
 import eu.mikko.intervaltraining.viewmodel.ProgressViewModel
-import kotlinx.android.synthetic.main.fragment_progress.*
+import kotlinx.android.synthetic.main.fragment_stats.*
 import javax.inject.Inject
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class ProgressFragment : Fragment(R.layout.fragment_progress) {
+class StatsFragment : Fragment(R.layout.fragment_stats) {
 
     private val viewModel: ProgressViewModel by viewModels()
+
+    //@Inject
+    //lateinit var sharedPref: SharedPreferences
 
     @set:Inject
     var workoutStep: Int = 1
 
-    @Inject
+    //@set:Inject
+    //var hourProgressNotification: Int = 12
+
+    //@set:Inject
+    //var minuteProgressNotification: Int = 0
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupCombinedChart()
+        setupProgressNotification()
 
         viewModel.totalDistance.observe(viewLifecycleOwner, {
             if(it != null)
@@ -53,6 +58,21 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
         viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner, {
             tvGoalProgress.text = (workoutStep - 1).div((it - 1).toFloat()).times(100f).toInt().toString().plus(" %")
         })
+    }
+
+    private fun setupProgressNotification() {
+        swProgressNotifications.setOnClickListener {
+
+        }
+
+        materialDatePickerProgressNotification.setDayPressedListener { weekday, isSelected ->
+            if(isSelected) {
+
+            } else {
+
+            }
+            weekday.toString()
+        }
     }
 
     //TODO "use data provided with the list"

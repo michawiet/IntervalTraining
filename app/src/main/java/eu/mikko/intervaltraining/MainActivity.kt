@@ -16,7 +16,7 @@ import eu.mikko.intervaltraining.other.Constants.PROGRESS_NOTIFICATION_DAY
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_NOTIFICATION_HOUR
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_NOTIFICATION_ID
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_NOTIFICATION_MINUTE
-import eu.mikko.intervaltraining.other.Utilities
+import eu.mikko.intervaltraining.other.CalendarUtility
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setRepeatableProgressNotification() {
-        val c = Utilities.generateCalendar(PROGRESS_NOTIFICATION_HOUR, PROGRESS_NOTIFICATION_MINUTE, PROGRESS_NOTIFICATION_DAY)
+        val c = CalendarUtility.generateCalendar(PROGRESS_NOTIFICATION_HOUR, PROGRESS_NOTIFICATION_MINUTE, PROGRESS_NOTIFICATION_DAY)
         val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, ProgressReceiver::class.java)
         intent.action = Intent.ACTION_DEFAULT

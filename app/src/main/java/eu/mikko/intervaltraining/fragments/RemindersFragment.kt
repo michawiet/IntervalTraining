@@ -20,14 +20,14 @@ import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.adapters.TrainingNotificationListAdapter
 import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
-import eu.mikko.intervaltraining.other.Utilities.generateCalendar
+import eu.mikko.intervaltraining.other.CalendarUtility.generateCalendar
 import eu.mikko.intervaltraining.viewmodel.ReminderNotificationViewModel
-import kotlinx.android.synthetic.main.fragment_notifications.view.*
+import kotlinx.android.synthetic.main.fragment_reminders.view.*
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 
 @AndroidEntryPoint
-class RemindersFragment : Fragment(R.layout.fragment_notifications) {
+class RemindersFragment : Fragment(R.layout.fragment_reminders) {
 
     private val viewModel: ReminderNotificationViewModel by viewModels()
 
@@ -67,7 +67,7 @@ class RemindersFragment : Fragment(R.layout.fragment_notifications) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_notifications, container, false)
+        val view = inflater.inflate(R.layout.fragment_reminders, container, false)
         val adapter = TrainingNotificationListAdapter( {
             TimePickerDialog(context,
                 //timeSetListener

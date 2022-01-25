@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.adapters.ProgressAdapter
-import eu.mikko.intervaltraining.viewmodel.ProgressViewModel
 import eu.mikko.intervaltraining.viewmodel.RunViewModel
-import kotlinx.android.synthetic.main.fragment_run_list.*
+import kotlinx.android.synthetic.main.fragment_activities.*
 
 @AndroidEntryPoint
-class ActivitiesFragment : Fragment(R.layout.fragment_run_list) {
+class ActivitiesFragment : Fragment(R.layout.fragment_activities) {
 
     private val viewModel: RunViewModel by viewModels()
 

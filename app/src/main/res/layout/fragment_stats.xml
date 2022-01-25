@@ -153,7 +153,7 @@
                 app:layout_constraintTop_toTopOf="@+id/swProgressNotifications" />
 
             <ca.antonious.materialdaypicker.MaterialDayPicker
-                android:id="@+id/materialDayPicker2"
+                android:id="@+id/materialDatePickerProgressNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:selectionMode="ca.antonious.materialdaypicker.SingleSelectionMode"
