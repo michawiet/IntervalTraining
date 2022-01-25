@@ -14,7 +14,7 @@ import eu.mikko.intervaltraining.viewmodel.RunViewModel
 import kotlinx.android.synthetic.main.fragment_run_list.*
 
 @AndroidEntryPoint
-class RunListFragment : Fragment(R.layout.fragment_run_list) {
+class ActivitiesFragment : Fragment(R.layout.fragment_run_list) {
 
     private val viewModel: RunViewModel by viewModels()
 

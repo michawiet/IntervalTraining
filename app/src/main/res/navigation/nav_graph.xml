@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/runFragment"
-        android:name="eu.mikko.intervaltraining.fragments.RunFragment"
+        android:name="eu.mikko.intervaltraining.fragments.TrackingFragment"
         android:label="RunFragment" >
         <action
             android:id="@+id/action_runFragment_to_runStartFragment"
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
-        android:name="eu.mikko.intervaltraining.fragments.NotificationsFragment"
+        android:name="eu.mikko.intervaltraining.fragments.RemindersFragment"
         android:label="NotificationsFragment" />
     <fragment
         android:id="@+id/progressFragment"
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/runListFragment"
-        android:name="eu.mikko.intervaltraining.fragments.RunListFragment"
+        android:name="eu.mikko.intervaltraining.fragments.ActivitiesFragment"
         android:label="fragment_run_list"
         tools:layout="@layout/fragment_run_list" >
         <action

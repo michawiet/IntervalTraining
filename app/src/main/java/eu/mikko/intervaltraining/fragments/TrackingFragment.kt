@@ -42,7 +42,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RunFragment : Fragment(R.layout.fragment_run) {
+class TrackingFragment : Fragment(R.layout.fragment_run) {
 
     // Shared preferences injection
     @Inject
@@ -228,7 +228,7 @@ class RunFragment : Fragment(R.layout.fragment_run) {
 
             stopRun()
 
-            val action = RunFragmentDirections.actionRunFragmentToRunSummaryFragment(run, ratedIntervals)
+            val action = TrackingFragmentDirections.actionRunFragmentToRunSummaryFragment(run, ratedIntervals)
             findNavController().navigate(action)
         }
     }

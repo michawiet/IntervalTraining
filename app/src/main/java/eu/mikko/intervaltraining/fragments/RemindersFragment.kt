@@ -27,7 +27,7 @@ import java.time.DayOfWeek
 import java.time.format.TextStyle
 
 @AndroidEntryPoint
-class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
+class RemindersFragment : Fragment(R.layout.fragment_notifications) {
 
     private val viewModel: ReminderNotificationViewModel by viewModels()
 

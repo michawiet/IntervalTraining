@@ -30,6 +30,9 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
     @set:Inject
     var workoutStep: Int = 1
 
+    @Inject
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -52,12 +55,7 @@ class ProgressFragment : Fragment(R.layout.fragment_progress) {
         })
     }
 
-    class LabelFormatter : IndexAxisValueFormatter() {
-        override fun getFormattedValue(value: Float): String {
-            return getKilometersPerMinuteFromMetersPerSecond(value)
-        }
-    }
-
+    //TODO "use data provided with the list"
     private fun setDataForCombinedChart(list: List<Run>) {
         val mockList = arrayListOf<Run>()
         for(i in 0 .. 10) {
