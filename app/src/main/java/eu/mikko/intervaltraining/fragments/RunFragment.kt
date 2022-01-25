@@ -246,21 +246,26 @@ class RunFragment : Fragment(R.layout.fragment_run) {
 
     private fun zoomToSeeWholeTrack() {
         val bounds = LatLngBounds.Builder()
+        var includedPoints = 0
         for(interval in pathPointsOfIntervals) {
             for(chunk in interval) {
-                for(pos in chunk)
+                for(pos in chunk) {
                     bounds.include(pos)
+                    ++includedPoints
+                }
             }
         }
 
-        map?.moveCamera(
-            CameraUpdateFactory.newLatLngBounds(
-                bounds.build(),
-                mapView.width,
-                mapView.height,
-                (mapView.height * 0.05f).toInt()
+        if(includedPoints > 1) {
+            map?.moveCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                    bounds.build(),
+                    mapView.width,
+                    mapView.height,
+                    (mapView.height * 0.2f).toInt()
+                )
             )
-        )
+        }
     }
 
     private fun addAllPolylines() {

@@ -66,5 +66,9 @@
         android:id="@+id/runListFragment"
         android:name="eu.mikko.intervaltraining.fragments.RunListFragment"
         android:label="fragment_run_list"
-        tools:layout="@layout/fragment_run_list" />
+        tools:layout="@layout/fragment_run_list" >
+        <action
+            android:id="@+id/action_runListFragment_to_runStartFragment"
+            app:destination="@id/runStartFragment" />
+    </fragment>
 </navigation>

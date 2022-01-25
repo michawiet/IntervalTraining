@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,10 +8,77 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:padding="8dp"
+        android:padding="16dp"
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/run_item" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivRunEmpty"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_run_svgrepo_com"
+        app:layout_constraintBottom_toTopOf="@+id/tvEmptyTitle"
+        app:layout_constraintEnd_toStartOf="@id/guidelineRightRunList"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeftRunList"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvEmptyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="No activities yet"
+        android:textColor="@color/black_active"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_view"
+        app:layout_constraintStart_toStartOf="@+id/recycler_view"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeftRunList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRightRunList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvEmptySubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:padding="16sp"
+        android:text="Train and save the activities to browse them here."
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRightRunList"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeftRunList"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmptyTitle" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Train"
+        android:textColor="@color/primary_50"
+        app:iconTint="@color/primary_50"
+        app:icon="@drawable/ic_round_directions_run_24"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+        app:layout_constraintEnd_toEndOf="@+id/tvEmptySubtitle"
+        app:layout_constraintStart_toStartOf="@+id/tvEmptySubtitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmptySubtitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

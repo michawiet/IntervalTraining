@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
@@ -25,8 +26,25 @@ class RunListFragment : Fragment(R.layout.fragment_run_list) {
         setupRecyclerView()
 
         viewModel.allRuns.observe(viewLifecycleOwner, {
-            if(it != null) progressAdapter.submitList(it)
+            if(it != null) {
+                if(it.isEmpty()) {
+                    ivRunEmpty.visibility = View.VISIBLE
+                    tvEmptyTitle.visibility = View.VISIBLE
+                    tvEmptySubtitle.visibility = View.VISIBLE
+                    fabEmpty.show()
+                } else {
+                    ivRunEmpty.visibility = View.INVISIBLE
+                    tvEmptyTitle.visibility = View.INVISIBLE
+                    tvEmptySubtitle.visibility = View.INVISIBLE
+                    fabEmpty.hide()
+                }
+                progressAdapter.submitList(it)
+            }
         })
+
+        fabEmpty.setOnClickListener {
+            findNavController().navigate(R.id.action_runListFragment_to_runStartFragment)
+        }
     }
 
     private fun setupRecyclerView() = recycler_view.apply {
