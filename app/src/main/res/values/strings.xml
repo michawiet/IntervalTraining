@@ -8,7 +8,6 @@
     <string name="stop_activity">Stop</string>
     <string name="notification_weekday">Weekday</string>
     <string name="notification_time" translatable="false">12:00</string>
-    <string name="set_time_of_notification">set time of notification</string>
     <string name="interval_timer_default" translatable="false">--:--:-</string>
     <string name="activity_timer_default" translatable="false">--:--</string>
     <string name="activity_type_walk">Walk</string>
@@ -71,4 +70,12 @@
     <string name="map_of_the_activity">Map of the activity</string>
     <string name="save_fab">Save</string>
     <string name="discard_fab">Discard</string>
+    <string name="distance_placeholder" translatable="false">0</string>
+    <string name="distance_unit" translatable="false">km</string>
+    <string name="pace_placeholder" translatable="false">--:--</string>
+    <string name="pace_unit" translatable="false">/km</string>
+    <string name="precision_placeholder" translatable="false">0%</string>
+    <string name="map_iv_activity_path">Activity path</string>
+    <string name="activity_time_placeholder" translatable="false">--:--</string>
+    <string name="date_placeholder" translatable="false">weekday, 01 month 1970, 00:00</string>
 </resources>

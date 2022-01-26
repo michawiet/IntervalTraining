@@ -8,7 +8,6 @@
     <string name="resume_activity">Wznów</string>
     <string name="stop_activity">Zatrzymaj</string>
     <string name="notification_weekday">Dzień tygodnia</string>
-    <string name="set_time_of_notification">ustaw czas powiadomienia</string>
     <string name="activity_type_walk">Biegnij</string>
     <string name="activity_type_run">Idź</string>
     <string name="training_scheduled_notification">Nadszedł czas na trening!</string>
@@ -59,4 +58,5 @@
     <string name="map_of_the_activity">Mapa zarejestrowanej aktywności</string>
     <string name="save_fab">Zapisz</string>
     <string name="discard_fab">Odrzuć</string>
+    <string name="map_iv_activity_path">Ścieżka aktywności</string>
 </resources>

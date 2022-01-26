@@ -11,8 +11,7 @@ import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedStopWatchTime
 import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
-import kotlinx.android.synthetic.main.fragment_run_summary.*
-import kotlinx.android.synthetic.main.run_item.view.*
+import kotlinx.android.synthetic.main.activity_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,7 +35,7 @@ class ProgressAdapter : RecyclerView.Adapter<ProgressAdapter.ProgressViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgressViewHolder {
         return ProgressViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.run_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.activity_item, parent, false)
         )
     }
 
