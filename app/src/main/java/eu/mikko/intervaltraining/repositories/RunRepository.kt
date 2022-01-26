@@ -15,4 +15,6 @@ class RunRepository @Inject constructor (val runDao: RunDao) {
     fun getTotalTimeInMillis() = runDao.getTotalTimeInMillis()
 
     fun getTotalDistance() = runDao.getTotalDistance()
+
+    fun getAllRunsWithIntervals() = runDao.getAllRunsWithIntervals()
 }

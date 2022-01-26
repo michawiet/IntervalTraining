@@ -37,15 +37,16 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvTotalDistanceInfo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:gravity="center"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="@string/stats_total_distance_km"
         android:textColor="@color/black_inactive"
-        android:layout_marginTop="4dp"
         android:textSize="12sp"
         android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="@+id/tvTotalDistanceCovered"
-        app:layout_constraintStart_toStartOf="@+id/tvTotalDistanceCovered"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/progressRightVerticalGuideline"
         app:layout_constraintTop_toBottomOf="@id/tvTotalDistanceCovered" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -62,14 +63,15 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvTotalTimeInfo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:gravity="center"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="@string/stats_total_time"
         android:textColor="@color/black_inactive"
-        android:layout_marginTop="4dp"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/tvTotalTimeSpentTrackingActivity"
-        app:layout_constraintStart_toStartOf="@+id/tvTotalTimeSpentTrackingActivity"
+        app:layout_constraintEnd_toStartOf="@+id/progressLeftVerticalGuideline"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTotalTimeSpentTrackingActivity" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -100,15 +102,16 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvCurrentWorkoutInfo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:gravity="center"
         android:layout_height="wrap_content"
-        android:text="@string/levels_completed"
-        android:hint=""
-        android:textColor="@color/black_inactive"
         android:layout_marginTop="4dp"
+        android:hint=""
+        android:text="@string/levels_completed"
+        android:textColor="@color/black_inactive"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/tvGoalProgress"
-        app:layout_constraintStart_toStartOf="@+id/tvGoalProgress"
+        app:layout_constraintEnd_toStartOf="@+id/progressRightVerticalGuideline"
+        app:layout_constraintStart_toStartOf="@+id/progressLeftVerticalGuideline"
         app:layout_constraintTop_toBottomOf="@id/tvGoalProgress" />
 
     <com.google.android.material.card.MaterialCardView

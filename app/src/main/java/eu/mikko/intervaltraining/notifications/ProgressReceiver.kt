@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.room.Room
+import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.data.IntervalDao
 import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
 import eu.mikko.intervaltraining.data.RunDao
@@ -34,23 +35,26 @@ class ProgressReceiver : BroadcastReceiver() {
             .allowMainThreadQueries()
             .createFromAsset(Constants.DATABASE_ASSET_PATH)
             .build()
-        val numberOfWorkoutsDone = getNumberOfWorkoutsDone(database.getRunDao())
+        val numberOfWorkoutsDone = getNumberOfWorkoutsDone(database.getRunDao(), context)
         val progressPercent = getProgressPercent(database.getIntervalDao(), context)
 
         return "$numberOfWorkoutsDone\n$progressPercent"
     }
 
-    private fun getNumberOfWorkoutsDone(runDao: RunDao): String {
+    private fun getNumberOfWorkoutsDone(runDao: RunDao, context: Context?): String {
         val list = runDao.getRunsWithHigherTimestamp(System.currentTimeMillis() - (AlarmManager.INTERVAL_DAY * 7))
-        return if(list.isEmpty()) {
-            "You did not train this week! Train 3 times per week!"
-        } else {
-            when(list.size) {
-                in 1 .. 2 -> "It is recommended that you train 3 times per week! (${list.size}/3)"
-                3 -> "You met the recommendations for the number of training days this week."
-                else -> "It is recommended to train 3 times per week - more than that increases the chance of injury! (${list.size}/3)"
+        if (context != null) {
+            return if(list.isEmpty()) {
+                context.getString(R.string.notification_did_not_train)
+            } else {
+                when(list.size) {
+                    in 1 .. 2 -> context.getString(R.string.notification_training_recommendation_not_met, list.size)
+                    3 -> context.getString(R.string.notification_training_recommendation_met)
+                    else -> context.getString(R.string.notification_training_recommendation_exceeded, list.size)
+                }
             }
         }
+        return ""
     }
 
     private fun getProgressPercent(intervalDao: IntervalDao, context: Context?): String {

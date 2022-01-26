@@ -78,4 +78,9 @@
     <string name="map_iv_activity_path">Activity path</string>
     <string name="activity_time_placeholder" translatable="false">--:--</string>
     <string name="date_placeholder" translatable="false">weekday, 01 month 1970, 00:00</string>
+    <string name="completed_levels_out_of_all_levels" translatable="false">%d/%d</string>
+    <string name="notification_did_not_train">You did not train this week! Train 3 times per week!</string>
+    <string name="notification_training_recommendation_met">You met the recommendations for the number of training days this week.</string>
+    <string name="notification_training_recommendation_not_met">It is recommended that you train 3 times per week! (%d/3)</string>
+    <string name="notification_training_recommendation_exceeded">It is recommended to train 3 times per week - more than that increases the chance of injury! (%d/3)</string>
 </resources>

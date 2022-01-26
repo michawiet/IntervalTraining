@@ -161,25 +161,18 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
     }
 
     private fun setDataForCombinedChart() {
-        val intervalResultList = arrayListOf<ParcelableRunIntervalResult>()
-        for(i in 0 .. 11) {
-            val result = if(i % 2 == 0) { ParcelableRunIntervalResult(1.2f, 100, false) }
-            else { ParcelableRunIntervalResult(2.3f, 100, true) }
-            intervalResultList.add(result)
-        }
-
         val achievedSpeeds = arrayListOf<Entry>()
         val requiredSpeeds = arrayListOf<Entry>()
         val runRatings = arrayListOf<BarEntry>()
         val walkRatings = arrayListOf<BarEntry>()
 
         var i = 1f
-        for(result in intervalResultList) {//args.intervalResults) {
+        for(result in args.intervalResults) {//args.intervalResults
             achievedSpeeds.add(Entry(i, result.avgSpeedMetersPerSecond))
             requiredSpeeds.add(Entry(i, if(result.isRunning) RUN_PACE else WALK_PACE))
 
-            if(result.isRunning) runRatings.add(BarEntry(i, Random.nextInt(70, 100).toFloat()))
-            else walkRatings.add(BarEntry(i, Random.nextInt(70, 100).toFloat()))
+            if(result.isRunning) runRatings.add(BarEntry(i, result.rating.toFloat()))
+            else walkRatings.add(BarEntry(i, result.rating.toFloat()))
 
             i += 1f
         }
@@ -231,13 +224,14 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         val data = CombinedData().apply {
             setData(lineData)
             setData(barData)
-            barData.barWidth = 0.5f
+            barData.barWidth = 0.8f
         }
 
         combinedChart.apply {
             setData(data)
             invalidate()
-            xAxis.axisMaximum = intervalResultList.size.plus(0.5f)
+            xAxis.axisMaximum = i - 0.4f
+            setVisibleXRangeMaximum(6f)
         }
     }
 

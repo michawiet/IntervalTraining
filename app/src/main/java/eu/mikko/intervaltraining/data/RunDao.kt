@@ -3,6 +3,7 @@ package eu.mikko.intervaltraining.data
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import eu.mikko.intervaltraining.model.Run
+import eu.mikko.intervaltraining.model.RunAndInterval
 
 @Dao
 interface RunDao {
@@ -24,4 +25,7 @@ interface RunDao {
 
     @Query("SELECT * FROM runs_table WHERE timestamp > :lowerBoundTimestamp")
     fun getRunsWithHigherTimestamp(lowerBoundTimestamp: Long): List<Run>
+
+    @Query("SELECT * FROM runs_table ORDER BY timestamp ASC")
+    fun getAllRunsWithIntervals(): LiveData<List<RunAndInterval>>
 }

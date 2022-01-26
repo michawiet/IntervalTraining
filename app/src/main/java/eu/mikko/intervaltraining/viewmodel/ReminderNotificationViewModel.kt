@@ -18,6 +18,4 @@ class ReminderNotificationViewModel @Inject constructor(private val repository: 
     fun update(trainingNotification: TrainingNotification) = viewModelScope.launch {
             repository.update(trainingNotification)
     }
-
-
 }

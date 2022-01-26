@@ -21,7 +21,7 @@ import com.github.mikephil.charting.data.*
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.model.Run
+import eu.mikko.intervaltraining.model.RunAndInterval
 import eu.mikko.intervaltraining.notifications.ProgressReceiver
 import eu.mikko.intervaltraining.other.CalendarUtility
 import eu.mikko.intervaltraining.other.CalendarUtility.calendarDayOfWeekToDayOfWeek
@@ -30,14 +30,14 @@ import eu.mikko.intervaltraining.other.Constants.KEY_HOUR_PROGRESS_NOTIFICATION
 import eu.mikko.intervaltraining.other.Constants.KEY_MINUTE_PROGRESS_NOTIFICATION
 import eu.mikko.intervaltraining.other.Constants.KEY_SELECTED_DAY_PROGRESS_NOTIFICATION
 import eu.mikko.intervaltraining.other.DistanceValueFormatter
-import eu.mikko.intervaltraining.other.MinutesValueFormatter
+import eu.mikko.intervaltraining.other.SecondsToMinutesAndSecondsValueFormatter
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedStopWatchTime
+import eu.mikko.intervaltraining.other.TrackingUtility.getTotalActivityTimeFromInterval
 import eu.mikko.intervaltraining.viewmodel.ProgressViewModel
 import kotlinx.android.synthetic.main.fragment_stats.*
 import java.time.format.TextStyle
 import java.util.*
 import javax.inject.Inject
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class StatsFragment : Fragment(R.layout.fragment_stats) {
@@ -47,19 +47,19 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     @Inject
     lateinit var sharedPref: SharedPreferences
 
-    @set:Inject
     var workoutStep: Int = 1
+    private var maxWorkoutStep: Int = 36
 
-    //var weekdayProgressNotification = ""
     private var hourProgressNotification: Int = 12
     private var minuteProgressNotification: Int = 0
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
         setupCombinedChart()
         setupProgressNotification()
+        tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutStep - 1),(maxWorkoutStep - 1))
 
         viewModel.totalDistance.observe(viewLifecycleOwner, {
             if(it != null) {
@@ -71,12 +71,14 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
                 tvTotalTimeSpentTrackingActivity.text = getFormattedStopWatchTime(it)
             }
         })
-        viewModel.allRuns.observe(viewLifecycleOwner, {
+        viewModel.allRunsWithIntervals.observe(viewLifecycleOwner, {
             setDataForCombinedChart(it)
             combinedProgressChart.invalidate()
+            tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutStep - 1),(maxWorkoutStep - 1))
         })
         viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner, {
-            tvGoalProgress.text = "$workoutStep/$it"
+            maxWorkoutStep = it
+            tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutStep - 1),(maxWorkoutStep - 1))
         })
     }
 
@@ -168,24 +170,14 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         )
     }
 
-    //TODO "use data provided with the list"
-    private fun setDataForCombinedChart(list: List<Run>) {
-        val mockList = arrayListOf<Run>()
-        for(i in 0 .. 10) {
-            mockList.add(Run(0,
-                Random.nextInt(1, 27).div(9f),
-                Random.nextInt(30, 50).times(100),
-                Random.nextLong(25L, 30L).times(60L).times(1000L),
-                Random.nextInt(70, 100)))
-        }
-
+    private fun setDataForCombinedChart(list: List<RunAndInterval>) {
         val distances = arrayListOf<Entry>()
         val activityTypeTimes = arrayListOf<BarEntry>()
 
         var i = 1f
-        for(run in mockList) {
-            distances.add(Entry(i, run.distanceInMeters.div(1000f)))
-            activityTypeTimes.add(BarEntry(i, floatArrayOf(5f, 25f)))
+        for(it in list) {
+            distances.add(Entry(i, it.run.distanceInMeters.div(1000f)))
+            activityTypeTimes.add(BarEntry(i, getTotalActivityTimeFromInterval(it.interval)))
 
             i += 1f
         }
@@ -211,7 +203,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
             barBorderColor = Color.parseColor("#A1A1A1")
             barBorderWidth = 2f
             valueTextSize = 12f
-            valueFormatter = MinutesValueFormatter()
+            valueFormatter = SecondsToMinutesAndSecondsValueFormatter()
         }
 
         val lineData = LineData(distanceDataSet)
@@ -219,12 +211,14 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         val data = CombinedData().apply {
             setData(lineData)
             setData(barData)
-            barData.barWidth = 0.5f
+            barData.barWidth = 0.8f
         }
 
         combinedProgressChart.apply {
             setData(data)
-            xAxis.axisMaximum = mockList.size.plus(0.5f)
+            xAxis.axisMaximum = i - 0.4f
+            moveViewToX(i - 1f)
+            setVisibleXRangeMaximum(8f)
         }
     }
 
