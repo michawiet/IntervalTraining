@@ -62,7 +62,7 @@
                         android:orientation="vertical"
                         app:layout_constraintGuide_percent="0.75" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvLength"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                         app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_run_item"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvLengthTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                         app:layout_constraintStart_toStartOf="@id/tvLength"
                         app:layout_constraintTop_toBottomOf="@id/tvLength" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                         app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvDistanceTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                         app:layout_constraintStart_toStartOf="@id/tvDistance"
                         app:layout_constraintTop_toBottomOf="@id/tvDistance" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvAvgSpeed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
                         app:layout_constraintStart_toStartOf="@+id/progressMiddleVerticalGuideline"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvAvgSpeedTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                         app:layout_constraintStart_toStartOf="@id/tvAvgSpeed"
                         app:layout_constraintTop_toBottomOf="@id/tvAvgSpeed" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
                         app:layout_constraintStart_toStartOf="@+id/progressRightVerticalGuideline"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvRatingTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

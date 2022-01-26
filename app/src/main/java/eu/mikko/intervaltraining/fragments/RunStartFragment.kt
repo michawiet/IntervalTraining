@@ -22,7 +22,6 @@ import eu.mikko.intervaltraining.other.TrackingUtility
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedTimeFromSeconds
 import eu.mikko.intervaltraining.other.TrackingUtility.getTotalActivityTimeFromInterval
 import eu.mikko.intervaltraining.viewmodel.IntervalViewModel
-import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run_start.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -45,7 +44,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
             findNavController().navigate(R.id.action_runStartFragment_to_runFragment)
         }
 
-        workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_STEP, 1)
+        workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
         viewModel.getIntervalByWorkoutStep(workoutStep).observe(viewLifecycleOwner, {
             tvWarmupLength.text = getFormattedTimeFromSeconds(it.warmupSeconds)
             tvTotalDistanceCovered.text = getFormattedTimeFromSeconds(it.walkSeconds)

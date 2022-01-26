@@ -41,7 +41,7 @@
             app:cpb_progressbar_color="@color/primary_900"
             app:cpb_progressbar_width="10dp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/interval_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:textColor="@color/black_active"
             android:typeface="monospace" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/activity_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             app:layout_constraintVertical_bias="0.6"
             android:typeface="monospace" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/workout_interval_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             app:layout_constraintVertical_bias="0.4"
             app:layout_constraintWidth_percent="0.5" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/workout_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
             android:typeface="monospace"
             />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/workout_distance_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
             app:layout_constraintStart_toStartOf="@id/workout_distance"
             android:typeface="monospace" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/workout_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
             app:layout_constraintStart_toEndOf="@id/activity_timer"
             app:layout_constraintEnd_toEndOf="@id/interval_progress_bar" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/workout_speed_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

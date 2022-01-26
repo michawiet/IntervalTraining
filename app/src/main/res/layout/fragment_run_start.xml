@@ -160,7 +160,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="@string/workout_step"
+        android:text="@string/workout_level"
         android:textColor="@color/black_active"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"

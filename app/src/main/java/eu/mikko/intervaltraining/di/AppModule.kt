@@ -13,9 +13,7 @@ import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
 import eu.mikko.intervaltraining.other.Constants.DATABASE_ASSET_PATH
 import eu.mikko.intervaltraining.other.Constants.DATABASE_NAME
 import eu.mikko.intervaltraining.other.Constants.KEY_HOUR_PROGRESS_NOTIFICATION
-import eu.mikko.intervaltraining.other.Constants.KEY_MINUTE_PROGRESS_NOTIFICATION
-import eu.mikko.intervaltraining.other.Constants.KEY_SELECTED_DAY_PROGRESS_NOTIFICATION
-import eu.mikko.intervaltraining.other.Constants.KEY_WORKOUT_STEP
+import eu.mikko.intervaltraining.other.Constants.KEY_WORKOUT_LEVEL
 import eu.mikko.intervaltraining.other.Constants.SHARED_PREFERENCES_NAME
 import javax.inject.Singleton
 
@@ -53,11 +51,11 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideWorkoutStep(sharedPref: SharedPreferences) = sharedPref.getInt(KEY_WORKOUT_STEP, 1)
+    fun provideWorkoutLevel(sharedPref: SharedPreferences) = sharedPref.getInt(KEY_WORKOUT_LEVEL, 1)
 
     //@Singleton
     //@Provides
-    //fun provideSelectedDayForProgressNotification(sharedPref: SharedPreferences) = sharedPref.getString(KEY_SELECTED_DAY_PROGRESS_NOTIFICATION, "kekw")
+    //fun provideSelectedDayForProgressNotification(sharedPref: SharedPreferences) = sharedPref.getString(KEY_SELECTED_DAY_PROGRESS_NOTIFICATION, "MONDAY")
 //
     //@Singleton
     //@Provides

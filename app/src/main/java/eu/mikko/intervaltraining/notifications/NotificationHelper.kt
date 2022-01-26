@@ -50,15 +50,15 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
 
     fun trainingScheduledNotification(): NotificationCompat.Builder =
         NotificationCompat.Builder(applicationContext, TRAINING_REMINDER_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setContentTitle(TRAINING_REMINDER_CHANNEL_NAME)
             .setContentText(applicationContext.getString(R.string.training_scheduled_notification))
-            .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setCategory("CATEGORY_REMINDER")
 
     fun progressNotification(): NotificationCompat.Builder =
         NotificationCompat.Builder(applicationContext, PROGRESS_CHANNEL_ID)
-            .setContentTitle(PROGRESS_CHANNEL_NAME)
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
+            .setContentTitle("Your weekly progress")
             .setCategory("CATEGORY_REMINDER")
 
     init {

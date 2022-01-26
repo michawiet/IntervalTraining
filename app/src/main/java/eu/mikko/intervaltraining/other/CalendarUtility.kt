@@ -27,6 +27,17 @@ object CalendarUtility {
         DayOfWeek.SUNDAY -> Calendar.SUNDAY
     }
 
+    fun calendarDayOfWeekToDayOfWeek(dayOfWeek: Int) = when(dayOfWeek) {
+        Calendar.MONDAY -> DayOfWeek.MONDAY
+        Calendar.TUESDAY -> DayOfWeek.TUESDAY
+        Calendar.WEDNESDAY -> DayOfWeek.WEDNESDAY
+        Calendar.THURSDAY -> DayOfWeek.THURSDAY
+        Calendar.FRIDAY -> DayOfWeek.FRIDAY
+        Calendar.SATURDAY -> DayOfWeek.SATURDAY
+        Calendar.SUNDAY -> DayOfWeek.SUNDAY
+        else -> DayOfWeek.MONDAY
+    }
+
     fun generateCalendar(hour: Int, minute: Int, weekday: MaterialDayPicker.Weekday) =
         generateCalendar(hour, minute, materialDayPickerWeekdayToCalendarDayOfWeek(weekday))
 

@@ -79,7 +79,7 @@
         android:text="@string/stats_default_total_time"
         android:textSize="16sp"
         android:textColor="@color/black_active"
-        android:typeface="monospace"
+        android:typeface="normal"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/progressHorizontalGuideline"
         app:layout_constraintEnd_toStartOf="@+id/progressLeftVerticalGuideline"
@@ -89,10 +89,10 @@
         android:id="@+id/tvGoalProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0 %"
+        android:text="1/36"
         android:textSize="16sp"
         android:textColor="@color/black_active"
-        android:typeface="monospace"
+        android:typeface="normal"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/progressHorizontalGuideline"
         app:layout_constraintEnd_toStartOf="@+id/progressRightVerticalGuideline"
@@ -102,7 +102,7 @@
         android:id="@+id/tvCurrentWorkoutInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Goal progress"
+        android:text="Levels completed"
         android:hint=""
         android:textColor="@color/black_inactive"
         android:layout_marginTop="4dp"
@@ -116,7 +116,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:elevation="2dp"
+        android:layout_marginHorizontal="8dp"
+        app:cardElevation="2dp"
         app:layout_constraintTop_toBottomOf="@id/tvTotalTimeInfo">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -127,45 +128,41 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvNotificationTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Progress notification"
-                android:textColor="@color/black_active"
-                android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textColor="@color/black_inactive"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/progressNotificationTime"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvProgressNotificationTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:minHeight="48dp"
                 android:text="12:00"
+                android:gravity="center"
                 android:textColor="@color/black_inactive"
-                android:textSize="24sp"
+                android:textSize="32sp"
+                android:textStyle="bold"
                 android:typeface="monospace"
-                app:layout_constraintBottom_toBottomOf="@+id/swProgressNotifications"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/swProgressNotifications" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ca.antonious.materialdaypicker.MaterialDayPicker
-                android:id="@+id/materialDatePickerProgressNotification"
+                android:id="@+id/materialDayPickerProgressNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:selectionMode="ca.antonious.materialdaypicker.SingleSelectionMode"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/swProgressNotifications" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/swProgressNotifications"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvNotificationTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/tvProgressNotificationTime"
+                app:selectionMode="ca.antonious.materialdaypicker.SingleSelectionMode" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

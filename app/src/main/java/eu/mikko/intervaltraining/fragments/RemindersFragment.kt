@@ -37,7 +37,8 @@ class RemindersFragment : Fragment(R.layout.fragment_reminders) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, TrainingReminderReceiver::class.java)
         intent.action = Intent.ACTION_DEFAULT
-        val pendingIntent = PendingIntent.getBroadcast(context, tn.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, tn.id, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.timeInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent)
     }
@@ -47,7 +48,8 @@ class RemindersFragment : Fragment(R.layout.fragment_reminders) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, TrainingReminderReceiver::class.java)
         intent.action = Intent.ACTION_DEFAULT
-        val pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, id, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         alarmManager.cancel(pendingIntent)
     }
@@ -69,7 +71,7 @@ class RemindersFragment : Fragment(R.layout.fragment_reminders) {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_reminders, container, false)
         val adapter = TrainingNotificationListAdapter( {
-            TimePickerDialog(context,
+            TimePickerDialog(requireContext(),
                 //timeSetListener
                 { _, hourOfDay, minute ->
                     val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, hourOfDay, minute, true)

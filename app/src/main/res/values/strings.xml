@@ -7,8 +7,6 @@
     <string name="pause_activity">Pause</string>
     <string name="resume_activity">Resume</string>
     <string name="stop_activity">Stop</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notification_weekday">Weekday</string>
     <string name="notification_time">12:00</string>
     <string name="set_time_of_notification">set time of notification</string>
@@ -25,10 +23,10 @@
     <string name="workout_speed_unit">/km</string>\
     <string name="workout_distance_default">0.000</string>
     <string name="workout_speed_default">--:--</string>
-    <string name="stats_total_distance_km">Total distance km</string>
+    <string name="stats_total_distance_km">Total distance</string>
     <string name="stats_total_time">Total Time</string>
     <string name="stats_default_total_time">00:00:00</string>
-    <string name="stats_total_distance_default">0</string>
+    <string name="stats_total_distance_default">0 km</string>
     <string name="minutes_seconds_default">00:00</string>
     <string name="interval_duration">Interval duration</string>
     <string name="start_run_button">Start training</string>
@@ -42,9 +40,14 @@
     <string name="confirm_cancel">Yes</string>
     <string name="confirm_continue">No</string>
     <string name="current_workout_step_file_key">current_workout_step</string>
-    <string name="workout_step">Workout step</string>
+    <string name="workout_level">Workout level</string>
     <string name="workout_step_default">1</string>
     <string name="interval_timer_hint">Interval timer</string>
     <string name="warmup_title">Warmup</string>
     <string name="activities">Activities</string>
+    <string name="increase_workout_level">Increase</string>
+    <string name="maintain_workout_level">Maintain</string>
+    <string name="reduce_workout_level">Reduce</string>
+    <string name="workout_level_dialog_title">What do you want to do with the workout level?</string>
+    <string name="workout_level_dialog_message">Your workout was below the recommended precision, which may be caused by low location accuracy of your device.</string>
 </resources>

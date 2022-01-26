@@ -5,18 +5,18 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.room.Room
+import ca.antonious.materialdaypicker.MaterialDayPicker
 import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
-import eu.mikko.intervaltraining.other.Constants
 import eu.mikko.intervaltraining.other.CalendarUtility
+import eu.mikko.intervaltraining.other.Constants
 import timber.log.Timber
 
 class RestartReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null) {
             if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
-                Log.d("RestartReminderReceiver", "on boot received")
+                Timber.d("on boot received")
                 resetAllAlarms(context)
             }
         }
@@ -34,21 +34,38 @@ class RestartReminderReceiver : BroadcastReceiver() {
             if(trainingNotification.isEnabled) {
                 val c = CalendarUtility.generateCalendar(trainingNotification)
                 val intent = Intent(context, TrainingReminderReceiver::class.java)
-                val pendingIntent = PendingIntent.getBroadcast(context, trainingNotification.id, intent, 0)
+                val pendingIntent = PendingIntent.getBroadcast(context, trainingNotification.id, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.timeInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent)
             }
         }
         //Progress notification
-        val c = CalendarUtility.generateCalendar(
-            Constants.PROGRESS_NOTIFICATION_HOUR,
-            Constants.PROGRESS_NOTIFICATION_MINUTE,
-            Constants.PROGRESS_NOTIFICATION_DAY
+        //read shared pref of hour, minute, weekday
+        val sharedPref = context.getSharedPreferences(
+            Constants.SHARED_PREFERENCES_NAME,
+            Context.MODE_PRIVATE
         )
-        val intent = Intent(context, ProgressReceiver::class.java)
-        intent.action = Intent.ACTION_DEFAULT
-        val pendingIntent = PendingIntent.getBroadcast(context,
-            Constants.PROGRESS_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.timeInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent)
+
+        val weekday: String = sharedPref.getString(Constants.KEY_SELECTED_DAY_PROGRESS_NOTIFICATION, "")!!
+        if(weekday != "") {
+            val hour = sharedPref.getInt(Constants.KEY_HOUR_PROGRESS_NOTIFICATION, 12)
+            val minute = sharedPref.getInt(Constants.KEY_MINUTE_PROGRESS_NOTIFICATION, 0)
+
+            val c = CalendarUtility.generateCalendar(hour, minute, MaterialDayPicker.Weekday.valueOf(weekday))
+            val intent = Intent(context, ProgressReceiver::class.java)
+            intent.action = Intent.ACTION_DEFAULT
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                Constants.PROGRESS_NOTIFICATION_ID, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                c.timeInMillis,
+                AlarmManager.INTERVAL_DAY * 7,
+                pendingIntent
+            )
+        }
 
         Timber.d("Alarms reset successfully!")
     }

@@ -29,13 +29,14 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
+            <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/dividerImageView"
+                android:layout_marginTop="8dp"
+                app:dividerInsetStart="8dp"
+                app:dividerInsetEnd="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="-4dp"
-                app:layout_constraintBottom_toBottomOf="@id/ivRunItem"
-                android:background="?android:attr/listDivider"/>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ivRunItem" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/progressLeftVerticalGuideline"
@@ -58,7 +59,7 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.75" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvLength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +74,7 @@
                 app:layout_constraintEnd_toEndOf="@id/progressLeftVerticalGuideline"
                 app:layout_constraintTop_toBottomOf="@id/dividerImageView" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvLengthTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,7 +86,7 @@
                 app:layout_constraintEnd_toEndOf="@id/tvLength"
                 app:layout_constraintTop_toBottomOf="@id/tvLength" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,7 +101,7 @@
                 app:layout_constraintStart_toStartOf="@id/progressLeftVerticalGuideline"
                 app:layout_constraintTop_toBottomOf="@id/dividerImageView" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvDistanceTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -112,15 +113,16 @@
                 app:layout_constraintEnd_toEndOf="@id/tvDistance"
                 app:layout_constraintTop_toBottomOf="@id/tvDistance" />
 
-            <View
+            <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/divider"
+                android:layout_marginTop="8dp"
+                app:dividerInsetStart="8dp"
+                app:dividerInsetEnd="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="-4dp"
-                app:layout_constraintBottom_toBottomOf="@id/tvDistanceTitle"
-                android:background="?android:attr/listDivider"/>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvDistanceTitle" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvAvgSpeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,7 +137,7 @@
                 app:layout_constraintStart_toStartOf="@+id/progressMiddleVerticalGuideline"
                 app:layout_constraintTop_toBottomOf="@id/dividerImageView" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvAvgSpeedTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -147,7 +149,7 @@
                 app:layout_constraintEnd_toEndOf="@id/tvAvgSpeed"
                 app:layout_constraintTop_toBottomOf="@id/tvAvgSpeed" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -162,7 +164,7 @@
                 app:layout_constraintStart_toStartOf="@+id/progressRightVerticalGuideline"
                 app:layout_constraintTop_toBottomOf="@id/dividerImageView" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvRatingTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -174,12 +176,13 @@
                 app:layout_constraintEnd_toEndOf="@id/tvRating"
                 app:layout_constraintTop_toBottomOf="@id/tvRating" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvDateRunItem"
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:gravity="center_vertical"
                 android:text="weekday, 01 month 1970, 00:00"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/black_inactive"
                 android:textSize="12sp"

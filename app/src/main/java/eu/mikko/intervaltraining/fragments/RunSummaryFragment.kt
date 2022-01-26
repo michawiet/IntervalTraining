@@ -22,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.other.Constants
-import eu.mikko.intervaltraining.other.Constants.INTERVAL_AVERAGE_PRECISION_LOWER_BOUND
 import eu.mikko.intervaltraining.other.Constants.INTERVAL_GOOD_PRECISION_LOWER_BOUND
 import eu.mikko.intervaltraining.other.Constants.RUN_PACE
 import eu.mikko.intervaltraining.other.Constants.WALK_PACE
@@ -40,13 +39,13 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
 
     private val viewModel: TrainingViewModel by viewModels()
 
+    private var maxWorkoutStep = 36
+
     @Inject
     lateinit var sharedPref: SharedPreferences
 
     @set:Inject
-    var workoutStep: Int = 1
-
-    private var maxWorkoutStep = 36
+    var workoutLevel: Int = 1
 
     private val args by navArgs<RunSummaryFragmentArgs>()
 
@@ -73,21 +72,48 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         })
 
         fabDiscard.setOnClickListener { discardWorkoutDialog() }
-        fabSave.setOnClickListener { saveRun() }
+        fabSave.setOnClickListener {
+            //if run rating is below the required score
+            if(args.runData.rating < INTERVAL_GOOD_PRECISION_LOWER_BOUND)
+                belowRequiredPrecisionWorkoutLevelDeciderDialog()
+            else {
+                saveNewWorkoutLevel(this.workoutLevel + 1)
+                saveRun()
+            }
+        }
     }
 
-    private fun discardWorkoutDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.discard_workout_title))
-            .setMessage(getString(R.string.discard_workout_message))
-            .setPositiveButton(getString(R.string.confirm_cancel)) { dialog, _ ->
-                findNavController().navigate(R.id.action_runSummaryFragment_to_runStartFragment)
-                dialog.cancel()
-            }.setNegativeButton(getString(R.string.confirm_continue)) { dialog, _ ->
-                dialog.cancel()
-            }.create()
-            .show()
-    }
+    private fun discardWorkoutDialog() = MaterialAlertDialogBuilder(requireContext())
+        .setTitle(getString(R.string.discard_workout_title))
+        .setMessage(getString(R.string.discard_workout_message))
+        .setPositiveButton(getString(R.string.confirm_cancel)) { dialog, _ ->
+            findNavController().navigate(R.id.action_runSummaryFragment_to_runStartFragment)
+            dialog.dismiss()
+        }.setNegativeButton(getString(R.string.confirm_continue)) { dialog, _ ->
+            dialog.dismiss()
+        }.create()
+        .show()
+
+    private fun belowRequiredPrecisionWorkoutLevelDeciderDialog() = MaterialAlertDialogBuilder(requireContext())
+        .setTitle(getString(R.string.workout_level_dialog_title))
+        .setMessage(getString(R.string.workout_level_dialog_message))
+        .setPositiveButton(getString(R.string.increase_workout_level)) { dialog, _ ->
+            dialog.dismiss()
+            //increase the level
+            saveNewWorkoutLevel(this.workoutLevel + 1)
+            saveRun()
+        }.setNeutralButton(getString(R.string.maintain_workout_level)) { dialog, _ ->
+            dialog.dismiss()
+            // same level
+            saveNewWorkoutLevel(this.workoutLevel)
+            saveRun()
+        }.setNegativeButton(getString(R.string.reduce_workout_level)) { dialog, _ ->
+            dialog.dismiss()
+            //decrease the level
+            saveNewWorkoutLevel(this.workoutLevel - 1)
+            saveRun()
+        }.create()
+        .show()
 
     class RatingLabelFormatter : IndexAxisValueFormatter() {
         override fun getFormattedValue(value: Float): String {
@@ -215,7 +241,6 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
     }
 
     private fun saveRun() {
-
         val newRun = Run(
             args.runData.timestamp,
             args.runData.avgSpeedMetersPerSecond,
@@ -225,14 +250,8 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             args.runData.workoutStep,
             args.runData.map
         )
-
-        writeNewWorkoutStepToSharedPref(newRun.rating)
         viewModel.insertNewRun(newRun)
-        when {
-            newRun.rating >= INTERVAL_GOOD_PRECISION_LOWER_BOUND -> writeNewWorkoutStepToSharedPref(workoutStep + 1)
-            newRun.rating >= INTERVAL_AVERAGE_PRECISION_LOWER_BOUND -> writeNewWorkoutStepToSharedPref(workoutStep)
-            else -> writeNewWorkoutStepToSharedPref(workoutStep - 1)
-        }
+
         Snackbar.make(
             requireActivity().findViewById(R.id.rootView),
             "Run saved successfully!",
@@ -243,16 +262,12 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         findNavController().navigate(R.id.action_runSummaryFragment_to_runStartFragment)
     }
 
-    private fun writeNewWorkoutStepToSharedPref(newWorkoutStep: Int) {
-        var correctedWorkoutStep = newWorkoutStep
-
-        if(newWorkoutStep < 1)
-            correctedWorkoutStep = 1
-        else if(newWorkoutStep > maxWorkoutStep)
-            correctedWorkoutStep = maxWorkoutStep
-
+    private fun saveNewWorkoutLevel(newWorkoutLevel: Int) {
         sharedPref.edit()
-            .putInt(Constants.KEY_WORKOUT_STEP, correctedWorkoutStep)
-            .apply()
+            .putInt(Constants.KEY_WORKOUT_LEVEL, when {
+                newWorkoutLevel < 1 -> 1
+                newWorkoutLevel > maxWorkoutStep -> maxWorkoutStep
+                else -> newWorkoutLevel
+            }).apply()
     }
 }
