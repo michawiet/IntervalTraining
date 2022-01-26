@@ -58,7 +58,7 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
     fun progressNotification(): NotificationCompat.Builder =
         NotificationCompat.Builder(applicationContext, PROGRESS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
-            .setContentTitle("Your weekly progress")
+            .setContentTitle(getString(R.string.weekly_progress_notification_title))
             .setCategory("CATEGORY_REMINDER")
 
     init {

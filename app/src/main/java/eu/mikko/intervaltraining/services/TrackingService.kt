@@ -151,7 +151,7 @@ class TrackingService : LifecycleService() {
                     if(isFirstRun) {
                         startForegroundService()
                         isFirstRun = false
-                        if(tts.speak("Warmup started! Start walking!", TextToSpeech.QUEUE_FLUSH, null, null) == TextToSpeech.ERROR) {
+                        if(tts.speak(getString(R.string.activity_type_walk), TextToSpeech.QUEUE_FLUSH, null, null) == TextToSpeech.ERROR) {
                             Timber.d("Voice synth error...")
                         }
                     } else {
@@ -247,10 +247,10 @@ class TrackingService : LifecycleService() {
             addEmptyInterval()
             if(currentIntervalData.isRunningInterval) {
                 //trigger tts with "Start running!" message
-                tts.speak("Start running!", TextToSpeech.QUEUE_FLUSH, null, null)
+                tts.speak(getString(R.string.activity_type_run), TextToSpeech.QUEUE_FLUSH, null, null)
             }
             else {
-                tts.speak("Start walking!", TextToSpeech.QUEUE_FLUSH, null, null)
+                tts.speak(getString(R.string.activity_type_walk), TextToSpeech.QUEUE_FLUSH, null, null)
                 //trigger tts with "Start running!" message
             }
         }

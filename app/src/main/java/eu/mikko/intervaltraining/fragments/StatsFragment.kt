@@ -151,7 +151,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         //display snackbar
         val dayOfWeek = calendarDayOfWeekToDayOfWeek(c[Calendar.DAY_OF_WEEK]).getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
         Snackbar.make(requireActivity().findViewById(R.id.rootView),
-            String.format("Progress reminder set - %s, %02d:%02d", dayOfWeek, c[Calendar.HOUR_OF_DAY], c[Calendar.MINUTE]),
+            String.format("%s - %s, %02d:%02d", getString(R.string.snackbar_progress_reminder_set), dayOfWeek, c[Calendar.HOUR_OF_DAY], c[Calendar.MINUTE]),
             Snackbar.LENGTH_LONG
         ).setAnchorView(R.id.bottom_navigation).show()
     }
@@ -190,7 +190,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
             i += 1f
         }
 
-        val distanceDataSet = LineDataSet(distances, "Distance").apply {
+        val distanceDataSet = LineDataSet(distances, getString(R.string.chart_distance)).apply {
             setDrawValues(true)
             color = Color.parseColor("#426FC0")
             lineWidth = 4f
@@ -205,7 +205,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         }
 
         val activityTypeTimesDataSet = BarDataSet(activityTypeTimes, "").apply {
-            stackLabels = arrayOf("Walk length", "Run length")
+            stackLabels = arrayOf(getString(R.string.chart_walk_length), getString(R.string.chart_run_length))
             colors = listOf(Color.parseColor("#CBCBCB"), Color.parseColor("#FFD891"))
             axisDependency = YAxis.AxisDependency.RIGHT
             barBorderColor = Color.parseColor("#A1A1A1")

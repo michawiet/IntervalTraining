@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Interval Training</string>
-    <string name="home">Home</string>
     <string name="statistics">Statistics</string>
     <string name="reminders">Reminders</string>
     <string name="training">Training</string>
@@ -8,26 +7,24 @@
     <string name="resume_activity">Resume</string>
     <string name="stop_activity">Stop</string>
     <string name="notification_weekday">Weekday</string>
-    <string name="notification_time">12:00</string>
+    <string name="notification_time" translatable="false">12:00</string>
     <string name="set_time_of_notification">set time of notification</string>
-    <string name="interval_timer_default">--:--:-</string>
-    <string name="activity_timer_default">--:--</string>
-    <string name="timer_minutes_hint">m</string>
-    <string name="timer_seconds_hint">s</string>
+    <string name="interval_timer_default" translatable="false">--:--:-</string>
+    <string name="activity_timer_default" translatable="false">--:--</string>
     <string name="activity_type_walk">Walk</string>
     <string name="activity_type_run">Run</string>
     <string name="training_scheduled_notification">It is time for your training!</string>
     <string name="training_notification_channel_name">Training reminder</string>
     <string name="progress_notification_channel_name">Progress</string>
-    <string name="workout_distance_unit">km</string>
-    <string name="workout_speed_unit">/km</string>\
-    <string name="workout_distance_default">0.000</string>
-    <string name="workout_speed_default">--:--</string>
+    <string name="workout_distance_unit" translatable="false">km</string>
+    <string name="workout_speed_unit" translatable="false">/km</string>\
+    <string name="workout_distance_default" translatable="false">0.000</string>
+    <string name="workout_speed_default" translatable="false">--:--</string>
     <string name="stats_total_distance_km">Total distance</string>
     <string name="stats_total_time">Total Time</string>
-    <string name="stats_default_total_time">00:00:00</string>
-    <string name="stats_total_distance_default">0 km</string>
-    <string name="minutes_seconds_default">00:00</string>
+    <string name="stats_default_total_time" translatable="false">00:00:00</string>
+    <string name="stats_total_distance_default" translatable="false">0 km</string>
+    <string name="minutes_seconds_default" translatable="false">00:00</string>
     <string name="interval_duration">Interval duration</string>
     <string name="start_run_button">Start training</string>
     <string name="active_time_title">Workout duration</string>
@@ -39,9 +36,9 @@
     <string name="discard_workout_message">Workout will not be saved!</string>
     <string name="confirm_cancel">Yes</string>
     <string name="confirm_continue">No</string>
-    <string name="current_workout_step_file_key">current_workout_step</string>
+    <string name="current_workout_step_file_key" translatable="false">current_workout_step</string>
     <string name="workout_level">Workout level</string>
-    <string name="workout_step_default">1</string>
+    <string name="workout_step_default" translatable="false">1</string>
     <string name="interval_timer_hint">Interval timer</string>
     <string name="warmup_title">Warmup</string>
     <string name="activities">Activities</string>
@@ -50,4 +47,28 @@
     <string name="reduce_workout_level">Reduce</string>
     <string name="workout_level_dialog_title">What do you want to do with the workout level?</string>
     <string name="workout_level_dialog_message">Your workout was below the recommended precision, which may be caused by low location accuracy of your device.</string>
+    <string name="weekly_progress_notification_title">Your weekly progress</string>
+    <string name="location_permission_prompt">To track your workout, you need to accept location permissions.</string>
+    <string name="background_location_permission_prompt">To track you workout with a locked screen, you must accept background location permissions.</string>
+    <string name="snackbar_activity_saved">Activity saved successfully!</string>
+    <string name="chart_run_precision_label">Run precision</string>
+    <string name="chart_walk_precision_label">Walk precision</string>
+    <string name="chart_achieved_pace_label">Achieved pace</string>
+    <string name="chart_required_pace_label">Required pace</string>
+    <string name="chart_good_precision_limit">Good precision</string>
+    <string name="snackbar_progress_reminder_set">Progress reminder set</string>
+    <string name="chart_distance">Distance</string>
+    <string name="chart_walk_length">Walk length</string>
+    <string name="chart_run_length">Run length</string>
+    <string name="levels_completed">Levels completed</string>
+    <string name="levels_completed_placeholder" translatable="false">1/36</string>
+    <string name="progress_notification">Progress notification</string>
+    <string name="active_time">Active time</string>
+    <string name="precision">Precision</string>
+    <string name="no_activities_yet">No activities yet</string>
+    <string name="activities_empty_desc">Train and save the activities to browse them here.</string>
+    <string name="train_button_empty_activities">Train</string>
+    <string name="map_of_the_activity">Map of the activity</string>
+    <string name="save_fab">Save</string>
+    <string name="discard_fab">Discard</string>
 </resources>

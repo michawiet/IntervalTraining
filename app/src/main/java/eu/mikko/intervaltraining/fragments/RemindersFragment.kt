@@ -31,27 +31,23 @@ class RemindersFragment : Fragment(R.layout.fragment_reminders) {
 
     private val viewModel: ReminderNotificationViewModel by viewModels()
 
-    private fun startAlarm(tn: TrainingNotification) {
-        val c = generateCalendar(tn)
-
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private fun getPendingIntent(id: Int): PendingIntent {
         val intent = Intent(context, TrainingReminderReceiver::class.java)
         intent.action = Intent.ACTION_DEFAULT
-        val pendingIntent = PendingIntent.getBroadcast(context, tn.id, intent,
+        return PendingIntent.getBroadcast(context, id, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+    }
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.timeInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent)
+    private fun startAlarm(tn: TrainingNotification) {
+        val c = generateCalendar(tn)
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.timeInMillis, AlarmManager.INTERVAL_DAY * 7, getPendingIntent(tn.id))
     }
 
     private fun cancelAlarm(id: Int) {
         //id is a request code
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, TrainingReminderReceiver::class.java)
-        intent.action = Intent.ACTION_DEFAULT
-        val pendingIntent = PendingIntent.getBroadcast(context, id, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
-        alarmManager.cancel(pendingIntent)
+        alarmManager.cancel(getPendingIntent(id))
     }
 
     private fun showSnackBarAlarmEnabled(hour: Int, minute: Int, dayOfWeek: String) {
@@ -60,7 +56,7 @@ class RemindersFragment : Fragment(R.layout.fragment_reminders) {
             .getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
         Snackbar.make(
             requireActivity().findViewById(R.id.rootView),
-            "Reminder at ${String.format("%02d:%02d", hour, minute)} enabled for $dayOfWeekDisplayName",
+            String.format("Training reminder enabled - %s, %02d:%02d", dayOfWeekDisplayName, hour, minute),
             Snackbar.LENGTH_LONG
         ).setAnchorView(R.id.bottom_navigation).show()
     }
@@ -75,14 +71,9 @@ class RemindersFragment : Fragment(R.layout.fragment_reminders) {
                 //timeSetListener
                 { _, hourOfDay, minute ->
                     val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, hourOfDay, minute, true)
-                    // if enabled cancel old
-                    if(it.isEnabled)
-                        cancelAlarm(it.id)
                     //add new alarm
                     startAlarm(newTrainingNotification)
                     showSnackBarAlarmEnabled(hourOfDay, minute, it.dayOfWeek)
-
-                    // Update the notification in database
                     this.viewModel.update(newTrainingNotification)
                 },
                 it.hour,

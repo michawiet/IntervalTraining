@@ -141,7 +141,8 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
                 setDrawLabels(false)
                 axisMinimum = 0f
                 axisMaximum = 110f
-                addLimitLine(LimitLine(INTERVAL_GOOD_PRECISION_LOWER_BOUND.toFloat(), "Good precision limit").also {
+                addLimitLine(LimitLine(INTERVAL_GOOD_PRECISION_LOWER_BOUND.toFloat(), context.getString(
+                                    R.string.chart_good_precision_limit)).also {
                     it.lineWidth = 2f
                     it.enableDashedLine(20f, 20f, 0f)
                     it.labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
@@ -183,7 +184,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             i += 1f
         }
 
-        val requiredPaceLineDataSet = LineDataSet(requiredSpeeds, "Required pace").apply {
+        val requiredPaceLineDataSet = LineDataSet(requiredSpeeds, getString(R.string.chart_required_pace_label)).apply {
             setDrawValues(false)
             color = Color.parseColor("#DC426FC0")
             lineWidth = 2f
@@ -194,7 +195,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             setDrawCircleHole(false)
             enableDashedLine(20f, 25f, 0f)
         }
-        val achievedPaceLineDataSet = LineDataSet(achievedSpeeds, "Achieved pace").apply {
+        val achievedPaceLineDataSet = LineDataSet(achievedSpeeds, getString(R.string.chart_achieved_pace_label)).apply {
             setDrawValues(true)
             color = Color.parseColor("#E87A30")
             setCircleColor(Color.parseColor("#E87A30"))
@@ -207,14 +208,14 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             valueTextSize = 12f
             valueTextColor = ContextCompat.getColor(requireContext(), R.color.black_active)
         }
-        val walkRatingsDataSet = BarDataSet(walkRatings, "Walk precision").apply {
+        val walkRatingsDataSet = BarDataSet(walkRatings, getString(R.string.chart_walk_precision_label)).apply {
             color = Color.parseColor("#CBCBCB")
             barBorderColor = Color.parseColor("#A1A1A1")
             axisDependency = YAxis.AxisDependency.RIGHT
             barBorderWidth = 2f
             valueTextSize = 12f
         }
-        val runRatingsDataSet = BarDataSet(runRatings, "Run precision").apply {
+        val runRatingsDataSet = BarDataSet(runRatings, getString(R.string.chart_run_precision_label)).apply {
             color = Color.parseColor("#FFD891")
             barBorderColor = Color.parseColor("#F9BC00")
             axisDependency = YAxis.AxisDependency.RIGHT
@@ -254,7 +255,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
 
         Snackbar.make(
             requireActivity().findViewById(R.id.rootView),
-            "Run saved successfully!",
+            getString(R.string.snackbar_activity_saved),
             Snackbar.LENGTH_LONG
         ).setAnchorView(R.id.bottom_navigation).show()
         Timber.d("Run data was saved!")

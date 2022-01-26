@@ -95,7 +95,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             EasyPermissions.requestPermissions(
                 this,
-                "To record a run you need to accept location permissions.",
+                getString(R.string.location_permission_prompt),
                 Constants.REQUEST_CODE_LOCATION_PERMISSION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -103,14 +103,14 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
         } else {
             EasyPermissions.requestPermissions(
                 this,
-                "To record a run you need to accept location permissions.",
+                getString(R.string.location_permission_prompt),
                 Constants.REQUEST_CODE_LOCATION_PERMISSION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
             )
             EasyPermissions.requestPermissions(
                 this,
-                "To record a run with application minimized you need to accept background location permissions.",
+                getString(R.string.background_location_permission_prompt),
                 Constants.REQUEST_CODE_LOCATION_PERMISSION,
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
             )
