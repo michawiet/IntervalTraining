@@ -19,6 +19,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Interval
+import eu.mikko.intervaltraining.other.Constants
 import eu.mikko.intervaltraining.other.Constants.ACTION_INTERVAL_DATA
 import eu.mikko.intervaltraining.other.Constants.ACTION_PAUSE_SERVICE
 import eu.mikko.intervaltraining.other.Constants.ACTION_START_SERVICE
@@ -48,7 +49,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     @Inject
     lateinit var sharedPref: SharedPreferences
 
-    @set:Inject
+    //@set:Inject
     var workoutStep: Int = 1
 
     private var maxWorkoutStep = 36
@@ -69,6 +70,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         super.onViewCreated(view, savedInstanceState)
 
         mapView.onCreate(savedInstanceState)
+        workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
 
         mapView.getMapAsync {
             it.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.empty_map_style))
@@ -104,15 +106,15 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             stopActivityCallback()
         }
 
-        viewModel.getIntervalByWorkoutStep(this.workoutStep).observe(viewLifecycleOwner, {
+        viewModel.getIntervalByWorkoutStep(this.workoutStep).observe(viewLifecycleOwner) {
             sendIntervalsToService(it)
             activityPlayPauseFab.show()
             interval = it
-        })
+        }
 
-        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner, {
+        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner) {
             maxWorkoutStep = it
-        })
+        }
 
         subscribeToObservers()
     }
@@ -140,46 +142,46 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         }
         })
         */
-        TrackingService.currentLocation.observe(viewLifecycleOwner, {
-            if(it.latitude != 0.0 && it.longitude != 0.0)
+        TrackingService.currentLocation.observe(viewLifecycleOwner) {
+            if (it.latitude != 0.0 && it.longitude != 0.0)
                 map?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, MAP_ZOOM))
-        })
-        TrackingService.timeRunInMillis.observe(viewLifecycleOwner, {
+        }
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner) {
             curTimeInMillis = it
             activity_timer.text = TrackingUtility.getFormattedStopWatchTime(curTimeInMillis)
-        })
-        TrackingService.currentSpeedMetersPerSecond.observe(viewLifecycleOwner, {
+        }
+        TrackingService.currentSpeedMetersPerSecond.observe(viewLifecycleOwner) {
             workout_speed.text = getKilometersPerMinuteFromMetersPerSecond(it)
-        })
-        TrackingService.distanceInMeters.observe(viewLifecycleOwner, {
+        }
+        TrackingService.distanceInMeters.observe(viewLifecycleOwner) {
             // convert meters to kilometers
             workout_distance.text = String.format("%.3f", it.div(1000))
-        })
-        TrackingService.isRunningInterval.observe(viewLifecycleOwner, {
+        }
+        TrackingService.isRunningInterval.observe(viewLifecycleOwner) {
             this.isRunningInterval = it
-            if(it) workout_interval_type.text = getString(R.string.activity_type_run)
+            if (it) workout_interval_type.text = getString(R.string.activity_type_run)
             else workout_interval_type.text = getString(R.string.activity_type_walk)
-        })
-        TrackingService.intervalTimer.observe(viewLifecycleOwner, {
+        }
+        TrackingService.intervalTimer.observe(viewLifecycleOwner) {
             //interval_timer.text = TrackingUtility.getFormattedStopWatchTime(it)
             interval_timer.text = TrackingUtility.getFormattedStopWatchTimeWithMillis(it)
-        })
-        TrackingService.intervalProgress.observe(viewLifecycleOwner, {
+        }
+        TrackingService.intervalProgress.observe(viewLifecycleOwner) {
             interval_progress_bar.setProgressWithAnimation(it, TIMER_UPDATE_INTERVAL)
-        })
-        TrackingService.activityProgress.observe(viewLifecycleOwner, {
+        }
+        TrackingService.activityProgress.observe(viewLifecycleOwner) {
             workout_progress_bar.setProgressWithAnimation(it, TIMER_UPDATE_INTERVAL)
-        })
-        TrackingService.isActivityOver.observe(viewLifecycleOwner, {
-            if(it) {
+        }
+        TrackingService.isActivityOver.observe(viewLifecycleOwner) {
+            if (it) {
                 passRunResultToSummaryFragment()
             }
-        })
-        TrackingService.pathPointsOfIntervals.observe(viewLifecycleOwner, {
+        }
+        TrackingService.pathPointsOfIntervals.observe(viewLifecycleOwner) {
             pathPointsOfIntervals = it
             addLatestPolyline()
             moveCameraToUser()
-        })
+        }
     }
 
     private fun stopRun() {

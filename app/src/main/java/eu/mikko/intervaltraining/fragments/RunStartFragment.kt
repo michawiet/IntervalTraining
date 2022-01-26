@@ -45,7 +45,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
         }
 
         workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
-        viewModel.getIntervalByWorkoutStep(workoutStep).observe(viewLifecycleOwner, {
+        viewModel.getIntervalByWorkoutStep(workoutStep).observe(viewLifecycleOwner) {
             tvWarmupLength.text = getFormattedTimeFromSeconds(it.warmupSeconds)
             tvTotalDistanceCovered.text = getFormattedTimeFromSeconds(it.walkSeconds)
             tvTotalTimeSpentTrackingActivity.text = getFormattedTimeFromSeconds(it.runSeconds)
@@ -53,7 +53,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
             tvWorkoutStep.text = workoutStep.toString()
 
             setupPieChart(it)
-        })
+        }
     }
 
     private fun setupPieChart(interval: Interval) {

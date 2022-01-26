@@ -46,22 +46,6 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(@ApplicationContext app: Context) =
+    fun provideSharedPreferences(@ApplicationContext app: Context): SharedPreferences =
         app.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)
-
-    @Singleton
-    @Provides
-    fun provideWorkoutLevel(sharedPref: SharedPreferences) = sharedPref.getInt(KEY_WORKOUT_LEVEL, 1)
-
-    //@Singleton
-    //@Provides
-    //fun provideSelectedDayForProgressNotification(sharedPref: SharedPreferences) = sharedPref.getString(KEY_SELECTED_DAY_PROGRESS_NOTIFICATION, "MONDAY")
-//
-    //@Singleton
-    //@Provides
-    //fun provideHourForProgressNotification(sharedPref: SharedPreferences) = sharedPref.getInt(KEY_HOUR_PROGRESS_NOTIFICATION, 12)
-//
-    //@Singleton
-    //@Provides
-    //fun provideMinuteForProgressNotification(sharedPref: SharedPreferences) = sharedPref.getInt(KEY_MINUTE_PROGRESS_NOTIFICATION, 0)
 }

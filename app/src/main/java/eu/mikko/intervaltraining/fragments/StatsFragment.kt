@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.YAxis
@@ -61,25 +62,60 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         setupProgressNotification()
         tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutStep - 1),(maxWorkoutStep - 1))
 
-        viewModel.totalDistance.observe(viewLifecycleOwner, {
-            if(it != null) {
+        fabEmptyStats.setOnClickListener {
+            findNavController().navigate(R.id.action_progressFragment_to_runStartFragment)
+        }
+
+        viewModel.totalDistance.observe(viewLifecycleOwner) {
+            if (it != null) {
                 tvTotalDistanceCovered.text = String.format("%.1f km", it.toFloat().div(1000f))
             }
-        })
-        viewModel.totalTimeInMillis.observe(viewLifecycleOwner, {
-            if(it != null) {
+        }
+        viewModel.totalTimeInMillis.observe(viewLifecycleOwner) {
+            if (it != null) {
                 tvTotalTimeSpentTrackingActivity.text = getFormattedStopWatchTime(it)
             }
-        })
-        viewModel.allRunsWithIntervals.observe(viewLifecycleOwner, {
-            setDataForCombinedChart(it)
-            combinedProgressChart.invalidate()
-            tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutStep - 1),(maxWorkoutStep - 1))
-        })
-        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner, {
+        }
+        viewModel.allRunsWithIntervals.observe(viewLifecycleOwner) {
+            if(it.isNotEmpty()) {
+                setDataForCombinedChart(it)
+                combinedProgressChart.invalidate()
+                tvGoalProgress.text = getString(
+                    R.string.completed_levels_out_of_all_levels,
+                    (workoutStep - 1),
+                    (maxWorkoutStep - 1)
+                )
+                setStatsLayoutElementsVisible(true)
+            } else {
+                setStatsLayoutElementsVisible(false)
+            }
+        }
+        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner) {
             maxWorkoutStep = it
-            tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutStep - 1),(maxWorkoutStep - 1))
-        })
+            tvGoalProgress.text = getString(
+                R.string.completed_levels_out_of_all_levels,
+                (workoutStep - 1),
+                (maxWorkoutStep - 1)
+            )
+        }
+    }
+
+    private fun setStatsLayoutElementsVisible(visible: Boolean) {
+        val visibility = if(visible) View.VISIBLE else View.INVISIBLE
+        val placeholderVisibility = if(!visible) View.VISIBLE else View.INVISIBLE
+
+        combinedProgressChart.visibility = visibility
+        tvTotalTimeSpentTrackingActivity.visibility = visibility
+        tvTotalTimeInfo.visibility = visibility
+        tvGoalProgress.visibility = visibility
+        tvCurrentWorkoutInfo.visibility = visibility
+        tvTotalDistanceCovered.visibility = visibility
+        tvTotalDistanceInfo.visibility = visibility
+        //placeholder
+        ivRunEmpty.visibility = placeholderVisibility
+        tvEmptyStatsTitle.visibility = placeholderVisibility
+        tvEmptyStatsSubtitle.visibility = placeholderVisibility
+        fabEmptyStats.visibility = placeholderVisibility
     }
 
     private fun setupProgressNotification() {

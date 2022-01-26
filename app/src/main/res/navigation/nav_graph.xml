@@ -45,7 +45,11 @@
     <fragment
         android:id="@+id/progressFragment"
         android:name="eu.mikko.intervaltraining.fragments.StatsFragment"
-        android:label="ProgressFragment" />
+        android:label="ProgressFragment" >
+        <action
+            android:id="@+id/action_progressFragment_to_runStartFragment"
+            app:destination="@id/runStartFragment" />
+    </fragment>
     <fragment
         android:id="@+id/runSummaryFragment"
         android:name="eu.mikko.intervaltraining.fragments.RunSummaryFragment"

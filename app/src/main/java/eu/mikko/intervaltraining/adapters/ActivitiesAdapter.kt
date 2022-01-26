@@ -15,11 +15,11 @@ import kotlinx.android.synthetic.main.activity_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProgressAdapter : RecyclerView.Adapter<ProgressAdapter.ProgressViewHolder>() {
+class ActivitiesAdapter : RecyclerView.Adapter<ActivitiesAdapter.ProgressViewHolder>() {
 
     inner class ProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    val diffCallback = object : DiffUtil.ItemCallback<Run>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<Run>() {
         override fun areItemsTheSame(oldItem: Run, newItem: Run): Boolean {
             return oldItem.id == newItem.id
         }
@@ -29,7 +29,7 @@ class ProgressAdapter : RecyclerView.Adapter<ProgressAdapter.ProgressViewHolder>
         }
     }
 
-    val differ = AsyncListDiffer(this, diffCallback)
+    private val differ = AsyncListDiffer(this, diffCallback)
 
     fun submitList(list: List<Run>) = differ.submitList(list)
 
@@ -44,7 +44,7 @@ class ProgressAdapter : RecyclerView.Adapter<ProgressAdapter.ProgressViewHolder>
         holder.itemView.apply {
             Glide.with(this).load(run.map).into(ivRunItem)
             tvLength.text = getFormattedStopWatchTime(run.timeInMillis)
-            tvDistance.text = run.distanceInMeters.div(1000).toString()
+            tvDistance.text = run.distanceInMeters.div(1000f).toString()
             tvAvgSpeed.text = getKilometersPerMinuteFromMetersPerSecond(run.avgSpeedMetersPerSecond)
             tvRating.text = run.rating.toString().plus("%")
             val calendar = Calendar.getInstance().apply {

@@ -96,9 +96,9 @@ class RemindersFragment : Fragment(R.layout.fragment_reminders) {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        this.viewModel.readAllData.observe(viewLifecycleOwner, { trainingNotification ->
-                adapter.setData(trainingNotification)
-        })
+        this.viewModel.readAllData.observe(viewLifecycleOwner) { trainingNotification ->
+            adapter.setData(trainingNotification)
+        }
 
         return view
     }

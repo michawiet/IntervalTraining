@@ -61,7 +61,7 @@ class TrackingService : LifecycleService() {
 
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
-    lateinit var curNotificationBuilder: NotificationCompat.Builder
+    private lateinit var curNotificationBuilder: NotificationCompat.Builder
 
     private val timeRunInSeconds = MutableLiveData<Long>()
 
@@ -115,10 +115,10 @@ class TrackingService : LifecycleService() {
         postInitialValues()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
 
-        isTracking.observe(this, {
+        isTracking.observe(this) {
             updateLocationTracking(it)
             updateNotificationTrackingState()
-        })
+        }
 
         tts = TextToSpeech(applicationContext) { status ->
             if(status == TextToSpeech.SUCCESS) {
@@ -184,7 +184,7 @@ class TrackingService : LifecycleService() {
         currentInterval = 0
         currentIntervalData = runData.intervals[currentInterval]
         maxTimeInInterval.postValue(runData.intervals[currentInterval].lengthMillis)
-        intervalTimer.postValue(0L)
+        intervalTimer.postValue(runData.intervals[currentInterval].lengthMillis)
     }
 
     private var isTimerEnabled = false
@@ -350,13 +350,13 @@ class TrackingService : LifecycleService() {
 
         startForeground(TRACKING_NOTIFICATION_ID, baseNotificationBuilder.build())
 
-        isRunningInterval.observe(this, {
-            if(!serviceKilled && isTimerEnabled) {
+        isRunningInterval.observe(this) {
+            if (!serviceKilled && isTimerEnabled) {
                 val notification = curNotificationBuilder
-                    .setContentText(if(it) getString(R.string.activity_type_run) else getString(R.string.activity_type_walk))
+                    .setContentText(if (it) getString(R.string.activity_type_run) else getString(R.string.activity_type_walk))
                 notificationManager.notify(TRACKING_NOTIFICATION_ID, notification.build())
             }
-        })
+        }
     }
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {

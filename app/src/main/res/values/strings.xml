@@ -60,8 +60,8 @@
     <string name="chart_walk_length">Walk length</string>
     <string name="chart_run_length">Run length</string>
     <string name="levels_completed">Levels completed</string>
-    <string name="levels_completed_placeholder" translatable="false">1/36</string>
-    <string name="progress_notification">Progress notification</string>
+    <string name="levels_completed_placeholder" translatable="false">0/35</string>
+    <string name="progress_notification">Progress notifications</string>
     <string name="active_time">Active time</string>
     <string name="precision">Precision</string>
     <string name="no_activities_yet">No activities yet</string>
@@ -83,4 +83,6 @@
     <string name="notification_training_recommendation_met">You met the recommendations for the number of training days this week.</string>
     <string name="notification_training_recommendation_not_met">It is recommended that you train 3 times per week! (%d/3)</string>
     <string name="notification_training_recommendation_exceeded">It is recommended to train 3 times per week - more than that increases the chance of injury! (%d/3)</string>
+    <string name="stats_empty_subtitle">Train and save the activities to browse the generated statistics here.</string>
+    <string name="stats_empty_title">No statistics</string>
 </resources>

@@ -104,7 +104,7 @@ object TrackingUtility {
         return totalDistance
     }
 
-    fun getIntervalDistance(interval: IntervalPathPoints): Float {
+    private fun getIntervalDistance(interval: IntervalPathPoints): Float {
         var distance = 0f
         for(chunk in interval) {
             //for loop with check of size

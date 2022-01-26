@@ -1,12 +1,13 @@
 package eu.mikko.intervaltraining.fragments
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,13 +27,11 @@ import eu.mikko.intervaltraining.other.Constants.INTERVAL_GOOD_PRECISION_LOWER_B
 import eu.mikko.intervaltraining.other.Constants.RUN_PACE
 import eu.mikko.intervaltraining.other.Constants.WALK_PACE
 import eu.mikko.intervaltraining.other.PaceLabelFormatter
-import eu.mikko.intervaltraining.other.ParcelableRunIntervalResult
 import eu.mikko.intervaltraining.other.TrackingUtility
 import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run_summary.*
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
@@ -44,13 +43,14 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
     @Inject
     lateinit var sharedPref: SharedPreferences
 
-    @set:Inject
-    var workoutLevel: Int = 1
+    private var workoutLevel: Int = 1
 
     private val args by navArgs<RunSummaryFragmentArgs>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        workoutLevel = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
 
         tvLength.text = TrackingUtility.getFormattedStopWatchTime(args.runData.timeInMillis)
         tvDistance.text = args.runData.distanceInMeters.div(1000).toString()
@@ -67,9 +67,9 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             discardWorkoutDialog()
         }
 
-        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner, {
+        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner) {
             this.maxWorkoutStep = it
-        })
+        }
 
         fabDiscard.setOnClickListener { discardWorkoutDialog() }
         fabSave.setOnClickListener {
@@ -98,20 +98,20 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         .setTitle(getString(R.string.workout_level_dialog_title))
         .setMessage(getString(R.string.workout_level_dialog_message))
         .setPositiveButton(getString(R.string.increase_workout_level)) { dialog, _ ->
-            dialog.dismiss()
             //increase the level
             saveNewWorkoutLevel(this.workoutLevel + 1)
             saveRun()
-        }.setNeutralButton(getString(R.string.maintain_workout_level)) { dialog, _ ->
             dialog.dismiss()
+        }.setNeutralButton(getString(R.string.maintain_workout_level)) { dialog, _ ->
             // same level
             saveNewWorkoutLevel(this.workoutLevel)
             saveRun()
-        }.setNegativeButton(getString(R.string.reduce_workout_level)) { dialog, _ ->
             dialog.dismiss()
+        }.setNegativeButton(getString(R.string.reduce_workout_level)) { dialog, _ ->
             //decrease the level
             saveNewWorkoutLevel(this.workoutLevel - 1)
             saveRun()
+            dialog.dismiss()
         }.create()
         .show()
 
@@ -257,12 +257,13 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         findNavController().navigate(R.id.action_runSummaryFragment_to_runStartFragment)
     }
 
+    @SuppressLint("ApplySharedPref")
     private fun saveNewWorkoutLevel(newWorkoutLevel: Int) {
         sharedPref.edit()
             .putInt(Constants.KEY_WORKOUT_LEVEL, when {
                 newWorkoutLevel < 1 -> 1
                 newWorkoutLevel > maxWorkoutStep -> maxWorkoutStep
                 else -> newWorkoutLevel
-            }).apply()
+            }).commit()
     }
 }

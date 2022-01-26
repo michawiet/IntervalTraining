@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.adapters.ProgressAdapter
+import eu.mikko.intervaltraining.adapters.ActivitiesAdapter
 import eu.mikko.intervaltraining.viewmodel.RunViewModel
 import kotlinx.android.synthetic.main.fragment_activities.*
 
@@ -17,16 +17,16 @@ class ActivitiesFragment : Fragment(R.layout.fragment_activities) {
 
     private val viewModel: RunViewModel by viewModels()
 
-    private lateinit var progressAdapter: ProgressAdapter
+    private lateinit var activitiesAdapter: ActivitiesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
 
-        viewModel.allRuns.observe(viewLifecycleOwner, {
-            if(it != null) {
-                if(it.isEmpty()) {
+        viewModel.allRuns.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.isEmpty()) {
                     ivRunEmpty.visibility = View.VISIBLE
                     tvEmptyTitle.visibility = View.VISIBLE
                     tvEmptySubtitle.visibility = View.VISIBLE
@@ -37,9 +37,9 @@ class ActivitiesFragment : Fragment(R.layout.fragment_activities) {
                     tvEmptySubtitle.visibility = View.INVISIBLE
                     fabEmpty.hide()
                 }
-                progressAdapter.submitList(it)
+                activitiesAdapter.submitList(it)
             }
-        })
+        }
 
         fabEmpty.setOnClickListener {
             findNavController().navigate(R.id.action_runListFragment_to_runStartFragment)
@@ -47,8 +47,8 @@ class ActivitiesFragment : Fragment(R.layout.fragment_activities) {
     }
 
     private fun setupRecyclerView() = recycler_view.apply {
-        progressAdapter = ProgressAdapter()
-        adapter = progressAdapter
+        activitiesAdapter = ActivitiesAdapter()
+        adapter = activitiesAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
 }

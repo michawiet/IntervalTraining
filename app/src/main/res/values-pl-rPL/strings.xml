@@ -49,7 +49,7 @@
     <string name="stats_total_distance_km">Całkowity dystans</string>
     <string name="stats_total_time">Całkowity czas</string>
     <string name="levels_completed">Ukończone poziomy</string>
-    <string name="progress_notification">Powiadomienie o postępie</string>
+    <string name="progress_notification">Powiadomienia o postępach</string>
     <string name="active_time">Czas aktywności</string>
     <string name="precision">Precyzja</string>
     <string name="no_activities_yet">Brak aktywności</string>
@@ -63,4 +63,6 @@
     <string name="notification_training_recommendation_met">Spełniłeś zalecenia dotyczące liczby dni treningowych w tym tygodniu.</string>
     <string name="notification_training_recommendation_not_met">Zalecany jest trening 3 razy w tygodniu! (%d/3)</string>
     <string name="notification_training_recommendation_exceeded">Zaleca się trenować 3 razy w tygodniu - więcej niż to zwiększa szansę na kontuzję! (%d/3)</string>
+    <string name="stats_empty_title">Brak statystyk</string>
+    <string name="stats_empty_subtitle">Trenuj i zapisuj aktywności, aby tutaj przeglądać wygenerowane statystyki.</string>
 </resources>

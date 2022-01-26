@@ -28,7 +28,7 @@ object ServiceModule {
 
     @ServiceScoped
     @Provides
-    fun provideMainActivityPendingIntent(@ApplicationContext app: Context) = PendingIntent.getActivity(
+    fun provideMainActivityPendingIntent(@ApplicationContext app: Context): PendingIntent = PendingIntent.getActivity(
         app, 8,
         Intent(app, MainActivity::class.java),
         FLAG_UPDATE_CURRENT)
