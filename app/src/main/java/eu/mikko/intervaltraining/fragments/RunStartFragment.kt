@@ -60,8 +60,8 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
         val totalTime = getTotalActivityTimeFromInterval(interval)
 
         val dataSet = PieDataSet(
-            listOf(PieEntry(totalTime[0], getString(R.string.activity_type_walk)),
-                    PieEntry(totalTime[1], getString(R.string.activity_type_run)))
+            listOf(PieEntry(totalTime[0], getString(R.string.pie_chart_walking)),
+                    PieEntry(totalTime[1], getString(R.string.pie_chart_running)))
             , "")
         dataSet.apply {
             valueFormatter = object : ValueFormatter() {
@@ -79,10 +79,10 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
             legend.isEnabled = false
             description.text = ""
             setDrawCenterText(true)
-            setCenterTextSize(20f)
+            setCenterTextSize(16f)
             setCenterTextColor(Color.parseColor("#222222"))
             setCenterTextTypeface(Typeface.DEFAULT_BOLD)
-            centerText = "Time\nyou\nwill"
+            centerText = context.getString(R.string.pie_chart_center)
             invalidate()
         }
     }

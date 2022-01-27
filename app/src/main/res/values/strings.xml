@@ -85,4 +85,7 @@
     <string name="notification_training_recommendation_exceeded">It is recommended to train 3 times per week - more than that increases the chance of injury! (%d/3)</string>
     <string name="stats_empty_subtitle">Train and save the activities to browse the generated statistics here.</string>
     <string name="stats_empty_title">No statistics</string>
+    <string name="pie_chart_center">Duration of</string>
+    <string name="pie_chart_walking">walking</string>
+    <string name="pie_chart_running">running</string>
 </resources>

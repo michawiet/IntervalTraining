@@ -65,4 +65,7 @@
     <string name="notification_training_recommendation_exceeded">Zaleca się trenować 3 razy w tygodniu - więcej niż to zwiększa szansę na kontuzję! (%d/3)</string>
     <string name="stats_empty_title">Brak statystyk</string>
     <string name="stats_empty_subtitle">Trenuj i zapisuj aktywności, aby tutaj przeglądać wygenerowane statystyki.</string>
+    <string name="pie_chart_center">Czas trwania</string>
+    <string name="pie_chart_walking">chodu</string>
+    <string name="pie_chart_running">biegu</string>
 </resources>
