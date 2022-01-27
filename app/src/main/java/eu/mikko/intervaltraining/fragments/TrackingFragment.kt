@@ -39,6 +39,7 @@ import eu.mikko.intervaltraining.services.IntervalPathPoints
 import eu.mikko.intervaltraining.services.TrackingService
 import eu.mikko.intervaltraining.viewmodel.IntervalViewModel
 import kotlinx.android.synthetic.main.fragment_tracking.*
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -49,7 +50,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     @Inject
     lateinit var sharedPref: SharedPreferences
 
-    //@set:Inject
     var workoutStep: Int = 1
 
     private var maxWorkoutStep = 36
@@ -163,7 +163,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             else workout_interval_type.text = getString(R.string.activity_type_walk)
         }
         TrackingService.intervalTimer.observe(viewLifecycleOwner) {
-            //interval_timer.text = TrackingUtility.getFormattedStopWatchTime(it)
             interval_timer.text = TrackingUtility.getFormattedStopWatchTimeWithMillis(it)
         }
         TrackingService.intervalProgress.observe(viewLifecycleOwner) {
@@ -180,7 +179,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         TrackingService.pathPointsOfIntervals.observe(viewLifecycleOwner) {
             pathPointsOfIntervals = it
             addLatestPolyline()
-            moveCameraToUser()
+            zoomToSeeWholeTrack()
+            //moveCameraToUser()
         }
     }
 
@@ -256,8 +256,10 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             }
         }
 
+        Timber.d("zoomToSeeWholeTrack -> includedPoints=$includedPoints")
+
         if(includedPoints > 1) {
-            map?.moveCamera(
+            map?.animateCamera(
                 CameraUpdateFactory.newLatLngBounds(
                     bounds.build(),
                     mapView.width,

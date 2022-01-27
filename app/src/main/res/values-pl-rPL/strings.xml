@@ -8,8 +8,7 @@
     <string name="resume_activity">Wznów</string>
     <string name="stop_activity">Zatrzymaj</string>
     <string name="notification_weekday">Dzień tygodnia</string>
-    <string name="activity_type_walk">Biegnij</string>
-    <string name="activity_type_run">Idź</string>
+    <string name="activity_type_run">Biegnij</string>
     <string name="training_scheduled_notification">Nadszedł czas na trening!</string>
     <string name="training_notification_channel_name">Przypomnienie o treningu</string>
     <string name="progress_notification_channel_name">Postęp</string>
@@ -68,4 +67,5 @@
     <string name="pie_chart_center">Czas trwania</string>
     <string name="pie_chart_walking">chodu</string>
     <string name="pie_chart_running">biegu</string>
+    <string name="activity_type_walk">Idź</string>
 </resources>

@@ -218,6 +218,7 @@ class TrackingService : LifecycleService() {
                 if(timeRun + lapTime >= runData.totalWorkoutTime) {
                     isTracking.postValue(false)
                     isActivityOver.postValue(true)
+                    fusedLocationProviderClient.removeLocationUpdates(locationCallback)
                 }
 
                 // update interval timer
@@ -300,7 +301,7 @@ class TrackingService : LifecycleService() {
                         addPathPoint(location)
                     }
                 }
-            } else {
+            } else if(isActivityOver.value == false) {
                 p0.locations.let {
                     for(location in it) {
                         currentLocation.postValue(LatLng(location.latitude, location.longitude))
