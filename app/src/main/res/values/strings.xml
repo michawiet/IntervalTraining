@@ -89,4 +89,9 @@
     <string name="pie_chart_walking">walking</string>
     <string name="pie_chart_running">running</string>
     <string name="levels">Levels</string>
+    <string name="levels_item_number" translatable="false">#</string>
+    <string name="levels_time_default" translatable="false">00:30</string>
+    <string name="levels_workout_duration">Workout duration</string>
+    <string name="levels_run_duration">Run duration</string>
+    <string name="levels_walk_duration">Walk duration</string>
 </resources>

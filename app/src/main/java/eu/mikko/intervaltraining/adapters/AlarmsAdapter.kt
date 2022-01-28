@@ -4,11 +4,10 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.os.ConfigurationCompat
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.switchmaterial.SwitchMaterial
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.TrainingNotification
 import kotlinx.android.synthetic.main.alarm_item.view.*
@@ -17,65 +16,53 @@ import java.time.format.TextStyle
 
 class AlarmsAdapter(private val clickToChangeTimeListener: (TrainingNotification) -> Unit,
                     private val clickToToggleNotificationListener: (TrainingNotification) -> Unit
-) : RecyclerView.Adapter<AlarmsAdapter.TrainingNotificationViewHolder>() {
+) : RecyclerView.Adapter<AlarmsAdapter.AlarmViewHolder>() {
 
-    private var trainingNotificationList = emptyList<TrainingNotification>()
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): TrainingNotificationViewHolder {
-        return TrainingNotificationViewHolder.create(parent, {
-            clickToChangeTimeListener(trainingNotificationList[it])
-        }, {
-            clickToToggleNotificationListener(trainingNotificationList[it])
-        })
+    class AlarmViewHolder(itemView: View, clickAtTimeTextView: (Int) -> Unit,
+                          clickAtNotificationSwitch: (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
+        init {
+            itemView.tvTrainingNotificationTime.setOnClickListener { clickAtTimeTextView(adapterPosition) }
+            itemView.switchTrainingNotification.setOnClickListener { clickAtNotificationSwitch(adapterPosition) }
+        }
     }
 
-    override fun onBindViewHolder(holder: TrainingNotificationViewHolder, position: Int) {
-        val currentItem = trainingNotificationList[position]
-        holder.weekdayNameTextView.text =
-            DayOfWeek
-            .valueOf(currentItem.dayOfWeek)
-            .getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
-        holder.notificationTimeTextView.text = String.format("%02d:%02d", currentItem.hour, currentItem.minute)
-        holder.notificationSwitch.isChecked = currentItem.isEnabled
+    private val diffCallback = object : DiffUtil.ItemCallback<TrainingNotification>() {
+        override fun areItemsTheSame(oldItem: TrainingNotification, newItem: TrainingNotification): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-        if(currentItem.isEnabled) {
-            holder.notificationTimeTextView.setTextColor(ContextCompat.getColor(holder.notificationTimeTextView.context, R.color.primary_500))
-        } else {
-            holder.notificationTimeTextView.setTextColor(ContextCompat.getColor(holder.notificationTimeTextView.context, R.color.black_inactive))
+        override fun areContentsTheSame(oldItem: TrainingNotification, newItem: TrainingNotification): Boolean {
+            return oldItem.hashCode() == newItem.hashCode()
+        }
+    }
+
+    private val differ = AsyncListDiffer(this, diffCallback)
+
+    fun submitList(list: List<TrainingNotification>) = differ.submitList(list)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
+        return AlarmViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.alarm_item, parent, false),
+            { clickToChangeTimeListener(differ.currentList[it]) },
+            { clickToToggleNotificationListener(differ.currentList[it]) }
+        )
+    }
+
+    override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
+        val currentItem = differ.currentList[position]
+        holder.itemView.apply {
+            tvDayOfWeekTrainingName.text =
+                DayOfWeek
+                    .valueOf(currentItem.dayOfWeek)
+                    .getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
+            tvTrainingNotificationTime.text = String.format("%02d:%02d", currentItem.hour, currentItem.minute)
+            switchTrainingNotification.isChecked = currentItem.isEnabled
+
+            //tvTrainingNotificationTime.setTextColor(ContextCompat.getColor(tvTrainingNotificationTime.context, if(currentItem.isEnabled) R.color.primary_500) else R.color.black_inactive)
         }
     }
 
     override fun getItemCount(): Int {
-        return trainingNotificationList.size
+        return differ.currentList.size
     }
-
-    fun setData(list: List<TrainingNotification>) {
-        this.trainingNotificationList = list
-        notifyDataSetChanged()
-    }
-
-    class TrainingNotificationViewHolder(itemView: View, clickAtTimeTextView: (Int) -> Unit,
-                                         clickAtNotificationSwitch: (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
-        val weekdayNameTextView: TextView = itemView.training_name_text_view
-        val notificationTimeTextView: TextView = itemView.training_notification_time
-        val notificationSwitch: SwitchMaterial = itemView.training_notification_switch
-
-        init {
-            notificationTimeTextView.setOnClickListener { clickAtTimeTextView(adapterPosition) }
-            notificationSwitch.setOnClickListener { clickAtNotificationSwitch(adapterPosition) }
-        }
-
-        companion object {
-            fun create(parent: ViewGroup, clickAtTimeTextView: (Int) -> Unit, clickToToggleNotificationListener: (Int) -> Unit): TrainingNotificationViewHolder {
-                val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.alarm_item, parent, false)
-                return TrainingNotificationViewHolder(view, clickAtTimeTextView, clickToToggleNotificationListener)
-            }
-        }
-    }
-
-
 }

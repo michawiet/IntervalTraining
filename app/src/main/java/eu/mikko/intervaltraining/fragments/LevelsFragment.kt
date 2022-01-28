@@ -15,7 +15,6 @@ import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedTimeFromSecon
 import eu.mikko.intervaltraining.viewmodel.IntervalViewModel
 import kotlinx.android.synthetic.main.fragment_journal.recycler_view
 import kotlinx.android.synthetic.main.fragment_levels.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,11 +24,7 @@ class LevelsFragment : Fragment(R.layout.fragment_levels) {
 
     @Inject
     lateinit var sharedPref: SharedPreferences
-
     private lateinit var levelsAdapter: LevelsAdapter
-
-    private lateinit var levelsList: List<Interval>
-
     private var workoutLevel: Int = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,39 +36,43 @@ class LevelsFragment : Fragment(R.layout.fragment_levels) {
         setupLineChart()
 
         viewModel.allIntervals.observe(viewLifecycleOwner) {
-            //TODO("pass the list to an adapter")
+            //pass the list to an adapter
             levelsAdapter.submitList(it)
+            levelsAdapter.setCurrentlyChecked(workoutLevel - 1)
+            //set data for the selected item
             val currentInterval = it[workoutLevel - 1]
             tvTrainingPlanNumber.text = currentInterval.workoutLevel.toString()
             tvTotalTime.text = getFormattedTimeFromSeconds(currentInterval.totalWorkoutTime)
             tvRunTime.text = getFormattedTimeFromSeconds(currentInterval.runSeconds)
             tvWalkTime.text = getFormattedTimeFromSeconds(currentInterval.walkSeconds)
-
-            setupDataForLineChart(currentInterval)
-            //probably also save it locally?
+            //setup
+            setDataForLineChart(currentInterval)
         }
     }
 
-    //TODO: update the data for the chart
+    //TODO: set up and style the chart
     private fun setupLineChart() {
 
     }
 
     //TODO: update the data for the chart
-    private fun setupDataForLineChart(interval: Interval) {
+    private fun setDataForLineChart(interval: Interval) {
+        //Create entries
 
+        //create data set and style it
+        //create data
+        //apply data to lineChart
+        //style lineChart
+        //apply vertical line at the end, text on the left side - totalWorkoutTime of value
     }
 
-    //TODO: use in a callback from adapter
     private fun updateCurrentSelectedInterval(interval: Interval) {
-        Timber.d("updateCurrentSelectedInterval got -> ${interval.workoutLevel}")
-
         tvTrainingPlanNumber.text = interval.workoutLevel.toString()
         tvTotalTime.text = getFormattedTimeFromSeconds(interval.totalWorkoutTime)
         tvRunTime.text = getFormattedTimeFromSeconds(interval.runSeconds)
         tvWalkTime.text = getFormattedTimeFromSeconds(interval.walkSeconds)
 
-        setupDataForLineChart(interval)
+        setDataForLineChart(interval)
     }
 
     private fun setupRecyclerView() = recycler_view.apply {

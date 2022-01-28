@@ -69,4 +69,7 @@
     <string name="pie_chart_running">biegu</string>
     <string name="activity_type_walk">Idź</string>
     <string name="levels">Poziomy</string>
+    <string name="levels_workout_duration">Czas trwania treningu</string>
+    <string name="levels_run_duration">Czas trwania biegu</string>
+    <string name="levels_walk_duration">Czas trwania chodu</string>
 </resources>

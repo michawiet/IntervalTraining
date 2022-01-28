@@ -10,18 +10,23 @@ import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Interval
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedTimeFromSeconds
 import kotlinx.android.synthetic.main.levels_item.view.*
-import timber.log.Timber
 
 class LevelsAdapter(private val clickToSelectListener: (Interval) -> Unit) : RecyclerView.Adapter<LevelsAdapter.ProgressViewHolder>() {
 
     inner class ProgressViewHolder(itemView: View, clickAtItem: (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.cardParent.setOnClickListener {
-                Timber.d("Item was clicked at position #$adapterPosition")
-                clickAtItem(adapterPosition)
+                if(currentlyChecked != adapterPosition) {
+                    clickAtItem(adapterPosition)
+                    notifyItemChanged(currentlyChecked)
+                    notifyItemChanged(adapterPosition)
+                    currentlyChecked = adapterPosition
+                }
             }
         }
     }
+
+    private var currentlyChecked = 1
 
     private val diffCallback = object : DiffUtil.ItemCallback<Interval>() {
         override fun areItemsTheSame(oldItem: Interval, newItem: Interval): Boolean {
@@ -37,6 +42,12 @@ class LevelsAdapter(private val clickToSelectListener: (Interval) -> Unit) : Rec
 
     fun submitList(list: List<Interval>) = differ.submitList(list)
 
+    fun setCurrentlyChecked(it: Int) {
+        notifyItemChanged(currentlyChecked)
+        currentlyChecked = it
+        notifyItemChanged(currentlyChecked)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgressViewHolder {
         return ProgressViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.levels_item, parent, false)
@@ -50,6 +61,7 @@ class LevelsAdapter(private val clickToSelectListener: (Interval) -> Unit) : Rec
             tvRunTime.text = getFormattedTimeFromSeconds(interval.runSeconds)
             tvWalkTime.text = getFormattedTimeFromSeconds(interval.walkSeconds)
             tvTotalTime.text = getFormattedTimeFromSeconds(interval.totalWorkoutTime)
+            cardParent.isChecked = currentlyChecked == position
         }
     }
 

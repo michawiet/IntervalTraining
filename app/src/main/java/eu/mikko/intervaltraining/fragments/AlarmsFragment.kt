@@ -22,12 +22,14 @@ import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
 import eu.mikko.intervaltraining.other.CalendarUtility.generateCalendar
 import eu.mikko.intervaltraining.viewmodel.AlarmsViewModel
-import kotlinx.android.synthetic.main.fragment_alarms.view.*
+import kotlinx.android.synthetic.main.fragment_alarms.*
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 
 @AndroidEntryPoint
 class AlarmsFragment : Fragment(R.layout.fragment_alarms) {
+
+    private lateinit var alarmsAdapter: AlarmsAdapter
 
     private val viewModel: AlarmsViewModel by viewModels()
 
@@ -61,45 +63,40 @@ class AlarmsFragment : Fragment(R.layout.fragment_alarms) {
         ).setAnchorView(R.id.bottom_navigation).show()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_alarms, container, false)
-        val adapter = AlarmsAdapter( {
-            TimePickerDialog(requireContext(),
-                //timeSetListener
-                { _, hourOfDay, minute ->
-                    val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, hourOfDay, minute, true)
-                    //add new alarm
-                    startAlarm(newTrainingNotification)
-                    showSnackBarAlarmEnabled(hourOfDay, minute, it.dayOfWeek)
-                    this.viewModel.update(newTrainingNotification)
-                },
-                it.hour,
-                it.minute,
-                true
-            ).show()
-        }, {
-            val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, it.hour, it.minute, !it.isEnabled)
-            if(it.isEnabled)
-                cancelAlarm(it.id)
-            else {
-                startAlarm(newTrainingNotification)
-                showSnackBarAlarmEnabled(it.hour, it.minute, it.dayOfWeek)
-            }
-            this.viewModel.update(newTrainingNotification)
-        })
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.recycler_view
-
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        setupRecyclerView()
 
         this.viewModel.readAllData.observe(viewLifecycleOwner) { trainingNotification ->
-            adapter.setData(trainingNotification)
+            alarmsAdapter.submitList(trainingNotification)
         }
+    }
 
-        return view
+    private fun setupRecyclerView() = recycler_view.apply {
+        alarmsAdapter = AlarmsAdapter( { onTimeClick(it) }, { onToggleClick(it) } )
+        adapter = alarmsAdapter
+        layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun onToggleClick(it: TrainingNotification) {
+        val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, it.hour, it.minute, !it.isEnabled)
+        if(it.isEnabled)
+            cancelAlarm(it.id)
+        else {
+            startAlarm(newTrainingNotification)
+            showSnackBarAlarmEnabled(it.hour, it.minute, it.dayOfWeek)
+        }
+        this.viewModel.update(newTrainingNotification)
+    }
+
+    private fun onTimeClick(it: TrainingNotification) {
+        TimePickerDialog(requireContext(), { _, hourOfDay, minute ->
+            val newTrainingNotification = TrainingNotification(it.id, it.dayOfWeek, hourOfDay, minute, true)
+            startAlarm(newTrainingNotification)
+            showSnackBarAlarmEnabled(hourOfDay, minute, it.dayOfWeek)
+            this.viewModel.update(newTrainingNotification) },
+            it.hour, it.minute,true
+        ).show()
     }
 }
