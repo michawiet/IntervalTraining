@@ -17,19 +17,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.adapters.TrainingNotificationListAdapter
+import eu.mikko.intervaltraining.adapters.AlarmsAdapter
 import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.notifications.TrainingReminderReceiver
 import eu.mikko.intervaltraining.other.CalendarUtility.generateCalendar
-import eu.mikko.intervaltraining.viewmodel.ReminderNotificationViewModel
-import kotlinx.android.synthetic.main.fragment_reminders.view.*
+import eu.mikko.intervaltraining.viewmodel.AlarmsViewModel
+import kotlinx.android.synthetic.main.fragment_alarms.view.*
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 
 @AndroidEntryPoint
-class RemindersFragment : Fragment(R.layout.fragment_reminders) {
+class AlarmsFragment : Fragment(R.layout.fragment_alarms) {
 
-    private val viewModel: ReminderNotificationViewModel by viewModels()
+    private val viewModel: AlarmsViewModel by viewModels()
 
     private fun getPendingIntent(id: Int): PendingIntent {
         val intent = Intent(context, TrainingReminderReceiver::class.java)
@@ -65,8 +65,8 @@ class RemindersFragment : Fragment(R.layout.fragment_reminders) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_reminders, container, false)
-        val adapter = TrainingNotificationListAdapter( {
+        val view = inflater.inflate(R.layout.fragment_alarms, container, false)
+        val adapter = AlarmsAdapter( {
             TimePickerDialog(requireContext(),
                 //timeSetListener
                 { _, hourOfDay, minute ->

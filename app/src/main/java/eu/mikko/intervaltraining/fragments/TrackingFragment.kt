@@ -50,9 +50,9 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     @Inject
     lateinit var sharedPref: SharedPreferences
 
-    var workoutStep: Int = 1
+    private var workoutLevel: Int = 1
 
-    private var maxWorkoutStep = 36
+    private var maxWorkoutLevel = 36
 
     private val viewModel: IntervalViewModel by viewModels()
     private lateinit var interval: Interval
@@ -70,7 +70,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         super.onViewCreated(view, savedInstanceState)
 
         mapView.onCreate(savedInstanceState)
-        workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
+        workoutLevel = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
 
         mapView.getMapAsync {
             it.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.empty_map_style))
@@ -106,14 +106,14 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             stopActivityCallback()
         }
 
-        viewModel.getIntervalByWorkoutStep(this.workoutStep).observe(viewLifecycleOwner) {
+        viewModel.getIntervalByWorkoutLevel(this.workoutLevel).observe(viewLifecycleOwner) {
             sendIntervalsToService(it)
             activityPlayPauseFab.show()
             interval = it
         }
 
-        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner) {
-            maxWorkoutStep = it
+        viewModel.getMaxWorkoutLevel().observe(viewLifecycleOwner) {
+            maxWorkoutLevel = it
         }
 
         subscribeToObservers()
@@ -220,7 +220,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
                 distanceInMeters,
                 timeInMillis,
                 rating,
-                workoutStep,
+                workoutLevel,
                 bmp
             )
 

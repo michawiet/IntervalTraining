@@ -35,7 +35,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
     @Inject
     lateinit var sharedPref: SharedPreferences
 
-    var workoutStep: Int = 1
+    private var workoutLevel: Int = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,13 +44,13 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
             findNavController().navigate(R.id.action_runStartFragment_to_runFragment)
         }
 
-        workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
-        viewModel.getIntervalByWorkoutStep(workoutStep).observe(viewLifecycleOwner) {
+        workoutLevel = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
+        viewModel.getIntervalByWorkoutLevel(workoutLevel).observe(viewLifecycleOwner) {
             tvWarmupLength.text = getFormattedTimeFromSeconds(it.warmupSeconds)
             tvTotalDistanceCovered.text = getFormattedTimeFromSeconds(it.walkSeconds)
             tvTotalTimeSpentTrackingActivity.text = getFormattedTimeFromSeconds(it.runSeconds)
             tvTotalActiveTime.text = getFormattedTimeFromSeconds(it.totalWorkoutTime)
-            tvWorkoutStep.text = workoutStep.toString()
+            tvWorkoutLevel.text = workoutLevel.toString()
 
             setupPieChart(it)
         }

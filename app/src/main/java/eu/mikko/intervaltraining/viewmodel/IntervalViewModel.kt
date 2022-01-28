@@ -10,7 +10,9 @@ class IntervalViewModel @Inject constructor(
     private val intervalRepository: IntervalRepository,
 ) : ViewModel() {
 
-    fun getIntervalByWorkoutStep(step: Int) = intervalRepository.getIntervalByWorkoutStep(step)
+    val allIntervals = intervalRepository.getAllIntervals()
 
-    fun getMaxWorkoutStep() = intervalRepository.getMaxWorkoutStep()
+    fun getIntervalByWorkoutLevel(level: Int) = intervalRepository.getIntervalByWorkoutLevel(level)
+
+    fun getMaxWorkoutLevel() = intervalRepository.getMaxWorkoutLevel()
 }

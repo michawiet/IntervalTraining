@@ -6,8 +6,8 @@ import androidx.room.Relation
 data class RunAndInterval(
     @Embedded val run: Run,
     @Relation(
-        parentColumn = "workoutStep",
-        entityColumn = "workoutStep"
+        parentColumn = "workoutLevel",
+        entityColumn = "workoutLevel"
     )
     val interval: Interval
 )

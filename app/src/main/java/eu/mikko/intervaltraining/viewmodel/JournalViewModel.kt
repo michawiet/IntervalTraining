@@ -6,8 +6,8 @@ import eu.mikko.intervaltraining.repositories.RunRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class RunViewModel @Inject constructor(
-    private val runRepository: RunRepository
+class JournalViewModel @Inject constructor(
+    runRepository: RunRepository
 ) : ViewModel() {
     val allRuns = runRepository.getAllRunsSortedByDateDesc()
 }

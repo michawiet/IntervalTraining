@@ -39,8 +39,8 @@
             app:popUpToInclusive="true"/>
     </fragment>
     <fragment
-        android:id="@+id/notificationsFragment"
-        android:name="eu.mikko.intervaltraining.fragments.RemindersFragment"
+        android:id="@+id/alarmsFragment"
+        android:name="eu.mikko.intervaltraining.fragments.AlarmsFragment"
         android:label="NotificationsFragment" />
     <fragment
         android:id="@+id/progressFragment"
@@ -68,11 +68,16 @@
     </fragment>
     <fragment
         android:id="@+id/runListFragment"
-        android:name="eu.mikko.intervaltraining.fragments.ActivitiesFragment"
+        android:name="eu.mikko.intervaltraining.fragments.JournalFragment"
         android:label="fragment_run_list"
-        tools:layout="@layout/fragment_activities" >
+        tools:layout="@layout/fragment_journal" >
         <action
             android:id="@+id/action_runListFragment_to_runStartFragment"
             app:destination="@id/runStartFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/trainingPlanBrowserFragment"
+        android:name="eu.mikko.intervaltraining.fragments.LevelsFragment"
+        android:label="fragment_training_plan_browser"
+        tools:layout="@layout/fragment_levels" />
 </navigation>

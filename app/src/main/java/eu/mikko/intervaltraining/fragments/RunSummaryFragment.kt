@@ -38,7 +38,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
 
     private val viewModel: TrainingViewModel by viewModels()
 
-    private var maxWorkoutStep = 36
+    private var maxWorkoutLevel = 36
 
     @Inject
     lateinit var sharedPref: SharedPreferences
@@ -67,8 +67,8 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             discardWorkoutDialog()
         }
 
-        viewModel.getMaxWorkoutStep().observe(viewLifecycleOwner) {
-            this.maxWorkoutStep = it
+        viewModel.getMaxWorkoutLevel().observe(viewLifecycleOwner) {
+            this.maxWorkoutLevel = it
         }
 
         fabDiscard.setOnClickListener { discardWorkoutDialog() }
@@ -242,7 +242,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             args.runData.distanceInMeters,
             args.runData.timeInMillis,
             args.runData.rating,
-            args.runData.workoutStep,
+            args.runData.workoutLevel,
             args.runData.map
         )
         viewModel.insertNewRun(newRun)
@@ -262,7 +262,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         sharedPref.edit()
             .putInt(Constants.KEY_WORKOUT_LEVEL, when {
                 newWorkoutLevel < 1 -> 1
-                newWorkoutLevel > maxWorkoutStep -> maxWorkoutStep
+                newWorkoutLevel > maxWorkoutLevel -> maxWorkoutLevel
                 else -> newWorkoutLevel
             }).commit()
     }

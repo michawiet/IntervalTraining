@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.TrainingNotification
-import kotlinx.android.synthetic.main.training_notification_item.view.*
+import kotlinx.android.synthetic.main.alarm_item.view.*
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 
-class TrainingNotificationListAdapter(private val clickToChangeTimeListener: (TrainingNotification) -> Unit,
-                                      private val clickToToggleNotificationListener: (TrainingNotification) -> Unit
-) : RecyclerView.Adapter<TrainingNotificationListAdapter.TrainingNotificationViewHolder>() {
+class AlarmsAdapter(private val clickToChangeTimeListener: (TrainingNotification) -> Unit,
+                    private val clickToToggleNotificationListener: (TrainingNotification) -> Unit
+) : RecyclerView.Adapter<AlarmsAdapter.TrainingNotificationViewHolder>() {
 
     private var trainingNotificationList = emptyList<TrainingNotification>()
 
@@ -71,7 +71,7 @@ class TrainingNotificationListAdapter(private val clickToChangeTimeListener: (Tr
         companion object {
             fun create(parent: ViewGroup, clickAtTimeTextView: (Int) -> Unit, clickToToggleNotificationListener: (Int) -> Unit): TrainingNotificationViewHolder {
                 val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.training_notification_item, parent, false)
+                    .inflate(R.layout.alarm_item, parent, false)
                 return TrainingNotificationViewHolder(view, clickAtTimeTextView, clickToToggleNotificationListener)
             }
         }

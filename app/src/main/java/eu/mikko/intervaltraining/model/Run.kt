@@ -13,7 +13,7 @@ data class Run(
     var distanceInMeters: Int = 0,
     var timeInMillis: Long = 0L,
     var rating: Int = 0,
-    var workoutStep: Int = 0,
+    var workoutLevel: Int = 0,
     var map: Bitmap? = null)
 {
     @PrimaryKey(autoGenerate = true)

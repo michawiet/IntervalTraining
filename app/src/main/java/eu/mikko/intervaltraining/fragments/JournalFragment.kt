@@ -8,16 +8,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import eu.mikko.intervaltraining.R
-import eu.mikko.intervaltraining.adapters.ActivitiesAdapter
-import eu.mikko.intervaltraining.viewmodel.RunViewModel
-import kotlinx.android.synthetic.main.fragment_activities.*
+import eu.mikko.intervaltraining.adapters.JournalAdapter
+import eu.mikko.intervaltraining.viewmodel.JournalViewModel
+import kotlinx.android.synthetic.main.fragment_journal.*
 
 @AndroidEntryPoint
-class ActivitiesFragment : Fragment(R.layout.fragment_activities) {
+class JournalFragment : Fragment(R.layout.fragment_journal) {
 
-    private val viewModel: RunViewModel by viewModels()
+    private val viewModel: JournalViewModel by viewModels()
 
-    private lateinit var activitiesAdapter: ActivitiesAdapter
+    private lateinit var journalAdapter: JournalAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,7 +37,7 @@ class ActivitiesFragment : Fragment(R.layout.fragment_activities) {
                     tvEmptySubtitle.visibility = View.INVISIBLE
                     fabEmpty.hide()
                 }
-                activitiesAdapter.submitList(it)
+                journalAdapter.submitList(it)
             }
         }
 
@@ -47,8 +47,8 @@ class ActivitiesFragment : Fragment(R.layout.fragment_activities) {
     }
 
     private fun setupRecyclerView() = recycler_view.apply {
-        activitiesAdapter = ActivitiesAdapter()
-        adapter = activitiesAdapter
+        journalAdapter = JournalAdapter()
+        adapter = journalAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
 }

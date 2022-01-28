@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Treningi Interwałowe</string>
     <string name="statistics">Statystyki</string>
-    <string name="reminders">Przypomnienia</string>
+    <string name="alarm">Alarmy</string>
     <string name="training">Trening</string>
-    <string name="pause_activity">Zapauzuj</string>
-    <string name="resume_activity">Wznów</string>
+    <string name="pause_activity">Pauza</string>
+    <string name="resume_activity">Wznowienie</string>
     <string name="stop_activity">Zatrzymaj</string>
     <string name="notification_weekday">Dzień tygodnia</string>
     <string name="activity_type_run">Biegnij</string>
@@ -26,7 +26,7 @@
     <string name="workout_level">Poziom treningu</string>
     <string name="interval_timer_hint">Timer interwałowy</string>
     <string name="warmup_title">Rozgrzewka</string>
-    <string name="activities">Aktywności</string>
+    <string name="activities">Dziennik</string>
     <string name="increase_workout_level">Zwiększ</string>
     <string name="maintain_workout_level">Utrzymaj</string>
     <string name="reduce_workout_level">Zmniejsz</string>
@@ -68,4 +68,5 @@
     <string name="pie_chart_walking">chodu</string>
     <string name="pie_chart_running">biegu</string>
     <string name="activity_type_walk">Idź</string>
+    <string name="levels">Poziomy</string>
 </resources>

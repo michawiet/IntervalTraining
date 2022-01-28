@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ReminderNotificationViewModel @Inject constructor(private val repository: TrainingNotificationRepository) : ViewModel() {
+class AlarmsViewModel @Inject constructor(private val repository: TrainingNotificationRepository) : ViewModel() {
 
     val readAllData = repository.readAllTrainingNotifications()
 

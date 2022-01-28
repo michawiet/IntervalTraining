@@ -38,7 +38,7 @@
                 android:textStyle="bold"
                 android:typeface="monospace"
                 app:layout_constraintStart_toStartOf="@id/card_view_constraint_layout_notification_item"
-                app:layout_constraintTop_toTopOf="@id/card_view_constraint_layout_notification_item" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/training_name_text_view"

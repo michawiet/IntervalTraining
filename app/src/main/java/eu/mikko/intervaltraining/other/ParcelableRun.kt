@@ -11,6 +11,6 @@ data class ParcelableRun(
     val distanceInMeters: Int,
     val timeInMillis: Long,
     val rating: Int,
-    val workoutStep: Int,
+    val workoutLevel: Int,
     var map: Bitmap? = null
 ) : Parcelable

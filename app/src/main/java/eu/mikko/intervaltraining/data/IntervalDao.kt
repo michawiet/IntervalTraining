@@ -7,16 +7,16 @@ import eu.mikko.intervaltraining.model.Interval
 
 @Dao
 interface IntervalDao {
-    @Query("SELECT * FROM intervals_table ORDER BY workoutStep ASC")
+    @Query("SELECT * FROM intervals_table ORDER BY workoutLevel ASC")
     fun getAllIntervals(): LiveData<List<Interval>>
 
-    @Query("SELECT * FROM intervals_table WHERE workoutStep=:workoutStep")
-    fun getIntervalByWorkoutStep(workoutStep: Int): LiveData<Interval>
+    @Query("SELECT * FROM intervals_table WHERE workoutLevel=:workoutLevel")
+    fun getIntervalByWorkoutStep(workoutLevel: Int): LiveData<Interval>
 
-    @Query("SELECT MAX(workoutStep) FROM intervals_table")
+    @Query("SELECT MAX(workoutLevel) FROM intervals_table")
     fun getMaxWorkoutStep(): LiveData<Int>
 
     //Only for use in broadcast receiver
-    @Query("SELECT MAX(workoutStep) FROM intervals_table")
+    @Query("SELECT MAX(workoutLevel) FROM intervals_table")
     fun getMaxWorkoutStepNonLive(): Int
 }

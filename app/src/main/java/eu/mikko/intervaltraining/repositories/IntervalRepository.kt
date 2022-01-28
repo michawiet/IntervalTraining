@@ -7,7 +7,7 @@ class IntervalRepository @Inject constructor (val intervalDao: IntervalDao) {
 
     fun getAllIntervals() = intervalDao.getAllIntervals()
 
-    fun getIntervalByWorkoutStep(workoutStep: Int) = intervalDao.getIntervalByWorkoutStep(workoutStep)
+    fun getIntervalByWorkoutLevel(workoutStep: Int) = intervalDao.getIntervalByWorkoutStep(workoutStep)
 
-    fun getMaxWorkoutStep() = intervalDao.getMaxWorkoutStep()
+    fun getMaxWorkoutLevel() = intervalDao.getMaxWorkoutStep()
 }

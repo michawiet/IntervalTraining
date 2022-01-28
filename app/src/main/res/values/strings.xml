@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Interval Training</string>
     <string name="statistics">Statistics</string>
-    <string name="reminders">Reminders</string>
+    <string name="alarm">Alarms</string>
     <string name="training">Training</string>
     <string name="pause_activity">Pause</string>
     <string name="resume_activity">Resume</string>
@@ -40,7 +40,7 @@
     <string name="workout_step_default" translatable="false">1</string>
     <string name="interval_timer_hint">Interval timer</string>
     <string name="warmup_title">Warmup</string>
-    <string name="activities">Activities</string>
+    <string name="activities">Journal</string>
     <string name="increase_workout_level">Increase</string>
     <string name="maintain_workout_level">Maintain</string>
     <string name="reduce_workout_level">Reduce</string>
@@ -88,4 +88,5 @@
     <string name="pie_chart_center">Duration of</string>
     <string name="pie_chart_walking">walking</string>
     <string name="pie_chart_running">running</string>
+    <string name="levels">Levels</string>
 </resources>

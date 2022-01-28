@@ -8,12 +8,16 @@
         android:title="@string/statistics" />
     <item
         android:id="@+id/runListFragment"
-        android:icon="@drawable/ic_round_list_24"
+        android:icon="@drawable/ic_round_assignment_24"
         android:title="@string/activities" />
     <item
-        android:id="@+id/notificationsFragment"
+        android:id="@+id/trainingPlanBrowserFragment"
+        android:icon="@drawable/ic_round_list_24"
+        android:title="@string/levels"/>
+    <item
+        android:id="@+id/alarmsFragment"
         android:icon="@drawable/ic_round_alarm_24"
-        android:title="@string/reminders" />
+        android:title="@string/alarm" />
     <item
         android:id="@+id/runStartFragment"
         android:icon="@drawable/ic_round_directions_run_24"

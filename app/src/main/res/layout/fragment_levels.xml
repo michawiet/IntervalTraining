@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    tools:context=".fragments.LevelsFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineChart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/chartCardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineChart"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/levelLineChart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/selectedLevel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/selectedLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/levelsRunVerticalGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/levelsWalkVerticalGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.78" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/levelsTotalTimeVerticalGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.22" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvTrainingPlanNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="#"
+                    android:textColor="@color/primary_500"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/layoutRunTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="@id/levelsRunVerticalGuideline"
+                    app:layout_constraintEnd_toEndOf="@id/levelsRunVerticalGuideline">
+                    <ImageView
+                        android:id="@+id/icRunTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_round_directions_run_24"
+                        app:tint="@color/primary_500" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvRunTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="4dp"
+                        android:gravity="center"
+                        android:text="00:30"
+                        android:textColor="@color/primary_500"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toEndOf="@id/icRunTime" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutWalkTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="@id/levelsWalkVerticalGuideline"
+                    app:layout_constraintEnd_toEndOf="@id/levelsWalkVerticalGuideline">
+                    <ImageView
+                        android:id="@+id/icWalkTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_round_directions_walk_24"
+                        app:tint="@color/primary_500" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvWalkTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="4dp"
+                        android:gravity="center"
+                        android:text="00:30"
+                        android:textColor="@color/primary_500"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toEndOf="@id/icWalkTime" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutTotalTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="@id/levelsTotalTimeVerticalGuideline"
+                    app:layout_constraintEnd_toEndOf="@id/levelsTotalTimeVerticalGuideline">
+                    <ImageView
+                        android:id="@+id/icTotalTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_round_timer_24"
+                        app:tint="@color/primary_500" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvTotalTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="4dp"
+                        android:gravity="center"
+                        android:text="00:30"
+                        android:textColor="@color/primary_500"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toEndOf="@id/icTotalTime" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineChart"
+        tools:listitem="@layout/levels_item" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

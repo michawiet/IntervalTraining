@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "intervals_table")
 data class Interval (
     @PrimaryKey(autoGenerate = false)
-    val workoutStep: Int,
+    val workoutLevel: Int,
     val warmupSeconds: Long,
     val runSeconds: Long,
     val walkSeconds: Long,

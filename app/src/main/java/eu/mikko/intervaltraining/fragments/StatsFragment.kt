@@ -48,7 +48,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     @Inject
     lateinit var sharedPref: SharedPreferences
 
-    var workoutStep: Int = 1
+    private var workoutLevel: Int = 1
     private var maxWorkoutStep: Int = 36
 
     private var hourProgressNotification: Int = 12
@@ -57,10 +57,10 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        workoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
+        workoutLevel = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
         setupCombinedChart()
         setupProgressNotification()
-        tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutStep - 1),(maxWorkoutStep - 1))
+        tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutLevel - 1),(maxWorkoutStep - 1))
 
         fabEmptyStats.setOnClickListener {
             findNavController().navigate(R.id.action_progressFragment_to_runStartFragment)
@@ -82,7 +82,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
                 combinedProgressChart.invalidate()
                 tvGoalProgress.text = getString(
                     R.string.completed_levels_out_of_all_levels,
-                    (workoutStep - 1),
+                    (workoutLevel - 1),
                     (maxWorkoutStep - 1)
                 )
                 setStatsLayoutElementsVisible(true)
@@ -94,7 +94,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
             maxWorkoutStep = it
             tvGoalProgress.text = getString(
                 R.string.completed_levels_out_of_all_levels,
-                (workoutStep - 1),
+                (workoutLevel - 1),
                 (maxWorkoutStep - 1)
             )
         }
