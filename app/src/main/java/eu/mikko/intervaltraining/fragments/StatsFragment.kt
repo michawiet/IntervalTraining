@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ca.antonious.materialdaypicker.MaterialDayPicker
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
@@ -35,6 +36,7 @@ import eu.mikko.intervaltraining.other.SecondsToMinutesAndSecondsValueFormatter
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedStopWatchTime
 import eu.mikko.intervaltraining.other.TrackingUtility.getTotalActivityTimeFromInterval
 import eu.mikko.intervaltraining.viewmodel.ProgressViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_stats.*
 import java.time.format.TextStyle
 import java.util.*
@@ -62,10 +64,6 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         setupProgressNotification()
         tvGoalProgress.text = getString(R.string.completed_levels_out_of_all_levels, (workoutLevel - 1),(maxWorkoutStep - 1))
 
-        fabEmptyStats.setOnClickListener {
-            findNavController().navigate(R.id.action_progressFragment_to_runStartFragment)
-        }
-
         viewModel.totalDistance.observe(viewLifecycleOwner) {
             if (it != null) {
                 tvTotalDistanceCovered.text = String.format("%.1f km", it.toFloat().div(1000f))
@@ -79,7 +77,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         viewModel.allRunsWithIntervals.observe(viewLifecycleOwner) {
             if(it.isNotEmpty()) {
                 setDataForCombinedChart(it)
-                combinedProgressChart.invalidate()
+                //combinedProgressChart.invalidate()
                 tvGoalProgress.text = getString(
                     R.string.completed_levels_out_of_all_levels,
                     (workoutLevel - 1),
@@ -115,7 +113,6 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         ivRunEmpty.visibility = placeholderVisibility
         tvEmptyStatsTitle.visibility = placeholderVisibility
         tvEmptyStatsSubtitle.visibility = placeholderVisibility
-        fabEmptyStats.visibility = placeholderVisibility
     }
 
     private fun setupProgressNotification() {
@@ -248,6 +245,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
             setData(lineData)
             setData(barData)
             barData.barWidth = 0.8f
+            isHighlightEnabled = false
         }
 
         combinedProgressChart.apply {
@@ -255,6 +253,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
             xAxis.axisMaximum = i - 0.4f
             moveViewToX(i - 1f)
             setVisibleXRangeMaximum(8f)
+            invalidate()
         }
     }
 

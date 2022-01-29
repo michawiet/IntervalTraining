@@ -39,4 +39,9 @@
     <color name="walk_light">#9DADDA</color>
     <color name="run_dark">#E87A30</color>
     <color name="run_light">#F6B499</color>
+
+    <color name="walk_dark_transparent">#AA426FC0</color>
+    <color name="walk_light_transparent">#AA9DADDA</color>
+    <color name="run_dark_transparent">#AAE87A30</color>
+    <color name="run_light_transparent">#AAF6B499</color>
 </resources>

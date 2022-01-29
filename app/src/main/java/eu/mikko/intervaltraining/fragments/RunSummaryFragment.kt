@@ -142,13 +142,13 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
                 axisMinimum = 0f
                 axisMaximum = 110f
                 addLimitLine(LimitLine(INTERVAL_GOOD_PRECISION_LOWER_BOUND.toFloat(), context.getString(
-                                    R.string.chart_good_precision_limit)).also {
-                    it.lineWidth = 2f
-                    it.enableDashedLine(20f, 20f, 0f)
-                    it.labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
-                    it.textSize = 10f
-                    it.lineColor = ContextCompat.getColor(requireContext(), R.color.black_disabled)
-                    it.textColor = ContextCompat.getColor(requireContext(), R.color.black_disabled)
+                                    R.string.chart_good_precision_limit)).apply {
+                    lineWidth = 2f
+                    enableDashedLine(20f, 20f, 0f)
+                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
+                    textSize = 10f
+                    lineColor = ContextCompat.getColor(requireContext(), R.color.black_disabled)
+                    textColor = ContextCompat.getColor(requireContext(), R.color.black_disabled)
                 })
             }
             description.text = ""
@@ -225,6 +225,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             setData(lineData)
             setData(barData)
             barData.barWidth = 0.8f
+            isHighlightEnabled = false
         }
 
         combinedChart.apply {

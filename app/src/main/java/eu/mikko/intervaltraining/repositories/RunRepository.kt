@@ -4,7 +4,7 @@ import eu.mikko.intervaltraining.data.RunDao
 import eu.mikko.intervaltraining.model.Run
 import javax.inject.Inject
 
-class RunRepository @Inject constructor (val runDao: RunDao) {
+class RunRepository @Inject constructor (private val runDao: RunDao) {
 
     suspend fun insertRun(run: Run) = runDao.insertRun(run)
 

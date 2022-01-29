@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/journal_item" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/ivRunEmpty"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -67,19 +67,5 @@
         app:layout_constraintEnd_toStartOf="@+id/guidelineRightRunList"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeftRunList"
         app:layout_constraintTop_toBottomOf="@+id/tvEmptyTitle" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabEmpty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="@string/train_button_empty_activities"
-        android:textColor="@color/primary_50"
-        app:iconTint="@color/primary_50"
-        app:icon="@drawable/ic_round_directions_run_24"
-        app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
-        app:layout_constraintEnd_toEndOf="@+id/tvEmptySubtitle"
-        app:layout_constraintStart_toStartOf="@+id/tvEmptySubtitle"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmptySubtitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

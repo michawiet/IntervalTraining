@@ -30,19 +30,13 @@ class JournalFragment : Fragment(R.layout.fragment_journal) {
                     ivRunEmpty.visibility = View.VISIBLE
                     tvEmptyTitle.visibility = View.VISIBLE
                     tvEmptySubtitle.visibility = View.VISIBLE
-                    fabEmpty.show()
                 } else {
                     ivRunEmpty.visibility = View.INVISIBLE
                     tvEmptyTitle.visibility = View.INVISIBLE
                     tvEmptySubtitle.visibility = View.INVISIBLE
-                    fabEmpty.hide()
                 }
                 journalAdapter.submitList(it)
             }
-        }
-
-        fabEmpty.setOnClickListener {
-            findNavController().navigate(R.id.action_runListFragment_to_runStartFragment)
         }
     }
 
