@@ -94,4 +94,20 @@
     <string name="levels_workout_duration">Workout duration</string>
     <string name="levels_run_duration">Run duration</string>
     <string name="levels_walk_duration">Walk duration</string>
+    <string name="pace">Pace</string>
+    <string name="levels_run">Run</string>
+    <string name="levels_walk">Walk</string>
+    <string name="run_start_run">Run</string>
+    <string name="run_start_walk">Walk</string>
+    <string name="levels_warmup">Warmup</string>
+    <string name="training_reminder_notification_channel_name">Training reminder</string>
+    <string name="progress_channel_name">Progress</string>
+    <string name="notification_goal_completed_0_percent">Hey, don\'t discourage yourself - YOU can do this! %d%% of workout levels completed.</string>
+    <string name="notification_goal_completed_1_to_29_percent">Keep training! %d%% of the goal achieved.</string>
+    <string name="notification_goal_completed_30_to_39_percent">Dream on, dream on, dream until the dream come true! %d%% of workout levels completed.</string>
+    <string name="notification_goal_completed_40_to_49_percent">Work it, make it, do it, makes us harder, better, faster, stronger! %d%% of workout levels completed.</string>
+    <string name="notification_goal_completed_50_to_59_percent">Whoa, you\'re half way there, whoa-oh, livin\' on a prayer! %d%% of workout levels completed.</string>
+    <string name="notification_goal_completed_60_to_79_percent">You\'re still standing, after all this time! %d%% of workout levels completed.</string>
+    <string name="notification_goal_completed_80_to_99_percent">You\'re gonna go, go, go, there\'s no stopping you! %d%% of workout levels completed.</string>
+    <string name="notification_goal_completed_100_percent">You are the champion, my friend! Congratulations, you\'ve completed %d%% of workout levels!</string>
 </resources>

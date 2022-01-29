@@ -31,7 +31,7 @@ import eu.mikko.intervaltraining.other.Constants.TIMER_UPDATE_INTERVAL
 import eu.mikko.intervaltraining.other.ParcelableInterval
 import eu.mikko.intervaltraining.other.ParcelableRun
 import eu.mikko.intervaltraining.other.TrackingUtility
-import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
+import eu.mikko.intervaltraining.other.TrackingUtility.getMinutesPerKilometerFromMetersPerSecond
 import eu.mikko.intervaltraining.other.TrackingUtility.getTotalDistance
 import eu.mikko.intervaltraining.other.TrackingUtility.rateIntervals
 import eu.mikko.intervaltraining.other.TrackingUtility.rateWorkout
@@ -151,7 +151,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             activity_timer.text = TrackingUtility.getFormattedStopWatchTime(curTimeInMillis)
         }
         TrackingService.currentSpeedMetersPerSecond.observe(viewLifecycleOwner) {
-            workout_speed.text = getKilometersPerMinuteFromMetersPerSecond(it)
+            workout_speed.text = getMinutesPerKilometerFromMetersPerSecond(it)
         }
         TrackingService.distanceInMeters.observe(viewLifecycleOwner) {
             // convert meters to kilometers

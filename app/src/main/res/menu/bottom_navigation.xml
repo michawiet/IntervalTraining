@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/statsFragment"
@@ -12,7 +11,7 @@
         android:title="@string/activities" />
     <item
         android:id="@+id/levelsFragment"
-        android:icon="@drawable/ic_round_list_24"
+        android:icon="@drawable/ic_round_timeline_24"
         android:title="@string/levels"/>
     <item
         android:id="@+id/alarmsFragment"

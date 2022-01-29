@@ -1,13 +1,13 @@
 package eu.mikko.intervaltraining.other
 
 import android.graphics.Color
+import eu.mikko.intervaltraining.R
 import java.time.DayOfWeek
 
 object Constants {
     // database
     const val DATABASE_NAME = "interval_training"
-    const val DATABASE_ASSET_PATH = "database/interval_training_mock.db"
-    //const val DATABASE_ASSET_PATH = "database/interval_training.db"
+    const val DATABASE_ASSET_PATH = "database/interval_training.db"
 
     // permissions
     const val REQUEST_CODE_LOCATION_PERMISSION = 0
@@ -38,9 +38,7 @@ object Constants {
     const val TRACKING_NOTIFICATION_ID = 8
 
     const val TRAINING_REMINDER_CHANNEL_ID = "trainingRemindersID"
-    const val TRAINING_REMINDER_CHANNEL_NAME = "Training reminder"
     const val PROGRESS_CHANNEL_ID = "progressNotificationsID"
-    const val PROGRESS_CHANNEL_NAME = "Progress"
     const val PROGRESS_NOTIFICATION_ID = 9
 
     const val RUN_PACE = 2.78f

@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedStopWatchTime
-import eu.mikko.intervaltraining.other.TrackingUtility.getKilometersPerMinuteFromMetersPerSecond
+import eu.mikko.intervaltraining.other.TrackingUtility.getMinutesPerKilometerFromMetersPerSecond
 import kotlinx.android.synthetic.main.journal_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,7 +45,7 @@ class JournalAdapter : RecyclerView.Adapter<JournalAdapter.ProgressViewHolder>()
             Glide.with(this).load(run.map).into(ivRunItem)
             tvLength.text = getFormattedStopWatchTime(run.timeInMillis)
             tvDistance.text = run.distanceInMeters.div(1000f).toString()
-            tvAvgSpeed.text = getKilometersPerMinuteFromMetersPerSecond(run.avgSpeedMetersPerSecond)
+            tvAvgSpeed.text = getMinutesPerKilometerFromMetersPerSecond(run.avgSpeedMetersPerSecond)
             tvRating.text = run.rating.toString().plus("%")
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = run.timestamp

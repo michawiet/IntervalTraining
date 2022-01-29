@@ -14,9 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import ca.antonious.materialdaypicker.MaterialDayPicker
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
@@ -36,7 +34,6 @@ import eu.mikko.intervaltraining.other.SecondsToMinutesAndSecondsValueFormatter
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedStopWatchTime
 import eu.mikko.intervaltraining.other.TrackingUtility.getTotalActivityTimeFromInterval
 import eu.mikko.intervaltraining.viewmodel.ProgressViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_stats.*
 import java.time.format.TextStyle
 import java.util.*
@@ -66,12 +63,12 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
 
         viewModel.totalDistance.observe(viewLifecycleOwner) {
             if (it != null) {
-                tvTotalDistanceCovered.text = String.format("%.1f km", it.toFloat().div(1000f))
+                tvWalkIntervalLength.text = String.format("%.1f km", it.toFloat().div(1000f))
             }
         }
         viewModel.totalTimeInMillis.observe(viewLifecycleOwner) {
             if (it != null) {
-                tvTotalTimeSpentTrackingActivity.text = getFormattedStopWatchTime(it)
+                tvRunIntervalLength.text = getFormattedStopWatchTime(it)
             }
         }
         viewModel.allRunsWithIntervals.observe(viewLifecycleOwner) {
@@ -103,11 +100,11 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         val placeholderVisibility = if(!visible) View.VISIBLE else View.INVISIBLE
 
         combinedProgressChart.visibility = visibility
-        tvTotalTimeSpentTrackingActivity.visibility = visibility
+        tvRunIntervalLength.visibility = visibility
         tvTotalTimeInfo.visibility = visibility
         tvGoalProgress.visibility = visibility
         tvCurrentWorkoutInfo.visibility = visibility
-        tvTotalDistanceCovered.visibility = visibility
+        tvWalkIntervalLength.visibility = visibility
         tvTotalDistanceInfo.visibility = visibility
         //placeholder
         ivRunEmpty.visibility = placeholderVisibility

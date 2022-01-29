@@ -72,4 +72,20 @@
     <string name="levels_workout_duration">Czas trwania treningu</string>
     <string name="levels_run_duration">Czas trwania biegu</string>
     <string name="levels_walk_duration">Czas trwania chodu</string>
+    <string name="pace">Tempo</string>
+    <string name="levels_run">Bieg</string>
+    <string name="levels_walk">Chód</string>
+    <string name="run_start_run">Bieg</string>
+    <string name="run_start_walk">Chód</string>
+    <string name="levels_warmup">Rozgrzewka</string>
+    <string name="training_reminder_notification_channel_name">Przypomnienie o treningu</string>
+    <string name="progress_channel_name">Postęp</string>
+    <string name="notification_goal_completed_0_percent">Hej, nie zniechęcaj się - możesz tego dokonać! %d%% poziomów treningowych ukończonych.</string>
+    <string name="notification_goal_completed_1_to_29_percent">Trenuj dalej! %d%% celu osiągnięte.</string>
+    <string name="notification_goal_completed_100_percent">Jesteś mistrzem! Gratulacje, ukończyłeś %d%% poziomów treningowych!</string>
+    <string name="notification_goal_completed_80_to_99_percent">Nic cię nie powstrzyma! %d%% ukończonych poziomów treningowych</string>
+    <string name="notification_goal_completed_50_to_59_percent">Jesteś w połowie drogi! %d%% poziomów treningowych ukończonych.</string>
+    <string name="notification_goal_completed_60_to_79_percent">Nadal trenujesz, po takim czasie! %d%% poziomów treningowych ukończonych.</string>
+    <string name="notification_goal_completed_30_to_39_percent">Trenuj, aż marzenie się spełni! %d%% poziomów treningowych ukończonych.</string>
+    <string name="notification_goal_completed_40_to_49_percent">Trenuj mocniej, lepiej, szybciej! %d%% ukończonych poziomów treningowych.</string>
 </resources>

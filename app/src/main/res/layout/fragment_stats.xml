@@ -47,10 +47,10 @@
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/progressRightVerticalGuideline"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalDistanceCovered" />
+        app:layout_constraintTop_toBottomOf="@id/tvWalkIntervalLength" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvTotalDistanceCovered"
+        android:id="@+id/tvWalkIntervalLength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stats_total_distance_default"
@@ -72,10 +72,10 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/progressLeftVerticalGuideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalTimeSpentTrackingActivity" />
+        app:layout_constraintTop_toBottomOf="@id/tvRunIntervalLength" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvTotalTimeSpentTrackingActivity"
+        android:id="@+id/tvRunIntervalLength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stats_default_total_time"
@@ -210,7 +210,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/tvCurrentWorkoutInfo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvEmptyStatsSubtitle"

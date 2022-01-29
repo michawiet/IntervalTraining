@@ -5,6 +5,8 @@ import android.content.Context
 import android.location.Location
 import android.os.Build
 import eu.mikko.intervaltraining.model.Interval
+import eu.mikko.intervaltraining.other.Constants.RUN_PACE
+import eu.mikko.intervaltraining.other.Constants.WALK_PACE
 import eu.mikko.intervaltraining.services.IntervalPathPoints
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.concurrent.TimeUnit
@@ -129,9 +131,9 @@ object TrackingUtility {
 
     private fun rateInterval(avgSpeed: Float, isRunningInterval: Boolean): Int {
         val rating: Int = if(isRunningInterval) {
-            ((-1 * ((avgSpeed - 3) * 1.2).pow(4) + 1) * 100).toInt()
+            ((-1 * ((avgSpeed - RUN_PACE) * 1.2).pow(4) + 1) * 100).toInt()
         } else {
-            ((-1 * ((avgSpeed - 1.3) * 1.7).pow(4) + 1) * 100).toInt()
+            ((-1 * ((avgSpeed - WALK_PACE) * 1.7).pow(4) + 1) * 100).toInt()
         }
 
         return if(rating > 0) rating else 0
@@ -175,7 +177,7 @@ object TrackingUtility {
         return ratingArray.toTypedArray()
     }
 
-    fun getKilometersPerMinuteFromMetersPerSecond(speed: Float): String {
+    fun getMinutesPerKilometerFromMetersPerSecond(speed: Float): String {
         return try {
             val pace = 1000 / (speed * 60)
             val leftover = pace % 1

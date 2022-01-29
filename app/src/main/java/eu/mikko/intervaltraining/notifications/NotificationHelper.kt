@@ -10,9 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import eu.mikko.intervaltraining.R
 import eu.mikko.intervaltraining.other.Constants.PROGRESS_CHANNEL_ID
-import eu.mikko.intervaltraining.other.Constants.PROGRESS_CHANNEL_NAME
 import eu.mikko.intervaltraining.other.Constants.TRAINING_REMINDER_CHANNEL_ID
-import eu.mikko.intervaltraining.other.Constants.TRAINING_REMINDER_CHANNEL_NAME
 
 class NotificationHelper(base: Context?) : ContextWrapper(base) {
 
@@ -21,7 +19,7 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
     @TargetApi(Build.VERSION_CODES.O)
     private fun createChannel() {
         val trainingReminderChannel = NotificationChannel(TRAINING_REMINDER_CHANNEL_ID,
-            TRAINING_REMINDER_CHANNEL_NAME,
+            applicationContext.getString(R.string.training_reminder_notification_channel_name),
                 NotificationManager.IMPORTANCE_HIGH).also {
             it.enableVibration(true)
             it.enableLights(true)
@@ -30,7 +28,7 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
 
         val progressNotificationChannel =
             NotificationChannel(PROGRESS_CHANNEL_ID,
-                PROGRESS_CHANNEL_NAME,
+                applicationContext.getString(R.string.progress_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT).also {
                 it.enableVibration(true)
                 it.enableLights(true)
@@ -51,7 +49,7 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
     fun trainingScheduledNotification(): NotificationCompat.Builder =
         NotificationCompat.Builder(applicationContext, TRAINING_REMINDER_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
-            .setContentTitle(TRAINING_REMINDER_CHANNEL_NAME)
+            .setContentTitle(applicationContext.getString(R.string.training_reminder_notification_channel_name))
             .setContentText(applicationContext.getString(R.string.training_scheduled_notification))
             .setCategory("CATEGORY_REMINDER")
 

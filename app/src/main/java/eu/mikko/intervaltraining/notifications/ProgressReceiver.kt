@@ -58,21 +58,19 @@ class ProgressReceiver : BroadcastReceiver() {
     }
 
     private fun getProgressPercent(intervalDao: IntervalDao, context: Context?): String {
-        var progressInfo = ""
         val sharedPref = context!!.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
         val currentWorkoutStep = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1) - 1
 
         val maxWorkoutStep = intervalDao.getMaxWorkoutStepNonLive()
-        when(val percentDone = currentWorkoutStep.div(maxWorkoutStep.toFloat() - 1f).times(100f).toInt()) {
-            0 -> progressInfo = "Hey, don't discourage yourself - YOU can do this! $percentDone% of workout levels completed"
-            in 1 .. 29 -> progressInfo = "Keep training! $percentDone% of the goal achieved"
-            in 30 .. 39 -> progressInfo = "Dream on, dream on, dream until the dream come true! $percentDone% of workout levels completed"
-            in 40 .. 49 -> progressInfo = "Work it, make it, do it, makes us harder, better, faster, stronger! $percentDone% of workout levels completed"
-            in 50 .. 59 -> progressInfo = "Whoa, you're half way there, whoa-oh, livin' on a prayer! $percentDone% of workout levels completed"
-            in 60 .. 79 -> progressInfo = "You're still standing, after all this time! $percentDone% of workout levels completed"
-            in 80 .. 99 -> progressInfo = "You're gonna go, go, go, there's no stopping you! $percentDone% of workout levels completed"
-            100 -> progressInfo = "You are the champion, my friend! Congratulations, you've completed $percentDone% of workout levels!"
+        return when(val percentDone = currentWorkoutStep.div(maxWorkoutStep.toFloat() - 1f).times(100f).toInt()) {
+            0 -> context.getString(R.string.notification_goal_completed_0_percent, percentDone)
+            in 1 .. 29 -> context.getString(R.string.notification_goal_completed_1_to_29_percent, percentDone)
+            in 30 .. 39 -> context.getString(R.string.notification_goal_completed_30_to_39_percent, percentDone)
+            in 40 .. 49 -> context.getString(R.string.notification_goal_completed_40_to_49_percent, percentDone)
+            in 50 .. 59 -> context.getString(R.string.notification_goal_completed_50_to_59_percent, percentDone)
+            in 60 .. 79 -> context.getString(R.string.notification_goal_completed_60_to_79_percent, percentDone)
+            in 80 .. 99 -> context.getString(R.string.notification_goal_completed_80_to_99_percent, percentDone)
+            else -> context.getString(R.string.notification_goal_completed_100_percent, percentDone)
         }
-        return progressInfo
     }
 }

@@ -55,7 +55,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         tvLength.text = TrackingUtility.getFormattedStopWatchTime(args.runData.timeInMillis)
         tvDistance.text = args.runData.distanceInMeters.div(1000).toString()
         tvAvgSpeed.text =
-            TrackingUtility.getKilometersPerMinuteFromMetersPerSecond(args.runData.avgSpeedMetersPerSecond)
+            TrackingUtility.getMinutesPerKilometerFromMetersPerSecond(args.runData.avgSpeedMetersPerSecond)
         tvRating.text = args.runData.rating.toString().plus("%")
 
         Glide.with(this).load(args.runData.map).into(summaryMapImageView)
@@ -233,6 +233,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             invalidate()
             xAxis.axisMaximum = i - 0.4f
             setVisibleXRangeMaximum(6f)
+            setVisibleXRangeMinimum(2f)
         }
     }
 

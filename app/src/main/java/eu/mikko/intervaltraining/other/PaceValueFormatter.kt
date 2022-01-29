@@ -4,6 +4,6 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 class PaceLabelFormatter : IndexAxisValueFormatter() {
     override fun getFormattedValue(value: Float): String {
-        return TrackingUtility.getKilometersPerMinuteFromMetersPerSecond(value)
+        return TrackingUtility.getMinutesPerKilometerFromMetersPerSecond(value)
     }
 }

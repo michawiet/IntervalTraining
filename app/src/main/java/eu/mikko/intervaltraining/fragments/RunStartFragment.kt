@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -47,8 +48,8 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
         workoutLevel = sharedPref.getInt(Constants.KEY_WORKOUT_LEVEL, 1)
         viewModel.getIntervalByWorkoutLevel(workoutLevel).observe(viewLifecycleOwner) {
             tvWarmupLength.text = getFormattedTimeFromSeconds(it.warmupSeconds)
-            tvTotalDistanceCovered.text = getFormattedTimeFromSeconds(it.walkSeconds)
-            tvTotalTimeSpentTrackingActivity.text = getFormattedTimeFromSeconds(it.runSeconds)
+            tvWalkIntervalLength.text = getFormattedTimeFromSeconds(it.walkSeconds)
+            tvRunIntervalLength.text = getFormattedTimeFromSeconds(it.runSeconds)
             tvTotalActiveTime.text = getFormattedTimeFromSeconds(it.totalWorkoutTime)
             tvWorkoutLevel.text = workoutLevel.toString()
 
@@ -80,7 +81,7 @@ class RunStartFragment : Fragment(R.layout.fragment_run_start), EasyPermissions.
             description.text = ""
             setDrawCenterText(true)
             setCenterTextSize(16f)
-            setCenterTextColor(Color.parseColor("#222222"))
+            setCenterTextColor(ContextCompat.getColor(requireContext(), R.color.black_inactive))
             setCenterTextTypeface(Typeface.DEFAULT_BOLD)
             centerText = context.getString(R.string.pie_chart_center)
             invalidate()
