@@ -16,7 +16,7 @@
     <string name="start_run_button">Rozpocznij trening</string>
     <string name="active_time_title">Czas trwania treningu</string>
     <string name="run_interval_length_hint">Biegnij</string>
-    <string name="walk_interval_length_hint">Idź</string>
+    <string name="walk_interval_length_hint">Spaceruj</string>
     <string name="stop_activity_title">Zatrzymać trening?</string>
     <string name="stop_activity_message">Spowoduje to odrzucenie bieżącej sesji.</string>
     <string name="discard_workout_title">Odrzucić trening?</string>
@@ -37,7 +37,7 @@
     <string name="background_location_permission_prompt">Aby śledzić trening z zablokowanym ekranem, musisz zaakceptować uprawnienia do lokalizacji w tle.</string>
     <string name="snackbar_activity_saved">Aktywność zapisana pomyślnie!</string>
     <string name="chart_run_precision_label">Precyzja biegu</string>
-    <string name="chart_walk_precision_label">Precyzja chodu</string>
+    <string name="chart_walk_precision_label">Precyzja spaceru</string>
     <string name="chart_achieved_pace_label">Osiągnięte tempo</string>
     <string name="chart_required_pace_label">Wymagane tempo</string>
     <string name="chart_good_precision_limit">Dobra precyzja</string>
@@ -65,18 +65,18 @@
     <string name="stats_empty_title">Brak statystyk</string>
     <string name="stats_empty_subtitle">Trenuj i zapisuj aktywności, aby tutaj przeglądać wygenerowane statystyki.</string>
     <string name="pie_chart_center">Czas trwania</string>
-    <string name="pie_chart_walking">chodu</string>
+    <string name="pie_chart_walking">spaceru</string>
     <string name="pie_chart_running">biegu</string>
-    <string name="activity_type_walk">Idź</string>
+    <string name="activity_type_walk">Spaceruj</string>
     <string name="levels">Poziomy</string>
     <string name="levels_workout_duration">Czas trwania treningu</string>
     <string name="levels_run_duration">Czas trwania biegu</string>
     <string name="levels_walk_duration">Czas trwania chodu</string>
     <string name="pace">Tempo</string>
     <string name="levels_run">Bieg</string>
-    <string name="levels_walk">Chód</string>
+    <string name="levels_walk">Soacer</string>
     <string name="run_start_run">Bieg</string>
-    <string name="run_start_walk">Chód</string>
+    <string name="run_start_walk">Spacer</string>
     <string name="levels_warmup">Rozgrzewka</string>
     <string name="training_reminder_notification_channel_name">Przypomnienie o treningu</string>
     <string name="progress_channel_name">Postęp</string>
@@ -88,4 +88,7 @@
     <string name="notification_goal_completed_60_to_79_percent">Nadal trenujesz, po takim czasie! %d%% poziomów treningowych ukończonych.</string>
     <string name="notification_goal_completed_30_to_39_percent">Trenuj, aż marzenie się spełni! %d%% poziomów treningowych ukończonych.</string>
     <string name="notification_goal_completed_40_to_49_percent">Trenuj mocniej, lepiej, szybciej! %d%% ukończonych poziomów treningowych.</string>
+    <string name="activity_has_ended">Ukończono trening</string>
+    <string name="activity_resume_running">Kontynuuj bieganie</string>
+    <string name="activity_resume_walking">Kontynuuj spacer</string>
 </resources>

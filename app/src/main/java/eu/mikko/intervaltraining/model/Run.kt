@@ -3,8 +3,6 @@ package eu.mikko.intervaltraining.model
 import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import eu.mikko.intervaltraining.data.Converters
 
 @Entity(tableName = "runs_table")
 data class Run(

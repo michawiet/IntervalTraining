@@ -10,7 +10,8 @@ object Constants {
     const val DATABASE_ASSET_PATH = "database/interval_training.db"
 
     // permissions
-    const val REQUEST_CODE_LOCATION_PERMISSION = 0
+    const val REQUEST_CODE_LOCATION_PERMISSION = 1
+    const val REQUEST_CODE_BACKGROUND_LOCATION_PERMISSION = 1
 
     // tracking service
     const val ACTION_START_SERVICE = "ACTION_START_SERVICE"

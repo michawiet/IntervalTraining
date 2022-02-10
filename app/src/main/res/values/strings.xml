@@ -110,4 +110,7 @@
     <string name="notification_goal_completed_60_to_79_percent">You\'re still standing, after all this time! %d%% of workout levels completed.</string>
     <string name="notification_goal_completed_80_to_99_percent">You\'re gonna go, go, go, there\'s no stopping you! %d%% of workout levels completed.</string>
     <string name="notification_goal_completed_100_percent">You are the champion, my friend! Congratulations, you\'ve completed %d%% of workout levels!</string>
+    <string name="activity_has_ended">Training completed</string>
+    <string name="activity_resume_running">Continue running</string>
+    <string name="activity_resume_walking">Continue walking</string>
 </resources>

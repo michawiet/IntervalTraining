@@ -11,7 +11,6 @@ class ProgressViewModel @Inject constructor(
     runRepository: RunRepository,
     private val intervalRepository: IntervalRepository) : ViewModel() {
 
-    val allRuns = runRepository.getAllRunsSortedByDateAsc()
     val totalDistance = runRepository.getTotalDistance()
     val totalTimeInMillis = runRepository.getTotalTimeInMillis()
 

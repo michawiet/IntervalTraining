@@ -131,9 +131,9 @@ object TrackingUtility {
 
     private fun rateInterval(avgSpeed: Float, isRunningInterval: Boolean): Int {
         val rating: Int = if(isRunningInterval) {
-            ((-1 * ((avgSpeed - RUN_PACE) * 1.2).pow(4) + 1) * 100).toInt()
+            ((-1 * (avgSpeed - RUN_PACE).pow(4) + 1) * 100).toInt()
         } else {
-            ((-1 * ((avgSpeed - WALK_PACE) * 1.7).pow(4) + 1) * 100).toInt()
+            ((-1 * ((avgSpeed - WALK_PACE) * 2).pow(4) + 1) * 100).toInt()
         }
 
         return if(rating > 0) rating else 0

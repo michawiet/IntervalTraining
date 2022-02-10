@@ -115,11 +115,6 @@ class TrackingService : LifecycleService() {
         postInitialValues()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
 
-        isTracking.observe(this) {
-            updateLocationTracking(it)
-            updateNotificationTrackingState()
-        }
-
         tts = TextToSpeech(applicationContext) { status ->
             if(status == TextToSpeech.SUCCESS) {
                 val result = tts.setLanguage(ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
@@ -129,6 +124,18 @@ class TrackingService : LifecycleService() {
             } else {
                 Timber.d("TTS initialization failed")
             }
+        }
+
+        isTracking.observe(this) {
+            updateLocationTracking(it)
+            updateNotificationTrackingState()
+        }
+
+        isActivityOver.observe(this) {
+            if(isActivityOver.value == true)
+                if(tts.speak(getString(R.string.activity_has_ended), TextToSpeech.QUEUE_FLUSH, null, null) == TextToSpeech.ERROR) {
+                    Timber.d("Voice synth error...")
+                }
         }
     }
 
@@ -155,6 +162,12 @@ class TrackingService : LifecycleService() {
                             Timber.d("Voice synth error...")
                         }
                     } else {
+                        if(tts.speak(getString(
+                                if(isRunningInterval.value == true) R.string.activity_resume_running
+                                else R.string.activity_resume_walking
+                            ), TextToSpeech.QUEUE_FLUSH, null, null) == TextToSpeech.ERROR) {
+                            Timber.d("Voice synth error...")
+                        }
                         Timber.d("Resuming service...")
                         startTimer()
                     }
@@ -247,12 +260,10 @@ class TrackingService : LifecycleService() {
             isRunningInterval.postValue(currentIntervalData.isRunningInterval)
             addEmptyInterval()
             if(currentIntervalData.isRunningInterval) {
-                //trigger tts with "Start running!" message
                 tts.speak(getString(R.string.activity_type_run), TextToSpeech.QUEUE_FLUSH, null, null)
             }
             else {
                 tts.speak(getString(R.string.activity_type_walk), TextToSpeech.QUEUE_FLUSH, null, null)
-                //trigger tts with "Start running!" message
             }
         }
     }

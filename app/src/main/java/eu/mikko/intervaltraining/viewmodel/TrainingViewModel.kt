@@ -14,8 +14,6 @@ class TrainingViewModel @Inject constructor(
     private val intervalRepository: IntervalRepository,
     private val runRepository: RunRepository) : ViewModel() {
 
-    fun getIntervalByWorkoutLevel(level: Int) = intervalRepository.getIntervalByWorkoutLevel(level)
-
     fun insertNewRun(run: Run) = viewModelScope.launch {
         runRepository.insertRun(run)
     }
