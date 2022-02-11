@@ -17,7 +17,7 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
     private var mManager: NotificationManager? = null
 
     @TargetApi(Build.VERSION_CODES.O)
-    private fun createChannel() {
+    private fun createChannels() {
         val trainingReminderChannel = NotificationChannel(TRAINING_REMINDER_CHANNEL_ID,
             applicationContext.getString(R.string.training_reminder_notification_channel_name),
                 NotificationManager.IMPORTANCE_HIGH).also {
@@ -46,20 +46,20 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
         return mManager!!
     }
 
-    fun trainingScheduledNotification(): NotificationCompat.Builder =
+    fun trainingScheduledNotification() =
         NotificationCompat.Builder(applicationContext, TRAINING_REMINDER_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setContentTitle(applicationContext.getString(R.string.training_reminder_notification_channel_name))
             .setContentText(applicationContext.getString(R.string.training_scheduled_notification))
             .setCategory("CATEGORY_REMINDER")
 
-    fun progressNotification(): NotificationCompat.Builder =
+    fun progressNotification() =
         NotificationCompat.Builder(applicationContext, PROGRESS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_round_directions_run_24)
             .setContentTitle(getString(R.string.weekly_progress_notification_title))
             .setCategory("CATEGORY_REMINDER")
 
     init {
-        createChannel()
+        createChannels()
     }
 }

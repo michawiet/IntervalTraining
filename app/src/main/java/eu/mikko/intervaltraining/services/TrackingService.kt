@@ -162,10 +162,11 @@ class TrackingService : LifecycleService() {
                             Timber.d("Voice synth error...")
                         }
                     } else {
-                        if(tts.speak(getString(
-                                if(isRunningInterval.value == true) R.string.activity_resume_running
-                                else R.string.activity_resume_walking
-                            ), TextToSpeech.QUEUE_FLUSH, null, null) == TextToSpeech.ERROR) {
+                        if(tts.speak(
+                                getString(
+                                    if(isRunningInterval.value == true) R.string.activity_resume_running
+                                    else R.string.activity_resume_walking
+                                ),TextToSpeech.QUEUE_FLUSH, null, null) == TextToSpeech.ERROR) {
                             Timber.d("Voice synth error...")
                         }
                         Timber.d("Resuming service...")
@@ -188,7 +189,6 @@ class TrackingService : LifecycleService() {
                 }
             }
         }
-
         return super.onStartCommand(intent, flags, startId)
     }
 

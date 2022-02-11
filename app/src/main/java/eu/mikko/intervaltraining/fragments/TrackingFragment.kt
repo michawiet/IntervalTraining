@@ -134,14 +134,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     }
 
     private fun subscribeToObservers() {
-        /*
-        TrackingService.isTracking.observe(viewLifecycleOwner, {
-        if(it) {
-        isTracking = false
-        activityPlayPauseFab.setImageResource(R.drawable.ic_round_play_arrow_24)
-        }
-        })
-        */
         TrackingService.currentLocation.observe(viewLifecycleOwner) {
             if (it.latitude != 0.0 && it.longitude != 0.0)
                 map?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, MAP_ZOOM))
@@ -179,8 +171,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         TrackingService.pathPointsOfIntervals.observe(viewLifecycleOwner) {
             pathPointsOfIntervals = it
             addLatestPolyline()
-            zoomToSeeWholeTrack()
-            //moveCameraToUser()
+            //zoomToSeeWholeTrack()
+            moveCameraToUser()
         }
     }
 
@@ -205,31 +197,44 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     //Permission check for disabling my location?
     @SuppressLint("MissingPermission")
     private fun passRunResultToSummaryFragment() {
+        //mapLoadedProgressIndicator.visibility = View.VISIBLE
+        loadingConstraintLayout.visibility = View.VISIBLE
+        activityPlayPauseFab.visibility = View.INVISIBLE
+
+        if(TrackingUtility.hasLocationPermissions(requireContext())) {
+            map?.isMyLocationEnabled = true
+        }
         zoomToSeeWholeTrack()
 
-        map?.snapshot { bmp ->
-            val timestamp = Calendar.getInstance().timeInMillis
-            val distanceInMeters = getTotalDistance(pathPointsOfIntervals).toInt()
-            val avgSpeedMetersPerSecond = distanceInMeters.div(interval.totalWorkoutTime.toFloat())
-            val timeInMillis = interval.totalWorkoutTime * 1000L
-            val rating: Int = rateWorkout(interval, pathPointsOfIntervals)
+        map?.setOnMapLoadedCallback {
+            map?.snapshot { bmp ->
+                val timestamp = Calendar.getInstance().timeInMillis
+                val distanceInMeters = getTotalDistance(pathPointsOfIntervals).toInt()
+                val avgSpeedMetersPerSecond =
+                    distanceInMeters.div(interval.totalWorkoutTime.toFloat())
+                val timeInMillis = interval.totalWorkoutTime * 1000L
+                val rating: Int = rateWorkout(interval, pathPointsOfIntervals)
 
-            val run = ParcelableRun(
-                timestamp,
-                avgSpeedMetersPerSecond,
-                distanceInMeters,
-                timeInMillis,
-                rating,
-                workoutLevel,
-                bmp
-            )
+                val run = ParcelableRun(
+                    timestamp,
+                    avgSpeedMetersPerSecond,
+                    distanceInMeters,
+                    timeInMillis,
+                    rating,
+                    workoutLevel,
+                    bmp
+                )
 
-            val ratedIntervals = rateIntervals(interval, pathPointsOfIntervals)
+                val ratedIntervals = rateIntervals(interval, pathPointsOfIntervals)
 
-            stopRun()
+                stopRun()
 
-            val action = TrackingFragmentDirections.actionRunFragmentToRunSummaryFragment(run, ratedIntervals)
-            findNavController().navigate(action)
+                val action = TrackingFragmentDirections.actionRunFragmentToRunSummaryFragment(
+                    run,
+                    ratedIntervals
+                )
+                findNavController().navigate(action)
+            }
         }
     }
 

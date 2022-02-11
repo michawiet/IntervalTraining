@@ -74,7 +74,7 @@
     <string name="levels_walk_duration">Czas trwania chodu</string>
     <string name="pace">Tempo</string>
     <string name="levels_run">Bieg</string>
-    <string name="levels_walk">Soacer</string>
+    <string name="levels_walk">Spacer</string>
     <string name="run_start_run">Bieg</string>
     <string name="run_start_walk">Spacer</string>
     <string name="levels_warmup">Rozgrzewka</string>
@@ -91,4 +91,6 @@
     <string name="activity_has_ended">Ukończono trening</string>
     <string name="activity_resume_running">Kontynuuj bieganie</string>
     <string name="activity_resume_walking">Kontynuuj spacer</string>
+    <string name="snackbar_reminder_enabled">Przypomnienie o treningu włączone - %s, %02d:%02d</string>
+    <string name="map_is_loading">Trwa ładowanie mapy ...</string>
 </resources>

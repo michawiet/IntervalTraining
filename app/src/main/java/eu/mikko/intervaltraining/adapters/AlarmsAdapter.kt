@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -58,7 +59,7 @@ class AlarmsAdapter(private val clickToChangeTimeListener: (TrainingNotification
             tvTrainingNotificationTime.text = String.format("%02d:%02d", currentItem.hour, currentItem.minute)
             switchTrainingNotification.isChecked = currentItem.isEnabled
 
-            //tvTrainingNotificationTime.setTextColor(ContextCompat.getColor(tvTrainingNotificationTime.context, if(currentItem.isEnabled) R.color.primary_500) else R.color.black_inactive)
+            tvTrainingNotificationTime.setTextColor(ContextCompat.getColor(tvTrainingNotificationTime.context, if(currentItem.isEnabled) R.color.primary_500 else R.color.black_inactive))
         }
     }
 

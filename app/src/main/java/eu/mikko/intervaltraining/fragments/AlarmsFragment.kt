@@ -47,7 +47,6 @@ class AlarmsFragment : Fragment(R.layout.fragment_alarms) {
     }
 
     private fun cancelAlarm(id: Int) {
-        //id is a request code
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(getPendingIntent(id))
     }
@@ -58,7 +57,7 @@ class AlarmsFragment : Fragment(R.layout.fragment_alarms) {
             .getDisplayName(TextStyle.FULL, ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0])
         Snackbar.make(
             requireActivity().findViewById(R.id.rootView),
-            String.format("Training reminder enabled - %s, %02d:%02d", dayOfWeekDisplayName, hour, minute),
+            getString(R.string.snackbar_reminder_enabled, dayOfWeekDisplayName, hour, minute),
             Snackbar.LENGTH_LONG
         ).setAnchorView(R.id.bottom_navigation).show()
     }
