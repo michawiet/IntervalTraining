@@ -25,8 +25,8 @@ object AppModule {
     @Provides
     fun provideDatabase(@ApplicationContext app: Context) =
         Room.databaseBuilder(
-        app,
-        IntervalTrainingDatabase::class.java,
+            app,
+            IntervalTrainingDatabase::class.java,
             DATABASE_NAME
         ).createFromAsset(
             DATABASE_ASSET_PATH
