@@ -8,7 +8,6 @@ import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.model.TrainingNotification
 
 @Database(entities = [TrainingNotification::class, Interval::class, Run::class], version = 1, exportSchema = false)
-@TypeConverters(Converters::class)
 abstract class IntervalTrainingDatabase: RoomDatabase() {
 
     abstract fun getTrainingNotificationDao(): TrainingNotificationDao

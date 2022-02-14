@@ -1,6 +1,5 @@
 package eu.mikko.intervaltraining.model
 
-import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -12,7 +11,7 @@ data class Run(
     var timeInMillis: Long = 0L,
     var rating: Int = 0,
     var workoutLevel: Int = 0,
-    var map: Bitmap? = null)
+    var map: String = "")
 {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

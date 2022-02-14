@@ -46,7 +46,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
-    // Shared preferences injection
     @Inject
     lateinit var sharedPref: SharedPreferences
 
@@ -171,7 +170,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         TrackingService.pathPointsOfIntervals.observe(viewLifecycleOwner) {
             pathPointsOfIntervals = it
             addLatestPolyline()
-            //zoomToSeeWholeTrack()
             moveCameraToUser()
         }
     }
@@ -197,12 +195,11 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     //Permission check for disabling my location?
     @SuppressLint("MissingPermission")
     private fun passRunResultToSummaryFragment() {
-        //mapLoadedProgressIndicator.visibility = View.VISIBLE
         loadingConstraintLayout.visibility = View.VISIBLE
         activityPlayPauseFab.visibility = View.INVISIBLE
 
         if(TrackingUtility.hasLocationPermissions(requireContext())) {
-            map?.isMyLocationEnabled = true
+            map?.isMyLocationEnabled = false
         }
         zoomToSeeWholeTrack()
 

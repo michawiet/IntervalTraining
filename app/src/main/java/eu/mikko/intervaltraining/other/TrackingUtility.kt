@@ -74,7 +74,6 @@ object TrackingUtility {
             var timeLeft = this.totalWorkoutTime
             intervals.add(IntervalData(0L, intervalData.warmupSeconds * 1000, false))
             timeLeft -= intervals.last().lengthMillis
-            //val currentTimeStamp = intervals.last().lengthMillis
 
             var isCurrentRunningInterval = true
             while(timeLeft > 0) {

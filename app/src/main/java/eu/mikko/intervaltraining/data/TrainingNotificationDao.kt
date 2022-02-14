@@ -13,7 +13,6 @@ interface TrainingNotificationDao {
     @Query("SELECT * FROM training_notifications_table ORDER BY id ASC")
     fun readAllData(): LiveData<List<TrainingNotification>>
 
-    //RestartReminderReceiver only
     @Query("SELECT * FROM training_notifications_table ORDER BY id ASC")
     fun getAllNotificationsNonLive(): List<TrainingNotification>
 }

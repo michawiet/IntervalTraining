@@ -1,9 +1,5 @@
 package eu.mikko.intervaltraining.other
 
-import android.graphics.Color
-import eu.mikko.intervaltraining.R
-import java.time.DayOfWeek
-
 object Constants {
     // database
     const val DATABASE_NAME = "interval_training"
@@ -12,6 +8,7 @@ object Constants {
     // permissions
     const val REQUEST_CODE_LOCATION_PERMISSION = 1
     const val REQUEST_CODE_BACKGROUND_LOCATION_PERMISSION = 1
+    const val REQUEST_CODE_STORAGE_READ = 2
 
     // tracking service
     const val ACTION_START_SERVICE = "ACTION_START_SERVICE"

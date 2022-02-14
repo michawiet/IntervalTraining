@@ -1,12 +1,10 @@
 package eu.mikko.intervaltraining.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import eu.mikko.intervaltraining.data.IntervalTrainingDatabase
 import eu.mikko.intervaltraining.model.TrainingNotification
 import eu.mikko.intervaltraining.repositories.TrainingNotificationRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

@@ -1,8 +1,11 @@
 package eu.mikko.intervaltraining.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
@@ -31,6 +34,11 @@ import eu.mikko.intervaltraining.other.TrackingUtility
 import eu.mikko.intervaltraining.viewmodel.TrainingViewModel
 import kotlinx.android.synthetic.main.fragment_run_summary.*
 import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -237,7 +245,26 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
         }
     }
 
+    private fun saveImageToLocalStorage(map: Bitmap?): String {
+
+        var file = requireContext().getDir("Images", Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            val stream : OutputStream = FileOutputStream(file)
+            map?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+            stream.flush()
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return Uri.parse(file.absolutePath).toString()
+    }
+
     private fun saveRun() {
+        val mapPath = saveImageToLocalStorage(args.runData.map)
+
         val newRun = Run(
             args.runData.timestamp,
             args.runData.avgSpeedMetersPerSecond,
@@ -245,7 +272,7 @@ class RunSummaryFragment : Fragment(R.layout.fragment_run_summary) {
             args.runData.timeInMillis,
             args.runData.rating,
             args.runData.workoutLevel,
-            args.runData.map
+            mapPath
         )
         viewModel.insertNewRun(newRun)
 

@@ -39,8 +39,7 @@ class RestartReminderReceiver : BroadcastReceiver() {
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.timeInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent)
             }
         }
-        //Progress notification
-        //read shared pref of hour, minute, weekday
+
         val sharedPref = context.getSharedPreferences(
             Constants.SHARED_PREFERENCES_NAME,
             Context.MODE_PRIVATE

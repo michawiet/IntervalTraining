@@ -1,5 +1,6 @@
 package eu.mikko.intervaltraining.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import eu.mikko.intervaltraining.model.Run
 import eu.mikko.intervaltraining.other.TrackingUtility.getFormattedStopWatchTime
 import eu.mikko.intervaltraining.other.TrackingUtility.getMinutesPerKilometerFromMetersPerSecond
 import kotlinx.android.synthetic.main.journal_item.view.*
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,7 +44,8 @@ class JournalAdapter : RecyclerView.Adapter<JournalAdapter.ProgressViewHolder>()
     override fun onBindViewHolder(holder: ProgressViewHolder, position: Int) {
         val run = differ.currentList[position]
         holder.itemView.apply {
-            Glide.with(this).load(run.map).into(ivRunItem)
+            Glide.with(this).load(File(run.map)).into(ivRunItem)
+
             tvLength.text = getFormattedStopWatchTime(run.timeInMillis)
             tvDistance.text = run.distanceInMeters.div(1000f).toString()
             tvAvgSpeed.text = getMinutesPerKilometerFromMetersPerSecond(run.avgSpeedMetersPerSecond)

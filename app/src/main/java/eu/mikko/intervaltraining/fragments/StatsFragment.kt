@@ -74,7 +74,6 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         viewModel.allRunsWithIntervals.observe(viewLifecycleOwner) {
             if(it.isNotEmpty()) {
                 setDataForCombinedChart(it)
-                //combinedProgressChart.invalidate()
                 tvGoalProgress.text = getString(
                     R.string.completed_levels_out_of_all_levels,
                     (workoutLevel - 1),

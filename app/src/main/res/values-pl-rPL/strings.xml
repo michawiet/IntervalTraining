@@ -93,4 +93,5 @@
     <string name="activity_resume_walking">Kontynuuj spacer</string>
     <string name="snackbar_reminder_enabled">Przypomnienie o treningu włączone - %s, %02d:%02d</string>
     <string name="map_is_loading">Trwa ładowanie mapy ...</string>
+    <string name="read_storage_permission">Aby wyświetlić mapę aktywności, musisz zaakceptować pozwolenie na przechowywanie danych</string>
 </resources>

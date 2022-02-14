@@ -115,4 +115,5 @@
     <string name="activity_resume_walking">Continue walking</string>
     <string name="snackbar_reminder_enabled">Training reminder enabled - %s, %02d:%02d</string>
     <string name="map_is_loading">Map is loading ...</string>
+    <string name="read_storage_permission">To view map of activity, you need to accept read storage permission</string>
 </resources>
